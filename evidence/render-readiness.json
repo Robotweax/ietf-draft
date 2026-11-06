@@ -1,0 +1,18 @@
+[
+  {
+    "topic": "multicast",
+    "fragment_links": 96,
+    "missing_fragments": [],
+    "text_pages": 8,
+    "author_checked": true,
+    "visual_review": "Still open: browser file-URL policy blocks preview; static inspection only."
+  },
+  {
+    "topic": "authentication",
+    "fragment_links": 95,
+    "missing_fragments": [],
+    "text_pages": 7,
+    "author_checked": true,
+    "visual_review": "Still open: browser file-URL policy blocks preview; static inspection only."
+  }
+]

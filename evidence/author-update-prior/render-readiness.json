@@ -1,0 +1,18 @@
+[
+  {
+    "topic": "multicast",
+    "title": "Multicast Dispatch for the Secure Reliable Transport Protocol",
+    "fragment_links": 96,
+    "missing_fragments": [],
+    "text_pages": 8,
+    "visual_review": "Not performed: browser policy disallows file URLs; static HTML and text reviewed instead."
+  },
+  {
+    "topic": "authentication",
+    "title": "Session Authentication Extensions for the Secure Reliable Transport Protocol",
+    "fragment_links": 95,
+    "missing_fragments": [],
+    "text_pages": 7,
+    "visual_review": "Not performed: browser policy disallows file URLs; static HTML and text reviewed instead."
+  }
+]

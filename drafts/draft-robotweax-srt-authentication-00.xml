@@ -1,49 +1,135 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <rfc version="3" ipr="trust200902" category="exp" submissionType="independent" docName="draft-robotweax-srt-authentication-00" tocInclude="true" symRefs="true">
-<front><title abbrev="SRT Extensions">Session Authentication Extensions for the Secure Reliable Transport Protocol</title><author fullname="Robotweax Editorial Team"><organization>Robotweax</organization></author><date year="2026" month="November" day="6"/><abstract><t>This initial editorial draft records Robotweax SRT session authentication version 2 and scopes the separate experimental ACP1 authenticated-control work. It describes current implementation behavior and outstanding security and specification decisions. It is not a complete security protocol specification or a claim of independent cryptographic review.</t></abstract></front>
-<middle>
-<section anchor="status"><name>Status and Scope</name>
-<t>This unsubmitted working draft uses placeholder author metadata. The implementation baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
-<t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
-</section>
-<section anchor="handshake"><name>Version 2 Handshake</name>
-<t>INDUCTION is unchanged. The CONCLUSION CONFIG extension type 0x7f10 has 100 content bytes: network-order uint32 version 2, caller nonce[32], listener nonce[32], proof[32]. The caller offers a fresh nonce with zero listener nonce and proof. The listener supplies its fresh nonce and server proof. The caller verifies it and sends its proof in AGREEMENT; the listener verifies that proof before publishing the connection.</t>
-<t>Unknown versions, malformed lengths and duplicate extensions are rejected. Lost final confirmation is recovered through listener response retry and the caller's cached AGREEMENT. No automatic downgrade is allowed. Exact transcript serialization and retransmission state transitions require normative vectors.</t>
-</section>
-<section anchor="derivation"><name>Key Derivation and Proof Input</name>
-<t>The 32-byte authentication key is PBKDF2-HMAC-SHA1 with 2048 iterations over the passphrase. Salt is the 16-byte label consisting of ASCII RWSRT-SESSION-2 followed by one zero byte, then caller nonce, listener nonce, caller socket ID encoded as uint64, and listener socket ID encoded as uint64. All integers are network order.</t>
-<t>HMAC-SHA256 input is the same 16-byte label, uint8 domain, uint8 sender role, uint64 counter, uint16 body length, and complete KM body. Domains are 1 for handshake, 2 for KMREQ and 3 for KMRSP. Roles are 1 caller and 2 listener. The handshake counter is zero and the proof covers the original initial KM body.</t>
-<t>The label is exactly 15 ASCII bytes plus one zero byte, confirmed against src/session_authentication.cpp at the baseline commit. The salt is 96 bytes. Independent vectors and a precise password encoding and embedded-NUL contract remain required.</t>
-</section>
-<section anchor="runtime"><name>Runtime Key Controls</name>
-<t>User-defined runtime subtypes 0x7f03 and 0x7f04 carry authenticated KMREQ and KMRSP respectively. Payload is uint64 counter, unchanged KM body, and a 32-byte tag. Request counters begin at one, increase when the body changes and are reused for identical retries; a response echoes its request counter.</t>
-<t>Authentication and counter validation precede key processing. Counter exhaustion fails closed. Protected sessions ignore bare standard KM controls; ordinary sessions ignore these protected subtypes. The exact bounded replay history, retry identity and out-of-order response rules must be specified from the implementation.</t>
-</section>
-<section anchor="fec"><name>Authenticated FEC Parity</name>
-<t>With version 2 and a packet filter, a parity DATA packet with message number zero carries uint64 counter, FEC body and a 32-byte HMAC tag. MAC input is the version label, domain 4, sender role, counter, uint16 FEC-body length, full 16-byte network-order DATA header and FEC body. Every header bit is covered.</t>
-<t>Parity counters are independent of key-control counters and key rotation. A 64-packet sliding bitmap accepts each authenticated counter once and permits bounded reordering. Invalid authentication does not advance replay state. Greater reordering may discard repair opportunities. Local datagram retries preserve sealed bytes and counter.</t>
-<t>The 40-byte envelope consumes payload budget. Exhaustion or signing failure terminates the sending connection. Authenticating parity does not authenticate CTR source DATA. GCM remains a separate selection.</t>
-</section>
-<section anchor="acp"><name>Separate Experimental ACP1 Work</name>
-<t>ACP1 uses user-defined control type 0x7fff and provisional subtype 0x7f05. Its envelope is outer header[16], uint32 envelope version 1, uint64 counter, original control packet[16 plus body], HMAC-SHA256 tag[32]. It adds 60 bytes. Direction keys and a 64-position replay window protect runtime controls before transport-state mutation.</t>
-<t>Session-authentication versions 3, 4, 5 and 6 select ordinary Caller/Listener, Rendezvous, Caller/Listener group members and Group Rendezvous respectively. They bind different nonce, cookie and membership contexts. They are not interchangeable versions of one topology. Full KDF/context/envelope and state-machine definitions are deferred to a separate drafting pass.</t>
-<t>ACP1 does not authenticate all handshake fields and does not change CTR DATA integrity. Its PBKDF-to-HKDF construction, coverage, loss/replay behavior and per-member lifecycle require independent review. No support or full-transport-security claim follows from this summary.</t>
-</section>
-<section anchor="security"><name>Security Considerations</name>
-<t>Version 2 protects selected key material and parity, not every handshake or runtime control. Stream ID, transport settings, ordinary ACK/NAK and shutdown are outside its protection. Stream ID is routing input, not authorization. GCM is required separately for DATA authentication.</t>
-<t>Shared-passphrase holders can impersonate each other and there is no forward secrecy. The 2048-iteration KDF is not a password-storage recommendation. Weak secrets, resource exhaustion, traffic analysis, withholding and malicious endpoints remain threats. Admission work must be bounded.</t>
-<t>Independent review must assess transcript binding and downgrade resistance, password derivation, key separation, counter replay and exhaustion, retry/loss behavior and topology interactions. Any strengthening that changes negotiated bytes needs a new explicit version rather than silent reinterpretation of version 2.</t>
-</section>
-<section anchor="iana"><name>IANA Considerations</name>
-<t>No allocation request is made in this initial editorial version. Handshake 0x7f10 and runtime 0x7f03, 0x7f04 and 0x7f05 are provisional implementation values, not registered assignments. Determine namespace policy and migration before publication.</t>
-</section>
-<section anchor="issues"><name>Open Issues</name>
-<t>Confirm exact KDF bytes and password representation; formalize all retry/replay state machines and rejection behavior. Add independent proof, key-control and parity vectors, malformed cases, reflection/cross-session checks and counter boundaries. Decide ACP1 document scope and complete an extension-combination matrix.</t>
-<t>Confirm named editors and publication route. Complete independent cryptographic review before recommending the construction as a generally supported security profile. Posting an initial draft is distinct from completing that review.</t>
-</section>
-<section anchor="sources"><name>Source Baseline</name><t>The base protocol is described in <xref target="SRT"/>. Implementation behavior is taken from <xref target="RWSRT"/>. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t></section>
-</middle><back><references><name>Informative References</name>
-<reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01"><front><title>The SRT Protocol</title><author fullname="Maria Sharabayko"/><date year="2021" month="September"/></front><seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01"/></reference>
-<reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1"><front><title>Robotweax SRT 0.3.2 source and protocol contracts</title><author fullname="Robotweax"/><date year="2026"/></front></reference>
-</references></back></rfc>
-
+  <front>
+    <title abbrev="SRT Session Authentication">Session Authentication Extensions for the Secure Reliable Transport Protocol</title>
+    <author fullname="Marc Cymontkowski" initials="M." surname="Cymontkowski">
+      <organization>Robotweax GmbH</organization>
+      <address>
+        <email>marc@robotweax.ai</email>
+      </address>
+    </author>
+    <date year="2026" month="November" day="6" />
+    <abstract>
+      <t>This initial editorial draft records Robotweax SRT session authentication version 2 and scopes the separate experimental ACP1 authenticated-control work. It describes current implementation behavior and outstanding security and specification decisions. It is not a complete security protocol specification or a claim of independent cryptographic review.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="status">
+      <name>Introduction</name>
+      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
+      <t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
+      <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
+    </section>
+    <section anchor="handshake">
+      <name>Version 2 Handshake</name>
+      <t>INDUCTION is unchanged. The CONCLUSION CONFIG extension type 0x7f10 has 100 content bytes: network-order uint32 version 2, 32-byte caller nonce, 32-byte listener nonce, 32-byte proof. The caller offers a fresh nonce with zero listener nonce and proof. The listener supplies its fresh nonce and server proof. The caller verifies it and sends its proof in AGREEMENT; the listener verifies that proof before publishing the connection.</t>
+      <t>Unknown versions, malformed lengths and duplicate extensions are rejected. Lost final confirmation is recovered through listener response retry and the caller's cached AGREEMENT. No automatic downgrade is allowed. Exact transcript serialization and retransmission state transitions require normative vectors.</t>
+    </section>
+    <section anchor="derivation">
+      <name>Key Derivation and Proof Input</name>
+      <t>The 32-byte authentication key is PBKDF2-HMAC-SHA1 with 2048 iterations over the passphrase. Salt is the 16-byte label consisting of ASCII RWSRT-SESSION-2 followed by one zero byte, then caller nonce, listener nonce, caller socket ID encoded as uint64, and listener socket ID encoded as uint64. All integers are network order.</t>
+      <t>HMAC-SHA256 input is the same 16-byte label, uint8 domain, uint8 sender role, uint64 counter, uint16 body length, and complete KM body. Domains are 1 for handshake, 2 for KMREQ and 3 for KMRSP. Roles are 1 caller and 2 listener. The handshake counter is zero and the proof covers the original initial KM body.</t>
+      <t>The label is exactly 15 ASCII bytes plus one zero byte, confirmed against src/session_authentication.cpp at the baseline commit. Salt length is 96 bytes. The public passphrase setter passes an explicit byte length and copies those bytes without text normalization or embedded-NUL stripping. Frozen formula-level KDF/proof vectors include an embedded-NUL password and match the pinned implementation. Their synthetic KM body does not establish a complete independently implemented handshake. Any human-readable password encoding convention is separate.</t>
+      <t>The underlying PBKDF2 construction is described in <xref target="RFC8018" />, HMAC in <xref target="RFC2104" />, and the AES key-wrap mechanism used by SRT key material in <xref target="RFC3394" />. These references identify primitives; they do not constitute review of this profile or approval of its parameters.</t>
+    </section>
+    <section anchor="runtime">
+      <name>Runtime Key Controls</name>
+      <t>User-defined runtime subtypes 0x7f03 and 0x7f04 carry authenticated KMREQ and KMRSP respectively. Payload is uint64 counter, unchanged KM body, and a 32-byte tag. Request counters begin at one, increase when the body changes and are reused for identical retries; a response echoes its request counter.</t>
+      <t>On receiving KMREQ, the authentication layer rejects a counter below the highest authenticated request counter. An equal counter is accepted only with the identical cached body and a valid MAC. A larger counter replaces that single cached request only after MAC verification. This is a monotonic counter with an idempotent retry exception, not the FEC sliding replay window. The audited runtime ignores bare KM controls in protected sessions and checks authenticated private subtypes before forwarding the decoded body to ordinary KM processing.</t>
+      <t>KMRSP must carry the current local sent-request counter and a valid response-domain MAC. The authentication layer does not mark that response counter consumed, so an identical valid response may be accepted repeatedly. It also does not replace the downstream key-material semantic validation described below. Once a different request advances the sent counter, responses to older requests fail. Counter exhaustion prevents sealing a new changed request; full runtime exhaustion failure handling still requires integration review.</t>
+      <t>The runtime opens the authenticated envelope before checking the KM payload shape and passing KMRSP to semantic acknowledgement with receive-key cloning disabled. Semantic acknowledgement returns idempotent success for a body already in bounded acknowledged history. Otherwise it requires exact equality with the pending body before clearing the pending request and marking the sender secured. An old acknowledged body does not confirm a different pending rotation. Authentication-counter acceptance and key-state advancement are separate decisions.</t>
+    </section>
+    <section anchor="fec">
+      <name>Authenticated FEC Parity</name>
+      <t>With version 2 and a packet filter, a parity DATA packet with message number zero carries uint64 counter, FEC body and a 32-byte HMAC tag. MAC input is the version label, domain 4, sender role, counter, uint16 FEC-body length, full 16-byte network-order DATA header and FEC body. Every header bit is covered.</t>
+      <t>Parity counters are independent of key-control counters and key rotation. A 64-packet sliding bitmap accepts each authenticated counter once and permits bounded reordering. Invalid authentication does not advance replay state. Greater reordering may discard repair opportunities. Local datagram retries preserve sealed bytes and counter.</t>
+      <t>The 40-byte envelope consumes payload budget. Exhaustion or signing failure terminates the sending connection. Authenticating parity does not authenticate CTR source DATA. GCM remains a separate selection.</t>
+    </section>
+    <section anchor="acp">
+      <name>Separate Experimental ACP1 Work</name>
+      <t>ACP1 uses user-defined control type 0x7fff and provisional subtype 0x7f05. Its envelope is 16-byte outer header, uint32 envelope version 1, uint64 counter, original control packet (16-byte header plus body), and 32-byte HMAC-SHA256 tag. It adds 60 bytes. Direction keys and a 64-position replay window protect runtime controls before transport-state mutation.</t>
+      <t>Session-authentication versions 3, 4, 5 and 6 select ordinary Caller/Listener, Rendezvous, Caller/Listener group members and Group Rendezvous respectively. They bind different nonce, cookie and membership contexts. They are not interchangeable versions of one topology. Full KDF/context/envelope and state-machine definitions are deferred to a separate drafting pass.</t>
+      <t>ACP1 does not authenticate all handshake fields and does not change CTR DATA integrity. Its PBKDF-to-HKDF construction, coverage, loss/replay behavior and per-member lifecycle require independent review. No support or full-transport-security claim follows from this summary.</t>
+    </section>
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>Version 2 protects selected key material and parity, not every handshake or runtime control. Stream ID, transport settings, ordinary ACK/NAK and shutdown are outside its protection. Stream ID is routing input, not authorization. GCM is required separately for DATA authentication.</t>
+      <t>Shared-passphrase holders can impersonate each other and there is no forward secrecy. The 2048-iteration KDF is not a password-storage recommendation. Weak secrets, resource exhaustion, traffic analysis, withholding and malicious endpoints remain threats. Admission work must be bounded.</t>
+      <t>Independent review must assess transcript binding and downgrade resistance, password derivation, key separation, counter replay and exhaustion, retry/loss behavior and topology interactions. Any strengthening that changes negotiated bytes needs a new explicit version rather than silent reinterpretation of version 2.</t>
+    </section>
+    <section anchor="iana">
+      <name>IANA Considerations</name>
+      <t>No allocation request is made in this initial editorial version. Handshake 0x7f10 and runtime 0x7f03, 0x7f04 and 0x7f05 are provisional implementation values, not registered assignments. Determine namespace policy and migration before publication.</t>
+    </section>
+    <section anchor="issues">
+      <name>Open Issues</name>
+      <t>Complete the normative transcript and retransmission state machines using the existing formula-level vectors as input. Add independent complete-handshake cases and exhaustive counter-exhaustion, failure and liveness analysis. Ordinary authenticated-KM dispatch and downstream response semantics are source-traced; selected executed cases do not qualify every rejection or teardown path.</t>
+      <t>Proposed scope: retain version 2 as a distinct explicitly negotiated profile, keep ACP1 separate, and do not silently strengthen the version-2 wire construction. Complete the extension-combination matrix. Independent cryptographic review is required before recommending broad security use; publication route and document names remain unconfirmed.</t>
+    </section>
+    <section anchor="sources">
+      <name>Source Baseline</name>
+      <t>The base protocol is described in <xref target="SRT" />. Implementation behavior is taken from <xref target="RWSRT" />. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t>
+    </section>
+    <section anchor="implementation-evidence">
+      <name>Implementation Evidence</name>
+      <t>Independent formula-level derivation, proof, KM-envelope and parity vectors match the pinned C++ implementation, including explicit-length password bytes. The initial vector bodies are synthetic and are not a complete peer implementation. A separate six-case CTR/GCM matrix checks valid KM, initial DATA and selected rotation semantics with independent KEK, key-wrap, IV and ciphertext/tag calculations.</t>
+      <t>Selected authentication, replay/tamper and stale-response checks passed. Detailed execution logs and fixture provenance remain in the local evidence package. ACP1 was disabled in these runs. The evidence does not constitute independent cryptographic review, exhaustive transcript/replay coverage or independent peer interoperability.</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>Informative References</name>
+      <reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01">
+        <front>
+          <title>The SRT Protocol</title>
+          <author fullname="Maxim Sharabayko" />
+          <author fullname="Maria Sharabayko" />
+          <author fullname="Jean Dube" />
+          <author fullname="Jeongseok Kim" />
+          <author fullname="Joonwoong Kim" />
+          <date year="2021" month="September" />
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
+      </reference>
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1">
+        <front>
+          <title>Robotweax SRT 0.3.2 source and protocol contracts</title>
+          <author fullname="Robotweax" />
+          <date year="2026" />
+        </front>
+      </reference>
+      <reference anchor="RFC8018" target="https://www.rfc-editor.org/info/rfc8018">
+        <front>
+          <title>PKCS #5: Password-Based Cryptography Specification Version 2.1</title>
+          <author fullname="K. Moriarty" />
+          <author fullname="B. Kaliski" />
+          <author fullname="A. Rusch" />
+          <date year="2017" month="January" />
+        </front>
+        <seriesInfo name="RFC" value="8018" />
+        <seriesInfo name="DOI" value="10.17487/RFC8018" />
+      </reference>
+      <reference anchor="RFC2104" target="https://www.rfc-editor.org/info/rfc2104">
+        <front>
+          <title>HMAC: Keyed-Hashing for Message Authentication</title>
+          <author fullname="H. Krawczyk" />
+          <author fullname="M. Bellare" />
+          <author fullname="R. Canetti" />
+          <date year="1997" month="February" />
+        </front>
+        <seriesInfo name="RFC" value="2104" />
+        <seriesInfo name="DOI" value="10.17487/RFC2104" />
+      </reference>
+      <reference anchor="RFC3394" target="https://www.rfc-editor.org/info/rfc3394">
+        <front>
+          <title>Advanced Encryption Standard (AES) Key Wrap Algorithm</title>
+          <author fullname="J. Schaad" />
+          <author fullname="R. Housley" />
+          <date year="2002" month="September" />
+        </front>
+        <seriesInfo name="RFC" value="3394" />
+        <seriesInfo name="DOI" value="10.17487/RFC3394" />
+      </reference>
+    </references>
+  </back>
+</rfc>

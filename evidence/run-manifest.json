@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "source_commit": "235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+  "openssl": "OpenSSL 3.6.5 29 Sep 2026 (Library: OpenSSL 3.6.5 29 Sep 2026)",
+  "profile": {
+    "build": "Release",
+    "aead": true,
+    "acp1": false
+  },
+  "runs": [
+    {
+      "log": "adapter.log",
+      "sha256": "5a8d607057a9556e1a10073923e7b87357161435bdd84018300561664a27884e",
+      "exit_code": 0,
+      "summary": "four adapter check groups passed"
+    },
+    {
+      "log": "session-authentication-local-network.log",
+      "sha256": "9275a14aa8109eb28475682313359238c273cc60cc0d45ff4f16d1077d1b7689",
+      "exit_code": 0,
+      "summary": [
+        "15",
+        "15"
+      ]
+    },
+    {
+      "log": "multicast-local-network.log",
+      "sha256": "7b3f01a065400272b9aedd6fe01fb9a840231f39151cda447fceaa95a8289723",
+      "exit_code": 0,
+      "summary": [
+        "22",
+        "22"
+      ]
+    },
+    {
+      "log": "stale-kmrsp.log",
+      "sha256": "604a4ba33fb7988b3f5f89c1f4943c39bf450fd643cb1d9207aecfbc9345440a",
+      "exit_code": 0,
+      "summary": [
+        "1",
+        "1"
+      ]
+    },
+    {
+      "log": "timing.log",
+      "sha256": "0668650c16cb0a7e8bf4cb41353a5e8d2b94ecc790e4abbf63263f42e40d14be",
+      "exit_code": 0,
+      "summary": [
+        "7",
+        "7"
+      ]
+    },
+    {
+      "log": "adapter-cmake.log",
+      "sha256": "5a8d607057a9556e1a10073923e7b87357161435bdd84018300561664a27884e",
+      "exit_code": 0,
+      "summary": "adapter rebuilt through local CMake recipe; output matches direct-link adapter"
+    },
+    {
+      "log": "adapter-matrix.log",
+      "sha256": "a351ddf22880e6b37c6701f167d622633f0e01a84413b3bf8503ebaf0d76cb03",
+      "exit_code": 0,
+      "summary": "six CTR/GCM key-size transactions plus DATA, six serialized admission/runtime cases, and earlier vector/clock checks",
+      "scope": "Production native multicast join and socket publication are not exercised by deterministic adapter"
+    },
+    {
+      "log": "native-publication.log",
+      "sha256": "d5a28951d824b59493f42118f8d8d1d96671eeb9c15d4d8c8038036dddbdbd2e",
+      "exit_code": 0,
+      "summary": "native join/publication success, late native join failure, and setup-time timing capture passed",
+      "instrumented": true
+    },
+    {
+      "log": "native-admission-matrix.log",
+      "sha256": "2149cdbcde097b76d3add9a6b6428bcb416903d573cf31a62ed62325f3b2b17e",
+      "exit_code": 0,
+      "summary": "12 sync/async plaintext/CTR256/GCM256 native cases; initial matrix run",
+      "probe_sha256": "c8e9c88cc383a8e4aeda87d71e658819674c6f5e79aa49c5a22d2d73da106da8",
+      "instrumented": true
+    },
+    {
+      "log": "native-admission-verified.log",
+      "sha256": "9a7c6ab2a28e46d47b3dd5568276ca6ce42bfc72f7ec3838e9f7642650551d75",
+      "exit_code": 0,
+      "summary": "12-case native admission matrix; successful key queries and early async return asserted",
+      "instrumented": true
+    },
+    {
+      "log": "native-admission-verified-stderr.log",
+      "sha256": "34d69eedaeb008ef44fcc8467b35a5ebde1d292bf27005073e7ca48b7983147d",
+      "exit_code": 0,
+      "summary": "12-case native admission matrix; successful key queries and early async return asserted",
+      "instrumented": true
+    },
+    {
+      "log": "native-key-delay.log",
+      "sha256": "2480200563dc30f1a5389c148c8b3b2964fe280580762da83620e602b9c1b25e",
+      "exit_code": 0,
+      "summary": "16 cases; initial controlled KM loss and epoll observation run",
+      "probe_sha256": "9ab6f8b2e5c8d62b0352dd53ee75b5629becac9f98d6c2a8e50f5522020a64cc",
+      "instrumented": true
+    },
+    {
+      "log": "native-key-delay-stderr.log",
+      "sha256": "d280bc224e73277238bbd21f5ed2bd73a9d5a9ffb39db7e1a914b275548720c2",
+      "exit_code": 0,
+      "summary": "16 cases; initial controlled KM loss and epoll observation run",
+      "probe_sha256": "9ab6f8b2e5c8d62b0352dd53ee75b5629becac9f98d6c2a8e50f5522020a64cc",
+      "instrumented": true
+    },
+    {
+      "log": "native-key-delay-verified.log",
+      "sha256": "e186aaa451fc3930971e1bfc516d69e12e7bae000c3564eba9c39d7919300d24",
+      "exit_code": 0,
+      "summary": "16/16: 12 admission cases and 4 controlled KM-loss cases; group epoll OUT before key acknowledgement and IN/drain assertions",
+      "probe_sha256": "de13406f24fbe72b9396018c5737f37909daa7e12135c73c8b444de333403e3d",
+      "binary_sha256": "ccd6f3ea4c899f57e088bd5f696152d0102f1fb685068316275a389f5fe02608",
+      "instrumented": true
+    },
+    {
+      "log": "native-key-delay-verified-stderr.log",
+      "sha256": "a292ede8e3078b3f6617e12190537325212a7d27f8a458e93b848f66637b2eae",
+      "exit_code": 0,
+      "summary": "16/16: 12 admission cases and 4 controlled KM-loss cases; group epoll OUT before key acknowledgement and IN/drain assertions",
+      "probe_sha256": "de13406f24fbe72b9396018c5737f37909daa7e12135c73c8b444de333403e3d",
+      "binary_sha256": "ccd6f3ea4c899f57e088bd5f696152d0102f1fb685068316275a389f5fe02608",
+      "instrumented": true
+    },
+    {
+      "log": "native-lifecycle-initial.log",
+      "sha256": "22673551fa5d457097e5a4b6232ed4ac3c530c87428d121a47abbba5f232f858",
+      "exit_code": 0,
+      "summary": "Initial 16-case lifecycle observation run",
+      "probe_sha256": "2f22c10f91a083c0fee618e53d28c81ccee265000dfcf60ef1bafb9c5604662f",
+      "instrumented": true
+    },
+    {
+      "log": "native-lifecycle-initial-stderr.log",
+      "sha256": "18a9004aa5ad2f09035ca1413b6dcc190c21dd48a0164f064a9678044dff3652",
+      "exit_code": 0,
+      "summary": "Initial 16-case lifecycle observation run",
+      "probe_sha256": "2f22c10f91a083c0fee618e53d28c81ccee265000dfcf60ef1bafb9c5604662f",
+      "instrumented": true
+    },
+    {
+      "log": "native-lifecycle-error-expectation.log",
+      "sha256": "eed4570c2a8013b067ea763a53b911140c6bc5b7183cd728e6bde4b7de92e780",
+      "exit_code": 1,
+      "summary": "Harness incorrectly expected ECONNLOST; actual code 1005 is ESCLOSED. Corrected expectation, not a release defect.",
+      "probe_sha256": "4a1026df4f75a9b5cd16ba1ec1ffc43d6eb8fb814c413cb1ae3daa314eb163a0",
+      "instrumented": true
+    },
+    {
+      "log": "native-lifecycle-error-expectation-stderr.log",
+      "sha256": "5f84a9d994fb5b8c41ffae2721a96ec01a6af48e50704952ede36049c9a78d32",
+      "exit_code": 1,
+      "summary": "Harness incorrectly expected ECONNLOST; actual code 1005 is ESCLOSED. Corrected expectation, not a release defect.",
+      "probe_sha256": "4a1026df4f75a9b5cd16ba1ec1ffc43d6eb8fb814c413cb1ae3daa314eb163a0",
+      "instrumented": true
+    },
+    {
+      "log": "native-lifecycle-verified.log",
+      "sha256": "75ea90676c4ee75e85dcd3f7562e059ec8355e48798ecdada22fc8b100a9d1b6",
+      "exit_code": 0,
+      "summary": "16/16: pending-key send/delivery, six failed-join epoll cases and four receive/close cases; ESCLOSED expectation corrected",
+      "probe_sha256": "f088dc1eae5d57ed93c601a6ef89d45ee56f37202c4259902b6a8dfa587fdca2",
+      "binary_sha256": "3d2a8a609b2da163616684cef5b4a27aa7f7b8065a55051ba3b360f7ae2b12eb",
+      "instrumented": true
+    },
+    {
+      "log": "native-lifecycle-verified-stderr.log",
+      "sha256": "5f424cb2f90fc7481f258411a77f62439365687bb3391c676d4259a234e281b1",
+      "exit_code": 0,
+      "summary": "16/16: pending-key send/delivery, six failed-join epoll cases and four receive/close cases; ESCLOSED expectation corrected",
+      "probe_sha256": "f088dc1eae5d57ed93c601a6ef89d45ee56f37202c4259902b6a8dfa587fdca2",
+      "binary_sha256": "3d2a8a609b2da163616684cef5b4a27aa7f7b8065a55051ba3b360f7ae2b12eb",
+      "instrumented": true
+    },
+    {
+      "log": "native-pressure-initial.log",
+      "sha256": "b8deea6c55fd6bcb7d0c47fd298c886f27cd0e76b02363728059758c6bda9d25",
+      "exit_code": 0,
+      "summary": "Initial 20-case run, four one-second KM-loss/queue-pressure/receive-epoll-close observations",
+      "probe_sha256": "89214bb967dbc23e6824fa461021802e1257f0d1d221be69bcab511fddc76b28",
+      "instrumented": true
+    },
+    {
+      "log": "native-pressure-initial-stderr.log",
+      "sha256": "ce5fc57844c3316d5759dbb229bd180d0cebfcd11284f8adb91d4a577d1bbbc3",
+      "exit_code": 0,
+      "summary": "Initial 20-case run, four one-second KM-loss/queue-pressure/receive-epoll-close observations",
+      "probe_sha256": "89214bb967dbc23e6824fa461021802e1257f0d1d221be69bcab511fddc76b28",
+      "instrumented": true
+    },
+    {
+      "log": "native-pressure-verified.log",
+      "sha256": "51b84f6380099248cb49ffdebd2f057d90931c974bce99b8d586559868b55d12",
+      "exit_code": 0,
+      "summary": "20/20: prior 16 plus four one-second KM-loss, bounded queue-pressure and receive/epoll-close cases",
+      "probe_sha256": "b1efa511e226c478ab0edb3520643b5292691a649444f96904f3e6a6f05c3924",
+      "binary_sha256": "2b5c75f0ad1b6ad4dad456a109421e0d70ba78b747870615c1199a2629eef4fb",
+      "instrumented": true
+    },
+    {
+      "log": "native-pressure-verified-stderr.log",
+      "sha256": "78864863183d1939a5ccd435925c072edfe0c744a127d2086ac90380c708a9cf",
+      "exit_code": 0,
+      "summary": "20/20: prior 16 plus four one-second KM-loss, bounded queue-pressure and receive/epoll-close cases",
+      "probe_sha256": "b1efa511e226c478ab0edb3520643b5292691a649444f96904f3e6a6f05c3924",
+      "binary_sha256": "2b5c75f0ad1b6ad4dad456a109421e0d70ba78b747870615c1199a2629eef4fb",
+      "instrumented": true
+    },
+    {
+      "log": "native-recovery-idle-initial.log",
+      "sha256": "7cbe8617d26d87ddb279b2f98c5aa77fc8f027d1c7fbd00088f233923264b0fd",
+      "exit_code": 1,
+      "summary": "First recovery fixture exceeded configured 2-second peer idle horizon; receiver BROKEN at 3 seconds. Split idle expiry from recovery; not classified as implementation defect.",
+      "probe_sha256": "e0dc3e7a8a55fea7a552977da624b96588bfacb034ade67f83c0a91446eb0033",
+      "instrumented": true
+    },
+    {
+      "log": "native-recovery-idle-initial-stderr.log",
+      "sha256": "3a8b6a2b4a5ca36901dd356a9ba6dd04459d0fad63c7ad2b42c5f2564870ad99",
+      "exit_code": 1,
+      "summary": "First recovery fixture exceeded configured 2-second peer idle horizon; receiver BROKEN at 3 seconds. Split idle expiry from recovery; not classified as implementation defect.",
+      "probe_sha256": "e0dc3e7a8a55fea7a552977da624b96588bfacb034ade67f83c0a91446eb0033",
+      "instrumented": true
+    },
+    {
+      "log": "native-recovery-verified.log",
+      "sha256": "35af35bf8e97da49fa59b755f6a7cf847f65e4a14747fc42ce914b177dcf826c",
+      "exit_code": 0,
+      "summary": "28/28 native cases with sustained-loss recovery and idle expiry",
+      "instrumented": true,
+      "probe_sha256": "52b5b8e2438845fc61411b7f013398350ad66bc14703ae3c4348f8f46e7e8488",
+      "binary_sha256": "efd4dd3e68457d10e3579265cedfe1c186db83c616c667e8bad31b29b76654b6"
+    },
+    {
+      "log": "native-recovery-verified-stderr.log",
+      "sha256": "6daac927e4fb34ee7229ceb3549bfbe221d182e676a96a931287bb7d14375799",
+      "exit_code": 0,
+      "summary": "28/28 native cases with sustained-loss recovery and idle expiry",
+      "instrumented": true,
+      "probe_sha256": "52b5b8e2438845fc61411b7f013398350ad66bc14703ae3c4348f8f46e7e8488",
+      "binary_sha256": "efd4dd3e68457d10e3579265cedfe1c186db83c616c667e8bad31b29b76654b6"
+    },
+    {
+      "log": "key-retry-focused.log",
+      "sha256": "ceb3035879ba73bc4a96e273202c56fd79623b69e52abeacec5bce71602b0903",
+      "exit_code": 0,
+      "summary": "Focused immutable-source retry/peer-idle tests passed",
+      "instrumented": false
+    },
+    {
+      "log": "peer-idle-focused.log",
+      "sha256": "5f4e03d7241dba4a21fa504eced790f651a18d6c54194a2d7d4a5a47f7237175",
+      "exit_code": 0,
+      "summary": "Focused immutable-source retry/peer-idle tests passed",
+      "instrumented": false
+    },
+    {
+      "log": "shared-schedule-focused.log",
+      "sha256": "ce342bf8471bf6ad0e7c79d11bf810521f4ac29d677a03ffc649b174ec6d44ae",
+      "exit_code": 0,
+      "summary": "Focused pinned-source lifecycle regression; see log for exact cases",
+      "instrumented": false
+    },
+    {
+      "log": "directional-overrun-focused.log",
+      "sha256": "7cbed74bd6c414d3bf3546966c2bf0f06f2bf813d75a186d4d4aca553cd91f0a",
+      "exit_code": 0,
+      "summary": "Focused pinned-source lifecycle regression; see log for exact cases",
+      "instrumented": false
+    },
+    {
+      "log": "directional-initial-focused.log",
+      "sha256": "fd7ed91415a62614db3e2e4425051553f1776625f3fec2854f7e2f9c70cf4ab2",
+      "exit_code": 0,
+      "summary": "Focused pinned-source lifecycle regression; see log for exact cases",
+      "instrumented": false
+    }
+  ],
+  "initial_sandbox_run": {
+    "log": "session-authentication.log",
+    "result": "13/15; two local UDP bind failures; superseded by successful local-network rerun, retained for transparency"
+  },
+  "fixture_files": {
+    "vectors/valid-km-transaction.json": "fbc81577941381d59f7ca48c7b6752bbb2643537e7f24732a426084ff73cd295",
+    "vectors/initial-wire-vectors.json": "3b3d2d5b786e4a07b2e9e2a567bb6980094acee688a3493b334e5cc5edec51ab",
+    "vectors/crypto-matrix.json": "b778563c8cd3a9884ada6ac0aeaecb9e8a2e90aadf3e541a5c984a7cfea9f4e7"
+  },
+  "adapter_source_sha256": "4693e433f16cffdaecd4fc31fcc438d722a86ebe994a49d1c0f98987a05e44ec",
+  "test_binary_sha256": "a503b6bfb38482929df9b8350b01f46d780f38f3143082f8de21383dbb53a496",
+  "previous_adapter_source_sha256": "c993f76158fd671355fa698a5b2edcb01f4870cc2e7fee733dd82ec712d0957f",
+  "current_adapter_sources": {
+    "conformance/adapter.cpp": "4693e433f16cffdaecd4fc31fcc438d722a86ebe994a49d1c0f98987a05e44ec",
+    "conformance/admission_handoff.cpp": "f31ca161fb6ca630af83a8417db5ef18c640f4e343f0a80eca2f992c48c1ab03",
+    "conformance/check_crypto_matrix.py": "1c423bcef6390cf14714df0a53ca4a57e6e6c1e07313d43cb6a912ae0bf3ab37",
+    "conformance/CMakeLists.txt": "9e894b090b3ed831c52ef7da79c2ac70039e30d5e3e2008371833885024125ea"
+  },
+  "native_instrumentation": {
+    "base_commit": "235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1",
+    "verified_original_file_count": 752,
+    "original_archive_sha256": "7b32f6d9db1e94850f0581fc4bcaaee9f6cb0bc8a216c5198e68cfd35ad0f086",
+    "original_connection_sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192",
+    "instrumented_connection_sha256": "f812e6fab3dcc56f4221a68eb310e0e83802c70ebad1a7ead359682117674006",
+    "files": {
+      "conformance/native/instrument.py": "38ea5cb29d2a7e866cb8ffe76de5795307b9ce7390c174217b43691f0c01d338",
+      "conformance/native/native_probe.cpp": "52b5b8e2438845fc61411b7f013398350ad66bc14703ae3c4348f8f46e7e8488",
+      "conformance/native/CMakeLists.txt": "1c99856557f50bb82d5bc11d7dbb6b3aa25c22283878ac10622c81a8d1ac5277",
+      "evidence/native-instrumentation.patch": "db4188699afb0f969a55c9008f5760eb0f14536290d5f820a2311ec66773efa4"
+    },
+    "scope": "Sync/async connect; plaintext/CTR256/GCM256; successful and late-failed native join; separate sender key readiness; test barriers and timing capture; not an unmodified binary; four controlled runtime KMREQ-loss cases using existing channel test hook, level-triggered group epoll readiness; pending-key nonblocking send with short-loss recovery, failed-join group epoll, and one concurrent receive/close schedule per controlled-loss case; four one-second KM-loss cases with bounded nonblocking queue pressure and pending receive/epoll close, without pressure-case recovery; eight three-second KM-loss cases separating recovery under 10-second peer idle from expiry under 2-second peer idle",
+    "previous_probe_sha256": "094d2b5a170441071e7894fb88734929714bd2d8438b1b206e91ce05cd07ae65"
+  },
+  "native_initial_attempt": {
+    "log": "native-publication-initial.log",
+    "result": "success path passed; invalid interface selected at startup failed before intended join barrier; failure fixture corrected, not an implementation defect"
+  }
+}

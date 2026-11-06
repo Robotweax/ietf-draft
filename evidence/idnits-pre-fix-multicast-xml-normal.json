@@ -1,0 +1,33 @@
+{
+  "result": "fail",
+  "file": {
+    "path": "/Users/marc/Documents/Codex/robotweax-srt-public/output/ietf-draft-local/drafts/draft-robotweax-srt-multicast-00.xml",
+    "size": 15698
+  },
+  "nitsBySeverity": {
+    "error": 1,
+    "warning": 1,
+    "comment": 0
+  },
+  "nits": [
+    {
+      "severity": "ValidationError",
+      "code": "MISSING_INTRODUCTION_SECTION",
+      "desc": "The introduction section is missing.",
+      "ref": "https://authors.ietf.org/en/required-content#introduction",
+      "path": "rfc.middle.section",
+      "line": [
+        {
+          "line": 13,
+          "pos": 3
+        }
+      ]
+    },
+    {
+      "severity": "ValidationWarning",
+      "code": "UNDEFINED_STATE",
+      "desc": "The draft reference draft-sharabayko-srt does not have a defined state or could not be fetched.",
+      "ref": "https://datatracker.ietf.org/doc/draft-sharabayko-srt"
+    }
+  ]
+}

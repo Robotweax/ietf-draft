@@ -1,0 +1,548 @@
+--- a/README.md
++++ b/README.md
+@@ -3,6 +3,52 @@
+ Initial editorial work for extensions implemented by Robotweax SRT 0.3.2.
+ These documents are **unsubmitted working drafts**, not IETF standards,
+ IANA allocations, or a claim of independent cryptographic review.
++
++## Audit and publication status
++
++This repository contains working drafts, proposals and audit evidence. Repository
++commits do not submit an Internet-Draft. Further external commits, pushes, review
++comments, outreach and submissions require explicit user instruction.
++See the [source audit](docs/source-audit-2026-11-06.md) and
++[machine-readable evidence](audit/source-map.json). Verify references with:
++
++```sh
++python3 tools/check_audit.py --source-repo /path/to/robotweax-srt
++```
++
++See also the [integration follow-up](docs/integration-audit-2026-11-06.md) and
++[vector scope](vectors/README.md).
++
++```sh
++python3 tools/wire_vectors.py
++# Optional separate crypto-tool invocation:
++python3 tools/wire_vectors.py --openssl /path/to/openssl-3
++```
++
++The [C++ conformance adapter](conformance/README.md) and
++[execution manifest](evidence/run-manifest.json) record the subsequent pinned
++implementation checks. Earlier audit reports retain their historical no-test-run
++status; the manifest and claim ledger now contain executed evidence.
++
++Latest: [conformance results](docs/conformance-results-2026-11-06.md).
++
++Latest continuation: [crypto matrix and handoff results](docs/matrix-and-handoff-results.md).
++
++Latest native-path evidence: [publication and timestamp capture](docs/native-publication-results.md).
++
++Latest editorial pass: [pinned baseline comparison](docs/baseline-comparison.md) and
++[decision package](docs/decision-package-2026-11-06.md), with
++[proposed base clauses](docs/proposed-base-clauses.md),
++[combination matrix](docs/extension-combination-matrix.md), and
++[key-lifecycle proposal](docs/proposed-key-lifecycle.md).
++
++Earlier reports retain their status at the time of writing; statements that work
++was local/uncommitted are historical snapshots. The author details are confirmed,
++while draft names, publication route and protocol decisions remain provisional.
++
++Latest validation: [submission readiness](docs/submission-readiness-2026-11-06.md).
++
++Recommended next decisions: [version 00 disposition](docs/initial-draft-disposition.md).
+ 
+ ## Start here
+ 
+@@ -14,8 +60,8 @@
+ 
+ The first drafting pass concentrates on multicast and authentication. Base-SRT
+ corrections and delivery/group extensions are tracked separately so experimental
+-features do not silently redefine ordinary SRT. Draft names and organizational
+-author entries are placeholders pending editor confirmation.
++features do not silently redefine ordinary SRT. Draft names remain provisional. The author/contact is Marc Cymontkowski,
++Robotweax GmbH, marc@robotweax.ai, as confirmed by the user.
+ 
+ ## Validate and render
+ 
+--- a/docs/decisions.md
++++ b/docs/decisions.md
+@@ -4,8 +4,8 @@
+ 
+ | ID | Decision / action | Completion criterion |
+ |---|---|---|
+-| D01 | Editors, author contacts, draft names and intended stream | Named editors approve metadata; coordinate continuation with existing SRT authors or use separate individual drafts |
+-| D02 | Base text provenance | Pin supplemental working-copy revision and complete section-by-section comparison |
++| D01 | Editors, author contacts, draft names and intended stream | Author/contact confirmed and applied; confirm draft names/route and coordinate continuation with existing SRT authors or use separate individual drafts |
++| D02 | Base text reconciliation | Supplemental source pinned and all 84 numbered submitted sections mapped; complete replacement clauses and clause-level compatibility review |
+ | D03 | Identifier governance | Coordinate handshake/runtime values, group type and profile names; define registry/allocation policy and collision migration |
+ | D04 | Multicast resource/congestion policy | Define aggregate original/repair limits, receiver limits, feedback amplification controls, slow receiver policy and deployment scope |
+ | D05 | Multicast clock and rollover semantics | Specify origin-delta calculation, serial arithmetic, admission cursor, retained repair history, wrap and empty-group behavior with vectors |
+@@ -18,10 +18,12 @@
+ | D12 | Extension combinations | Explicit matrix for topology, cipher, authentication, filters and profiles, including fail-closed behavior |
+ | D13 | Conformance corpus | Independently calculated vectors plus malformed, duplicate, loss, reorder, replay, rollover and lifetime tests |
+ | D14 | Interoperability and deployment | Seek independent peer implementation; separately qualify multicast physical network and scale |
++| D15 | Clock capture event | Decide attachment-time versus ingress-time semantics without misdescribing 0.3.2 |
++| D16 | Pending-key deadline | Decide whether a separate key-completion policy is needed; do not equate it with peer-idle expiry |
+ 
+ ## Initial Internet-Draft posting gates
+ 
+-- Confirm editors, contacts, names, scope, attribution and applicable IPR notices.
++- Author/contact confirmed; confirm names of the drafts, scope, attribution and applicable IPR notices.
+ - Make status and incompleteness explicit; resolve accidental contradictions.
+ - Render with xml2rfc; inspect text/HTML; run idnits and review warnings.
+ - Check references, required sections and IANA wording; submit through Datatracker.
+@@ -38,3 +40,80 @@
+ For IETF standards-track work, seek an appropriate community venue and consensus;
+ an individual upload does not confer adoption. Follow the current
+ [submission instructions](https://datatracker.ietf.org/submit/tool-instructions/).
++
++## Local audit findings — 2026-11-06
++
++See [the claim ledger](source-audit-2026-11-06.md). D05 now explicitly includes the zero-emitted, runtime-unused timestamp delta; D04 includes per-request member RTT versus a shared expiry window; D06 distinguishes four key-cache slots from historical-generation availability. D09 must distinguish idempotent KM retries from the FEC bitmap. These are observations, not approved wire changes. No remote files were modified by this continuation.
++
++## Timing sample decision from native probe
++
++D15 (open): define whether the interoperable clock baseline uses native ingress
++capture or the current caller setup-time sample, and specify treatment of
++admission/scheduler delay. The instrumented native run confirms the current
++behavior; no protocol change is approved or implemented by this observation.
++See [native publication results](native-publication-results.md).
++
++## Key readiness after admission
++
++The native matrix distinguishes CONNECTED publication from sender group-key
++acknowledgement. A scheduling-dependent GCM observation shows that publication
++can precede a secured receive-key status; eventual DATA passed after sender
++acknowledgement. Controlled runtime KMREQ loss now reproduces CONNECTED and group epoll OUT
++while sender SNDKMSTATE remains SECURING in four encrypted cases. Level-triggered
++IN follows subsequent DATA and clears when drained. A subsequent extension verifies one pending-key DATA submission followed by
++short-loss recovery, BROKEN/IN|OUT|ERR after failed join, and socket-closed errors
++when closing a receiver with a receive future pending. Four further cases establish nonblocking backpressure during a one-second
++KM-loss window and close completion for pending receive/epoll futures. Three-second recovery and idle-expiry cases now distinguish configured
++peer-idle horizons from key completion. A dedicated maximum KM-completion
++policy, delivery across arbitrary deadlines and broader teardown interleavings
++remain open. See the expanded
++[native results](native-publication-results.md); no new normative wire requirement
++is inferred from the observed scheduling interval.
++
++## KM completion and peer-idle policy
++
++Do not specify PEERIDLETIMEO as an independent KM-completion timeout. MC-D01/D02
++and the native recovery/expiry fixtures distinguish retry cadence from expiry
++since last peer activity. Whether an interoperable profile needs a separate
++maximum pending-key interval requires an explicit design decision; the observed
++three-second fixtures do not resolve it.
++
++## Consolidated editorial review
++
++The [decision package](decision-package-2026-11-06.md) presents recommendations,
++alternatives and compatibility consequences. Recommendations are not approved
++wire changes. The [baseline comparison](baseline-comparison.md) pins source
++provenance and records section dispositions; it does not certify every clause.
++
++## Proposed base clauses
++
++[P01–P05](proposed-base-clauses.md) provide replacement/insertion text for GCM,
++handshake acceptance, the Control REXMITFLG exception, clock sampling and namespace
++interpretation. All are marked proposed, not approved. Their source anchors are
++verified by the audit checker. No implementation or deployed wire rule changed.
++
++## Combination and lifecycle review
++
++[P06](extension-combination-matrix.md) separates supported contract families,
++source-confirmed exclusions and unqualified combinations. [P07](proposed-key-lifecycle.md)
++distinguishes multicast positional rotation from ordinary acknowledgement-gated
++rotation and documents the cache-miss rule precisely. D06 still needs historical
++repair eligibility and complete serial/exhaustion policy; no new rejection rule
++or wire change is approved by these descriptions.
++
++## Submission readiness pass
++
++The [readiness report](submission-readiness-2026-11-06.md) records passing normal
++and submission-mode idnits results after editorial fixes. Author/contact metadata is now confirmed. Intended route/names, rights review, reference classification and
++protocol decisions remain open. Local browser policy blocked visual HTML review;
++static text/HTML checks passed. No external submission is authorized.
++
++## Recommended version 00 disposition
++
++The [disposition table](initial-draft-disposition.md) assigns concrete initial-draft
++wording and remaining decisions without adopting wire changes. P08 adds ordinary
++directional key lifecycle separately from multicast. Four shared-schedule and
++two directional-key focused regressions passed; their limits remain explicit.
++Author/contact details were explicitly supplied and applied to both drafts:
++Marc Cymontkowski, Robotweax GmbH, marc@robotweax.ai. Draft names and route remain
++provisional.
+--- a/docs/traceability.md
++++ b/docs/traceability.md
+@@ -9,9 +9,9 @@
+ | BASE-01 | HSv5 flags, section 3.2.1.1 | docs/control-profile.md | Resolve base MUST-set REXMITFLG versus Control omission | Explicit profile exception or implementation change undecided |
+ | BASE-02 | TSBPD, drift and RTT, sections 4.5, 4.7, 4.10 | docs/release-notes-0.3.2.md; docs/live-timing.md | Distinguish initialized RTT from valid measurement | Reported timing regressions; extract exact cases |
+ | BASE-03 | Drop/recovery, sections 4.6, 4.8 | docs/sender-drop-semantics.md; docs/protocol-edge-cases.md | Reconcile first-transmission deadline, ACK validation and rollover | Clause-by-clause audit pending |
+-| AEAD-01 | Encryption, sections 3.2.2 and 6; newer working copy | docs/aes-gcm-contract.md; compat/robotweax-0.2-aead-fixtures.json | Freeze negotiation, IV/AAD, tag, retransmission and lifetime | Existing fixture corpus; independent validation pending |
++| AEAD-01 | Encryption, sections 3.2.2 and 6; newer working copy | docs/aes-gcm-contract.md; compat/robotweax-0.2-aead-fixtures.json | Freeze negotiation, IV/AAD, tag, retransmission and lifetime | Six initial DATA/KM calculations independently matched; post-rotation DATA and full GCM base text remain open |
+ | GROUP-01 | Group membership, section 3.2.1.4 | docs/connection-groups.md | Specify Broadcast/Backup sequence, clocks, join/failover and deduplication | Per-topology evidence must be extracted |
+-| MC-01 | Reserved group type 4 | include/robotweax/srt/connection_group.hpp; src/connection_group.cpp | Document 60-byte dispatch record and validation | Exact field layout inspected; vectors pending |
++| MC-01 | Reserved group type 4 | include/robotweax/srt/connection_group.hpp; src/connection_group.cpp | Document 60-byte dispatch record and validation | Pinned codec vectors and native admission evidence available; independent peer absent |
+ | MC-02 | New dispatch transport | docs/connection-groups.md | Admission, group destination ID, feedback and repair | Reported lifecycle, epoll and media tests; independent peer absent |
+ | MC-03 | Group encryption | docs/encryption.md | Positional shared keys, late joins, wrap and receiver-free progression | Reported CTR/GCM tests; no sender identity or leave revocation |
+ | MC-04 | Congestion and deployment | docs/multicast-media.md | Aggregate repair budget, heterogeneous receivers, network qualification | Per-member cap exists; aggregate policy and physical fan-out unresolved |
+@@ -25,7 +25,16 @@
+ | REC-01 | ARQ-first/tail probes, sections 4.8 and 5 | docs/arq-first-fec.md; docs/socket-options.md | Optional sender algorithm, pacing and cold-start limits | Reported measured-RTT UDP tests; no general deadline/bandwidth claim |
+ | EXP-01 | Compiled controllers and filters | docs/experimental-controllers.md; docs/experimental-filters.md | Specify selected named wire algorithms only if promoted | Private provider API is out of scope |
+ 
+-Next evidence pass: map each row to exact test names and immutable result
+-artifacts, record platform/topology/cipher, then add captured wire vectors.
++Multicast/authentication rows now have selected pinned execution evidence.
++Map the remaining base/profile/ancillary rows to exact test names and immutable
++artifacts before extending conformance claims.
+ Missing evidence remains missing; a passing same-code peer pair is not a second
+ independent implementation.
++
++## Detailed local follow-up
++
++The original [source audit](source-audit-2026-11-06.md) is historical; the current [claim ledger](../audit/source-map.json) verifies 36 source claims and associated test evidence. The [validation record](local-audit-validation.md) distinguishes evidence checks from protocol test execution. Broader base-protocol and ancillary-extension rows above remain planned work.
++
++The [baseline comparison](baseline-comparison.md) covers all numbered sections
++of the submitted text and maps the supplemental source by heading and line.
++Its editorial dispositions complement, rather than replace, this feature map.
+--- a/drafts/draft-robotweax-srt-multicast-00.xml
++++ b/drafts/draft-robotweax-srt-multicast-00.xml
+@@ -1,47 +1,107 @@
+-<?xml version="1.0" encoding="UTF-8"?>
++<?xml version='1.0' encoding='UTF-8'?>
+ <rfc version="3" ipr="trust200902" category="exp" submissionType="independent" docName="draft-robotweax-srt-multicast-00" tocInclude="true" symRefs="true">
+-<front><title abbrev="SRT Extensions">Multicast Dispatch for the Secure Reliable Transport Protocol</title><author fullname="Robotweax Editorial Team"><organization>Robotweax</organization></author><date year="2026" month="November" day="6"/><abstract><t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.2. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t></abstract></front>
+-<middle>
+-<section anchor="status"><name>Status and Scope</name>
+-<t>This is an unsubmitted editorial draft. The organizational author and document name are placeholders. It is not a complete independently implementable specification. Statements describing version 0.3.2 are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
+-<t>The baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
+-</section>
+-<section anchor="model"><name>Transport Model</name>
+-<t>The Listener is the sole DATA sender. Each Caller receiver has a unicast session for admission, acknowledgments, negative acknowledgments, key exchange and repairs. Original DATA is emitted once to the multicast destination. Every original and repair names the dispatch group in the DATA destination-socket field, including unicast repairs. The receiver routes both paths into one member reliability state.</t>
+-<t>Membership uses group type 4, reserved for multicast in the base SRT draft. Use of that value does not imply allocation of the additional handshake extension. The receiver accepts multicast DATA only for the announced group identity and sender source. Source filtering is not cryptographic sender authentication.</t>
+-<t>Each receiver retains its own control and repair state. The sender remains open without receivers, and accepted sends advance the group position without delivery. Initial joining position, timestamp mapping and retained-history boundaries require complete serial-arithmetic definitions; see Open Issues.</t>
+-</section>
+-<section anchor="wire"><name>Dispatch Handshake Record</name>
+-<t>The Listener CONCLUSION carries CONFIG extension type 0x7f14. This provisional value is not an IANA allocation. Content is exactly 60 bytes, excluding the normal four-byte extension header; its length is 15 four-byte words. Integers use network byte order.</t>
+-<t>Offsets and widths: 0/4 magic 0x52574d01; 4/4 dispatch group ID; 8/1 address family (4 or 6); 9/1 flags; 10/2 destination UDP port; 12/16 multicast address; 28/16 interface selector; 44/4 initial sequence; 48/8 signed timestamp-origin delta in microseconds; 56/1 hop limit; 57/3 reserved zero.</t>
+-<t>Flag bit 0 indicates an interface hint; other bits are zero. IPv4 addresses occupy the first four bytes of address slots and the remaining bytes are zero. For IPv6, the interface-selector slot contains twelve zero bytes followed by a 32-bit scope index. With no hint, the entire selector is zero. A local receiver interface override takes precedence; an index is host-local and its cross-host meaning remains an open issue.</t>
+-<t>The implementation rejects wrong length or magic, unknown family/flags, nonzero reserved/padding bytes, a non-multicast destination, port zero, an initial sequence above 0x7fffffff, and invalid group/interface identity. The group-ID mask and its relationship to SRT socket identifiers require a portable definition. Duplicate records and unsupported combinations must be included in the conformance corpus.</t>
+-</section>
+-<section anchor="repair"><name>Delivery and Repairs</name>
+-<t>Unicast repair is the default. With a configured threshold of 1 through 16 distinct requesting receivers, a bounded per-sequence tally can cause one multicast repair for shared loss. Suppression begins only after local UDP acceptance. A repeated request by the same receiver uses unicast, permitting recovery if the multicast repair was lost. Transient multicast send failure falls back to unicast.</t>
+-<t>The current implementation uses a tally window described as a couple of round trips. A normative formula, expiration rules, capacity/eviction rules and duplicate-request handling remain to be specified from code and tests. This draft does not turn that informal description into a requirement.</t>
+-<t>The elected transmitting member must accept a message before suppressed members commit it. Backpressure does not advance the group sequence. Per-member bandwidth caps constrain the elected multicast transmitter and individual repairs; there is no separate aggregate cap. A network-suitable aggregate feedback and repair policy remains unresolved.</t>
+-</section>
+-<section anchor="keys"><name>Shared Traffic Keys</name>
+-<t>Each receiver has its own key exchange and key-encrypting context, but the sender shares one traffic-key schedule and salt across the dispatch group. Admission requires matching encryption mode and key length. A receiver starts participating only after initial group-key confirmation. A dispatch receiver does not retain the ordinary handshake key clone as an alternate DATA key.</t>
+-<t>Rotations follow consumed group sequence positions, including receiver-free intervals. Members preannounce successor keys separately. Rotation is positional rather than waiting for all receivers to acknowledge; a receiver missing a key leaves affected DATA unacknowledged and may recover through unicast repair within its latency budget. The implementation retains four generations for repairs.</t>
+-<t>CTR and GCM use sequence-based IV derivation. A repeated packet reuses its protected representation, with the GCM retransmission bit normalized for AAD. The same key and nonce must not protect different plaintext/header inputs. A complete extended-position/generation algorithm, wrap vectors, key-retention boundary and failure-atomicity rules are still required.</t>
+-</section>
+-<section anchor="security"><name>Security Considerations</name>
+-<t>Shared keys permit admitted receivers to forge traffic authentic under the group key. AES-GCM therefore does not establish sender identity against group insiders; AES-CTR does not provide DATA integrity. Source-address filtering does not fix either limitation.</t>
+-<t>Leaving does not revoke learned keys; admission does not guarantee that a joiner cannot decrypt retained historical ciphertext protected by its newly learned keys. There is no per-receiver forward/backward access guarantee. Deployments must treat the group as one trusted domain unless a future version supplies stronger protection.</t>
+-<t>Review must cover handshake tampering, redirection to multicast destinations, unauthorized membership, feedback amplification, receiver state exhaustion, forged control traffic, congestion and denial of service. An implementation source review is not independent cryptographic or network-scale qualification.</t>
+-</section>
+-<section anchor="iana"><name>IANA Considerations</name>
+-<t>No allocation request is made in this initial editorial version. Type 0x7f14 is a provisional implementation value; no private-use reservation is asserted. Before publication, coordinate the extension namespace and group-type semantics, decide an allocation policy and specify migration if a collision is found.</t>
+-</section>
+-<section anchor="issues"><name>Open Issues</name>
+-<t>Define full admission/retry and receiver lifecycle state machines, timestamp-origin mapping, serial arithmetic, extended generation positions, cipher interactions, key-generation failure and repair retention. Produce independent wire vectors for IPv4/IPv6 encodings, rollover, late joining and empty-group progression.</t>
+-<t>Decide aggregate congestion and feedback policy, slow-receiver handling, supported multicast deployment scope, interface-hint semantics and combinations with authentication extensions. Qualify physical network behavior separately from loopback media tests. A second independent implementation is desirable maturity evidence.</t>
+-</section>
+-<section anchor="sources"><name>Source Baseline</name><t>The base protocol is described in <xref target="SRT"/>. Implementation behavior is taken from <xref target="RWSRT"/>. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t></section>
+-</middle><back><references><name>Informative References</name>
+-<reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01"><front><title>The SRT Protocol</title><author fullname="Maria Sharabayko"/><date year="2021" month="September"/></front><seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01"/></reference>
+-<reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1"><front><title>Robotweax SRT 0.3.2 source and protocol contracts</title><author fullname="Robotweax"/><date year="2026"/></front></reference>
+-</references></back></rfc>
+-
++  <front>
++    <title abbrev="SRT Multicast">Multicast Dispatch for the Secure Reliable Transport Protocol</title>
++    <author fullname="Marc Cymontkowski" initials="M." surname="Cymontkowski">
++      <organization>Robotweax GmbH</organization>
++      <address>
++        <email>marc@robotweax.ai</email>
++      </address>
++    </author>
++    <date year="2026" month="November" day="6" />
++    <abstract>
++      <t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.2. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t>
++    </abstract>
++  </front>
++  <middle>
++    <section anchor="status">
++      <name>Introduction</name>
++      <t>This is an unsubmitted editorial draft. The document name remains provisional. It is not a complete independently implementable specification. Statements describing version 0.3.2 are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
++      <t>The baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
++      <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
++    </section>
++    <section anchor="model">
++      <name>Transport Model</name>
++      <t>The Listener is the sole DATA sender. Each Caller receiver has a unicast session for admission, acknowledgments, negative acknowledgments, key exchange and repairs. Original DATA is emitted once to the multicast destination. Every original and repair names the dispatch group in the DATA destination-socket field, including unicast repairs. The receiver routes both paths into one member reliability state.</t>
++      <t>Membership uses group type 4, reserved for multicast in the base SRT draft. Use of that value does not imply allocation of the additional handshake extension. The receiver accepts multicast DATA only for the announced group identity and sender source. Source filtering is not cryptographic sender authentication.</t>
++      <t>Each receiver retains its own control and repair state. The sender remains open without receivers, and accepted sends advance the group position without delivery. The announcement carries the current next-send sequence. Version 0.3.2 emits a timestamp-origin delta of zero: members share the group timestamp origin. The field is serialized and decoded, but no runtime application of a nonzero delta was found in the audited source. Nonzero clock mapping is therefore not specified by this profile. Whether to require zero on reception is an open protocol decision, not a claim about current decoder rejection.</t>
++    </section>
++    <section anchor="admission-timing">
++      <name>Admission and Clock Initialization</name>
++      <t>The Caller selects its inbound sequence from the dispatch announcement before installing the runtime. Native receive membership and ingress routes are attached before the implementation publishes CONNECTED. Attachment failure terminates admission without that publication. An asynchronous connect return indicates work has started; it does not establish successful admission.</t>
++      <t>The Caller initializes its Live receive-clock base from the local time sampled during runtime attachment minus the peer handshake timestamp. This sample includes setup scheduling delay; it is not a retained UDP-ingress timestamp. Members share receive-clock state within the group. Accepted sender members use the group timestamp origin. The announced timestamp delta is not applied.</t>
++      <t>Connection publication and group-key confirmation are distinct. CONNECTED and API writable readiness may precede key acknowledgement. Queue acceptance does not promise UDP emission or receiver delivery. Terminal failure can also report writable readiness together with error; applications must inspect the connection state. These API observations do not define additional wire signals.</t>
++    </section>
++    <section anchor="wire">
++      <name>Dispatch Handshake Record</name>
++      <t>The Listener CONCLUSION carries CONFIG extension type 0x7f14. This provisional value is not an IANA allocation. Content is exactly 60 bytes, excluding the normal four-byte extension header; its length is 15 four-byte words. Integers use network byte order.</t>
++      <t>Offsets and widths: 0/4 magic 0x52574d01; 4/4 dispatch group ID; 8/1 address family (4 or 6); 9/1 flags; 10/2 destination UDP port; 12/16 multicast address; 28/16 interface selector; 44/4 initial sequence; 48/8 signed timestamp-origin delta in microseconds; 56/1 hop limit; 57/3 reserved zero.</t>
++      <t>Flag bit 0 indicates an interface hint; other bits are zero. IPv4 addresses occupy the first four bytes of address slots and the remaining bytes are zero. For IPv6, the interface-selector slot contains twelve zero bytes followed by a 32-bit scope index. With no hint, the entire selector is zero. A local receiver interface override takes precedence; an index is host-local and its cross-host meaning remains an open issue.</t>
++      <t>The implementation rejects wrong length or magic, unknown family/flags, nonzero reserved/padding bytes, a non-multicast destination, port zero, an initial sequence above 0x7fffffff, and invalid group/interface identity. The group ID must have bit 0x40000000 set. This implementation check does not define a global identifier allocation scheme. Duplicate records and unsupported combinations require conformance cases. The timestamp delta is not a validated zero-only reserved field in the current decoder.</t>
++    </section>
++    <section anchor="repair">
++      <name>Delivery and Repairs</name>
++      <t>Unicast repair is the default. With a configured threshold of 1 through 16 distinct requesting receivers, a bounded per-sequence tally can cause one multicast repair for shared loss. Suppression begins only after local UDP acceptance. A repeated request by the same receiver uses unicast, permitting recovery if the multicast repair was lost. Transient multicast send failure falls back to unicast.</t>
++      <t>At each repair decision, the implementation computes a window in microseconds from the requesting member: clamp(2 * smoothed_RTT, 10000, 1000000) when that member has an RTT sample, otherwise 100000. The window is measured from the tally entry first-request time, but recalculated for each requesting member; it is not a fixed shared group RTT. Expiry occurs when elapsed time is strictly greater than this window, or the local clock moves before the recorded first time.</t>
++      <t>The tally uses 1024 slots indexed by sequence modulo 1024, with at most 16 remembered receiver identities per slot. A repeated receiver request or an unrecordable additional receiver uses unicast. Once an entry has attempted multicast, expiry restores unicast until eviction rather than starting another multicast attempt. Completion is bound to the sequence and attempt identity, preventing stale completion from modifying a replacement entry. These are observed implementation bounds, not yet mandatory limits for independent implementations.</t>
++      <t>The elected transmitting member must accept a message before suppressed members commit it. Per-member caps do not provide an aggregate repair cap. A transient local failure of an original multicast DATA send records submission and relies on receiver NAK recovery; a transient multicast repair failure falls back to the ordinary unicast path. A nontransient send failure breaks the member. Queue acceptance, successful UDP emission and receiver delivery are different events.</t>
++    </section>
++    <section anchor="keys">
++      <name>Shared Traffic Keys</name>
++      <t>Each receiver has its own key exchange and key-encrypting context, but the sender shares one traffic-key schedule and salt across the dispatch group. Admission requires matching encryption mode and key length. Encrypted group DATA participation requires initial group-key confirmation; admission publication and application queue acceptance can precede that confirmation. A dispatch receiver does not retain the ordinary handshake key clone as an alternate DATA key.</t>
++      <t>Rotation uses an extended local sequence-position frontier. Generation is floor(position / refresh_rate); the even/odd selector is generation parity. Serial comparison uses the signed distance in the 31-bit sequence space and requires an unambiguous half-range interpretation. Refresh is clamped between 2 and 2^30 positions; preannouncement is at most floor((refresh_rate - 1) / 2). The schedule has four generation-cache slots. This is not a promise of four consecutive populated historical generations after idle jumps.</t>
++      <t>CTR and GCM use sequence-based IV derivation. A repeated packet reuses its protected representation, with the GCM retransmission bit normalized for AAD. The same key and nonce must not protect different plaintext/header inputs. A complete extended-position/generation algorithm, wrap vectors, key-retention boundary and failure-atomicity rules are still required.</t>
++      <t>Pending KM requests are retried using the runtime RTT-dependent cadence. Peer-idle expiry measures inactivity since peer activity, independently of the existence of pending key material. This document does not specify a separate maximum KM-completion deadline. Recovery remains subject to configured inactivity limits, queue capacity and packet lifetime.</t>
++      <t>On a generation-cache miss, the implementation can create a missing key within its retained numeric window, not only the next generation. An idle jump may skip unpopulated generations; generating such a key does not recover a previous cryptogram. Historical repair eligibility must therefore be specified separately from cache capacity. The unused-position advance checks 64-bit overflow before committing its frontier, while the ordinary signed-distance advance does not contain the same explicit check. Complete position-exhaustion semantics remain unresolved.</t>
++    </section>
++    <section anchor="security">
++      <name>Security Considerations</name>
++      <t>Shared keys permit admitted receivers to forge traffic authentic under the group key. AES-GCM therefore does not establish sender identity against group insiders; AES-CTR does not provide DATA integrity. Source-address filtering does not fix either limitation.</t>
++      <t>Leaving does not revoke learned keys; admission does not guarantee that a joiner cannot decrypt retained historical ciphertext protected by its newly learned keys. There is no per-receiver forward/backward access guarantee. Deployments must treat the group as one trusted domain unless a future version supplies stronger protection.</t>
++      <t>Review must cover handshake tampering, redirection to multicast destinations, unauthorized membership, feedback amplification, receiver state exhaustion, forged control traffic, congestion and denial of service. An implementation source review is not independent cryptographic or network-scale qualification.</t>
++    </section>
++    <section anchor="iana">
++      <name>IANA Considerations</name>
++      <t>No allocation request is made in this initial editorial version. Type 0x7f14 is a provisional implementation value; no private-use reservation is asserted. Before publication, coordinate the extension namespace and group-type semantics, decide an allocation policy and specify migration if a collision is found.</t>
++    </section>
++    <section anchor="issues">
++      <name>Open Issues</name>
++      <t>Proposed compatibility baseline: document the emitted zero timestamp delta and the setup-time receive-clock initialization without silently imposing new receiver rejection or ingress-capture rules. Decide whether a future negotiated profile should change either behavior. Specify complete admission, retry and key-lifecycle state machines, serial arithmetic, position exhaustion, historical repair eligibility and key-retention boundaries.</t>
++      <t>Define aggregate congestion and repair budgets, receiver and feedback limits, slow-receiver behavior, interface-hint semantics and the supported extension-combination matrix. Decide whether a separate pending-key deadline is required. These policy choices remain proposals; the current implementation bounds do not automatically become protocol requirements.</t>
++      <t>Extend validation where a proposed requirement needs evidence: independent post-rotation DATA vectors, exhaustive lifetime/replay boundaries, independent peer interoperability and physical-network qualification. Existing vectors and local tests do not remove the need for independent security review.</t>
++    </section>
++    <section anchor="sources">
++      <name>Source Baseline</name>
++      <t>The base protocol is described in <xref target="SRT" />. Implementation behavior is taken from <xref target="RWSRT" />. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t>
++    </section>
++    <section anchor="implementation-evidence">
++      <name>Implementation Evidence</name>
++      <t>The local evidence package includes frozen codec/authentication vectors, six CTR/GCM key-size calculations, serialized handshake/runtime checks and 28 instrumented native loopback scenarios. It distinguishes source-confirmed behavior, executed assertions and unresolved requirements. Logs, hashes, failure explanations and reproduction details are retained outside this protocol text.</t>
++      <t>The native scenarios cover synchronous/asynchronous admission, join failure, controlled KM loss, bounded queue pressure, selected receive/epoll close schedules, recovery and peer-idle expiry. They support the behavior described here within those fixtures, not independent interoperability, arbitrary deadline guarantees, race freedom or physical-network scale. The release source is unchanged; the native probe uses a separately instrumented export.</t>
++    </section>
++  </middle>
++  <back>
++    <references>
++      <name>Informative References</name>
++      <reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01">
++        <front>
++          <title>The SRT Protocol</title>
++          <author fullname="Maxim Sharabayko" />
++          <author fullname="Maria Sharabayko" />
++          <author fullname="Jean Dube" />
++          <author fullname="Jeongseok Kim" />
++          <author fullname="Joonwoong Kim" />
++          <date year="2021" month="September" />
++        </front>
++        <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
++      </reference>
++      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1">
++        <front>
++          <title>Robotweax SRT 0.3.2 source and protocol contracts</title>
++          <author fullname="Robotweax" />
++          <date year="2026" />
++        </front>
++      </reference>
++    </references>
++  </back>
++</rfc>--- a/drafts/draft-robotweax-srt-authentication-00.xml
++++ b/drafts/draft-robotweax-srt-authentication-00.xml
+@@ -1,49 +1,135 @@
+-<?xml version="1.0" encoding="UTF-8"?>
++<?xml version='1.0' encoding='UTF-8'?>
+ <rfc version="3" ipr="trust200902" category="exp" submissionType="independent" docName="draft-robotweax-srt-authentication-00" tocInclude="true" symRefs="true">
+-<front><title abbrev="SRT Extensions">Session Authentication Extensions for the Secure Reliable Transport Protocol</title><author fullname="Robotweax Editorial Team"><organization>Robotweax</organization></author><date year="2026" month="November" day="6"/><abstract><t>This initial editorial draft records Robotweax SRT session authentication version 2 and scopes the separate experimental ACP1 authenticated-control work. It describes current implementation behavior and outstanding security and specification decisions. It is not a complete security protocol specification or a claim of independent cryptographic review.</t></abstract></front>
+-<middle>
+-<section anchor="status"><name>Status and Scope</name>
+-<t>This unsubmitted working draft uses placeholder author metadata. The implementation baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
+-<t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
+-</section>
+-<section anchor="handshake"><name>Version 2 Handshake</name>
+-<t>INDUCTION is unchanged. The CONCLUSION CONFIG extension type 0x7f10 has 100 content bytes: network-order uint32 version 2, caller nonce[32], listener nonce[32], proof[32]. The caller offers a fresh nonce with zero listener nonce and proof. The listener supplies its fresh nonce and server proof. The caller verifies it and sends its proof in AGREEMENT; the listener verifies that proof before publishing the connection.</t>
+-<t>Unknown versions, malformed lengths and duplicate extensions are rejected. Lost final confirmation is recovered through listener response retry and the caller's cached AGREEMENT. No automatic downgrade is allowed. Exact transcript serialization and retransmission state transitions require normative vectors.</t>
+-</section>
+-<section anchor="derivation"><name>Key Derivation and Proof Input</name>
+-<t>The 32-byte authentication key is PBKDF2-HMAC-SHA1 with 2048 iterations over the passphrase. Salt is the 16-byte label consisting of ASCII RWSRT-SESSION-2 followed by one zero byte, then caller nonce, listener nonce, caller socket ID encoded as uint64, and listener socket ID encoded as uint64. All integers are network order.</t>
+-<t>HMAC-SHA256 input is the same 16-byte label, uint8 domain, uint8 sender role, uint64 counter, uint16 body length, and complete KM body. Domains are 1 for handshake, 2 for KMREQ and 3 for KMRSP. Roles are 1 caller and 2 listener. The handshake counter is zero and the proof covers the original initial KM body.</t>
+-<t>The label is exactly 15 ASCII bytes plus one zero byte, confirmed against src/session_authentication.cpp at the baseline commit. The salt is 96 bytes. Independent vectors and a precise password encoding and embedded-NUL contract remain required.</t>
+-</section>
+-<section anchor="runtime"><name>Runtime Key Controls</name>
+-<t>User-defined runtime subtypes 0x7f03 and 0x7f04 carry authenticated KMREQ and KMRSP respectively. Payload is uint64 counter, unchanged KM body, and a 32-byte tag. Request counters begin at one, increase when the body changes and are reused for identical retries; a response echoes its request counter.</t>
+-<t>Authentication and counter validation precede key processing. Counter exhaustion fails closed. Protected sessions ignore bare standard KM controls; ordinary sessions ignore these protected subtypes. The exact bounded replay history, retry identity and out-of-order response rules must be specified from the implementation.</t>
+-</section>
+-<section anchor="fec"><name>Authenticated FEC Parity</name>
+-<t>With version 2 and a packet filter, a parity DATA packet with message number zero carries uint64 counter, FEC body and a 32-byte HMAC tag. MAC input is the version label, domain 4, sender role, counter, uint16 FEC-body length, full 16-byte network-order DATA header and FEC body. Every header bit is covered.</t>
+-<t>Parity counters are independent of key-control counters and key rotation. A 64-packet sliding bitmap accepts each authenticated counter once and permits bounded reordering. Invalid authentication does not advance replay state. Greater reordering may discard repair opportunities. Local datagram retries preserve sealed bytes and counter.</t>
+-<t>The 40-byte envelope consumes payload budget. Exhaustion or signing failure terminates the sending connection. Authenticating parity does not authenticate CTR source DATA. GCM remains a separate selection.</t>
+-</section>
+-<section anchor="acp"><name>Separate Experimental ACP1 Work</name>
+-<t>ACP1 uses user-defined control type 0x7fff and provisional subtype 0x7f05. Its envelope is outer header[16], uint32 envelope version 1, uint64 counter, original control packet[16 plus body], HMAC-SHA256 tag[32]. It adds 60 bytes. Direction keys and a 64-position replay window protect runtime controls before transport-state mutation.</t>
+-<t>Session-authentication versions 3, 4, 5 and 6 select ordinary Caller/Listener, Rendezvous, Caller/Listener group members and Group Rendezvous respectively. They bind different nonce, cookie and membership contexts. They are not interchangeable versions of one topology. Full KDF/context/envelope and state-machine definitions are deferred to a separate drafting pass.</t>
+-<t>ACP1 does not authenticate all handshake fields and does not change CTR DATA integrity. Its PBKDF-to-HKDF construction, coverage, loss/replay behavior and per-member lifecycle require independent review. No support or full-transport-security claim follows from this summary.</t>
+-</section>
+-<section anchor="security"><name>Security Considerations</name>
+-<t>Version 2 protects selected key material and parity, not every handshake or runtime control. Stream ID, transport settings, ordinary ACK/NAK and shutdown are outside its protection. Stream ID is routing input, not authorization. GCM is required separately for DATA authentication.</t>
+-<t>Shared-passphrase holders can impersonate each other and there is no forward secrecy. The 2048-iteration KDF is not a password-storage recommendation. Weak secrets, resource exhaustion, traffic analysis, withholding and malicious endpoints remain threats. Admission work must be bounded.</t>
+-<t>Independent review must assess transcript binding and downgrade resistance, password derivation, key separation, counter replay and exhaustion, retry/loss behavior and topology interactions. Any strengthening that changes negotiated bytes needs a new explicit version rather than silent reinterpretation of version 2.</t>
+-</section>
+-<section anchor="iana"><name>IANA Considerations</name>
+-<t>No allocation request is made in this initial editorial version. Handshake 0x7f10 and runtime 0x7f03, 0x7f04 and 0x7f05 are provisional implementation values, not registered assignments. Determine namespace policy and migration before publication.</t>
+-</section>
+-<section anchor="issues"><name>Open Issues</name>
+-<t>Confirm exact KDF bytes and password representation; formalize all retry/replay state machines and rejection behavior. Add independent proof, key-control and parity vectors, malformed cases, reflection/cross-session checks and counter boundaries. Decide ACP1 document scope and complete an extension-combination matrix.</t>
+-<t>Confirm named editors and publication route. Complete independent cryptographic review before recommending the construction as a generally supported security profile. Posting an initial draft is distinct from completing that review.</t>
+-</section>
+-<section anchor="sources"><name>Source Baseline</name><t>The base protocol is described in <xref target="SRT"/>. Implementation behavior is taken from <xref target="RWSRT"/>. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t></section>
+-</middle><back><references><name>Informative References</name>
+-<reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01"><front><title>The SRT Protocol</title><author fullname="Maria Sharabayko"/><date year="2021" month="September"/></front><seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01"/></reference>
+-<reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1"><front><title>Robotweax SRT 0.3.2 source and protocol contracts</title><author fullname="Robotweax"/><date year="2026"/></front></reference>
+-</references></back></rfc>
+-
++  <front>
++    <title abbrev="SRT Session Authentication">Session Authentication Extensions for the Secure Reliable Transport Protocol</title>
++    <author fullname="Marc Cymontkowski" initials="M." surname="Cymontkowski">
++      <organization>Robotweax GmbH</organization>
++      <address>
++        <email>marc@robotweax.ai</email>
++      </address>
++    </author>
++    <date year="2026" month="November" day="6" />
++    <abstract>
++      <t>This initial editorial draft records Robotweax SRT session authentication version 2 and scopes the separate experimental ACP1 authenticated-control work. It describes current implementation behavior and outstanding security and specification decisions. It is not a complete security protocol specification or a claim of independent cryptographic review.</t>
++    </abstract>
++  </front>
++  <middle>
++    <section anchor="status">
++      <name>Introduction</name>
++      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
++      <t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
++      <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
++    </section>
++    <section anchor="handshake">
++      <name>Version 2 Handshake</name>
++      <t>INDUCTION is unchanged. The CONCLUSION CONFIG extension type 0x7f10 has 100 content bytes: network-order uint32 version 2, 32-byte caller nonce, 32-byte listener nonce, 32-byte proof. The caller offers a fresh nonce with zero listener nonce and proof. The listener supplies its fresh nonce and server proof. The caller verifies it and sends its proof in AGREEMENT; the listener verifies that proof before publishing the connection.</t>
++      <t>Unknown versions, malformed lengths and duplicate extensions are rejected. Lost final confirmation is recovered through listener response retry and the caller's cached AGREEMENT. No automatic downgrade is allowed. Exact transcript serialization and retransmission state transitions require normative vectors.</t>
++    </section>
++    <section anchor="derivation">
++      <name>Key Derivation and Proof Input</name>
++      <t>The 32-byte authentication key is PBKDF2-HMAC-SHA1 with 2048 iterations over the passphrase. Salt is the 16-byte label consisting of ASCII RWSRT-SESSION-2 followed by one zero byte, then caller nonce, listener nonce, caller socket ID encoded as uint64, and listener socket ID encoded as uint64. All integers are network order.</t>
++      <t>HMAC-SHA256 input is the same 16-byte label, uint8 domain, uint8 sender role, uint64 counter, uint16 body length, and complete KM body. Domains are 1 for handshake, 2 for KMREQ and 3 for KMRSP. Roles are 1 caller and 2 listener. The handshake counter is zero and the proof covers the original initial KM body.</t>
++      <t>The label is exactly 15 ASCII bytes plus one zero byte, confirmed against src/session_authentication.cpp at the baseline commit. Salt length is 96 bytes. The public passphrase setter passes an explicit byte length and copies those bytes without text normalization or embedded-NUL stripping. Frozen formula-level KDF/proof vectors include an embedded-NUL password and match the pinned implementation. Their synthetic KM body does not establish a complete independently implemented handshake. Any human-readable password encoding convention is separate.</t>
++      <t>The underlying PBKDF2 construction is described in <xref target="RFC8018" />, HMAC in <xref target="RFC2104" />, and the AES key-wrap mechanism used by SRT key material in <xref target="RFC3394" />. These references identify primitives; they do not constitute review of this profile or approval of its parameters.</t>
++    </section>
++    <section anchor="runtime">
++      <name>Runtime Key Controls</name>
++      <t>User-defined runtime subtypes 0x7f03 and 0x7f04 carry authenticated KMREQ and KMRSP respectively. Payload is uint64 counter, unchanged KM body, and a 32-byte tag. Request counters begin at one, increase when the body changes and are reused for identical retries; a response echoes its request counter.</t>
++      <t>On receiving KMREQ, the authentication layer rejects a counter below the highest authenticated request counter. An equal counter is accepted only with the identical cached body and a valid MAC. A larger counter replaces that single cached request only after MAC verification. This is a monotonic counter with an idempotent retry exception, not the FEC sliding replay window. The audited runtime ignores bare KM controls in protected sessions and checks authenticated private subtypes before forwarding the decoded body to ordinary KM processing.</t>
++      <t>KMRSP must carry the current local sent-request counter and a valid response-domain MAC. The authentication layer does not mark that response counter consumed, so an identical valid response may be accepted repeatedly. It also does not replace the downstream key-material semantic validation described below. Once a different request advances the sent counter, responses to older requests fail. Counter exhaustion prevents sealing a new changed request; full runtime exhaustion failure handling still requires integration review.</t>
++      <t>The runtime opens the authenticated envelope before checking the KM payload shape and passing KMRSP to semantic acknowledgement with receive-key cloning disabled. Semantic acknowledgement returns idempotent success for a body already in bounded acknowledged history. Otherwise it requires exact equality with the pending body before clearing the pending request and marking the sender secured. An old acknowledged body does not confirm a different pending rotation. Authentication-counter acceptance and key-state advancement are separate decisions.</t>
++    </section>
++    <section anchor="fec">
++      <name>Authenticated FEC Parity</name>
++      <t>With version 2 and a packet filter, a parity DATA packet with message number zero carries uint64 counter, FEC body and a 32-byte HMAC tag. MAC input is the version label, domain 4, sender role, counter, uint16 FEC-body length, full 16-byte network-order DATA header and FEC body. Every header bit is covered.</t>
++      <t>Parity counters are independent of key-control counters and key rotation. A 64-packet sliding bitmap accepts each authenticated counter once and permits bounded reordering. Invalid authentication does not advance replay state. Greater reordering may discard repair opportunities. Local datagram retries preserve sealed bytes and counter.</t>
++      <t>The 40-byte envelope consumes payload budget. Exhaustion or signing failure terminates the sending connection. Authenticating parity does not authenticate CTR source DATA. GCM remains a separate selection.</t>
++    </section>
++    <section anchor="acp">
++      <name>Separate Experimental ACP1 Work</name>
++      <t>ACP1 uses user-defined control type 0x7fff and provisional subtype 0x7f05. Its envelope is 16-byte outer header, uint32 envelope version 1, uint64 counter, original control packet (16-byte header plus body), and 32-byte HMAC-SHA256 tag. It adds 60 bytes. Direction keys and a 64-position replay window protect runtime controls before transport-state mutation.</t>
++      <t>Session-authentication versions 3, 4, 5 and 6 select ordinary Caller/Listener, Rendezvous, Caller/Listener group members and Group Rendezvous respectively. They bind different nonce, cookie and membership contexts. They are not interchangeable versions of one topology. Full KDF/context/envelope and state-machine definitions are deferred to a separate drafting pass.</t>
++      <t>ACP1 does not authenticate all handshake fields and does not change CTR DATA integrity. Its PBKDF-to-HKDF construction, coverage, loss/replay behavior and per-member lifecycle require independent review. No support or full-transport-security claim follows from this summary.</t>
++    </section>
++    <section anchor="security">
++      <name>Security Considerations</name>
++      <t>Version 2 protects selected key material and parity, not every handshake or runtime control. Stream ID, transport settings, ordinary ACK/NAK and shutdown are outside its protection. Stream ID is routing input, not authorization. GCM is required separately for DATA authentication.</t>
++      <t>Shared-passphrase holders can impersonate each other and there is no forward secrecy. The 2048-iteration KDF is not a password-storage recommendation. Weak secrets, resource exhaustion, traffic analysis, withholding and malicious endpoints remain threats. Admission work must be bounded.</t>
++      <t>Independent review must assess transcript binding and downgrade resistance, password derivation, key separation, counter replay and exhaustion, retry/loss behavior and topology interactions. Any strengthening that changes negotiated bytes needs a new explicit version rather than silent reinterpretation of version 2.</t>
++    </section>
++    <section anchor="iana">
++      <name>IANA Considerations</name>
++      <t>No allocation request is made in this initial editorial version. Handshake 0x7f10 and runtime 0x7f03, 0x7f04 and 0x7f05 are provisional implementation values, not registered assignments. Determine namespace policy and migration before publication.</t>
++    </section>
++    <section anchor="issues">
++      <name>Open Issues</name>
++      <t>Complete the normative transcript and retransmission state machines using the existing formula-level vectors as input. Add independent complete-handshake cases and exhaustive counter-exhaustion, failure and liveness analysis. Ordinary authenticated-KM dispatch and downstream response semantics are source-traced; selected executed cases do not qualify every rejection or teardown path.</t>
++      <t>Proposed scope: retain version 2 as a distinct explicitly negotiated profile, keep ACP1 separate, and do not silently strengthen the version-2 wire construction. Complete the extension-combination matrix. Independent cryptographic review is required before recommending broad security use; publication route and document names remain unconfirmed.</t>
++    </section>
++    <section anchor="sources">
++      <name>Source Baseline</name>
++      <t>The base protocol is described in <xref target="SRT" />. Implementation behavior is taken from <xref target="RWSRT" />. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t>
++    </section>
++    <section anchor="implementation-evidence">
++      <name>Implementation Evidence</name>
++      <t>Independent formula-level derivation, proof, KM-envelope and parity vectors match the pinned C++ implementation, including explicit-length password bytes. The initial vector bodies are synthetic and are not a complete peer implementation. A separate six-case CTR/GCM matrix checks valid KM, initial DATA and selected rotation semantics with independent KEK, key-wrap, IV and ciphertext/tag calculations.</t>
++      <t>Selected authentication, replay/tamper and stale-response checks passed. Detailed execution logs and fixture provenance remain in the local evidence package. ACP1 was disabled in these runs. The evidence does not constitute independent cryptographic review, exhaustive transcript/replay coverage or independent peer interoperability.</t>
++    </section>
++  </middle>
++  <back>
++    <references>
++      <name>Informative References</name>
++      <reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01">
++        <front>
++          <title>The SRT Protocol</title>
++          <author fullname="Maxim Sharabayko" />
++          <author fullname="Maria Sharabayko" />
++          <author fullname="Jean Dube" />
++          <author fullname="Jeongseok Kim" />
++          <author fullname="Joonwoong Kim" />
++          <date year="2021" month="September" />
++        </front>
++        <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
++      </reference>
++      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1">
++        <front>
++          <title>Robotweax SRT 0.3.2 source and protocol contracts</title>
++          <author fullname="Robotweax" />
++          <date year="2026" />
++        </front>
++      </reference>
++      <reference anchor="RFC8018" target="https://www.rfc-editor.org/info/rfc8018">
++        <front>
++          <title>PKCS #5: Password-Based Cryptography Specification Version 2.1</title>
++          <author fullname="K. Moriarty" />
++          <author fullname="B. Kaliski" />
++          <author fullname="A. Rusch" />
++          <date year="2017" month="January" />
++        </front>
++        <seriesInfo name="RFC" value="8018" />
++        <seriesInfo name="DOI" value="10.17487/RFC8018" />
++      </reference>
++      <reference anchor="RFC2104" target="https://www.rfc-editor.org/info/rfc2104">
++        <front>
++          <title>HMAC: Keyed-Hashing for Message Authentication</title>
++          <author fullname="H. Krawczyk" />
++          <author fullname="M. Bellare" />
++          <author fullname="R. Canetti" />
++          <date year="1997" month="February" />
++        </front>
++        <seriesInfo name="RFC" value="2104" />
++        <seriesInfo name="DOI" value="10.17487/RFC2104" />
++      </reference>
++      <reference anchor="RFC3394" target="https://www.rfc-editor.org/info/rfc3394">
++        <front>
++          <title>Advanced Encryption Standard (AES) Key Wrap Algorithm</title>
++          <author fullname="J. Schaad" />
++          <author fullname="R. Housley" />
++          <date year="2002" month="September" />
++        </front>
++        <seriesInfo name="RFC" value="3394" />
++        <seriesInfo name="DOI" value="10.17487/RFC3394" />
++      </reference>
++    </references>
++  </back>
++</rfc>

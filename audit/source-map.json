@@ -1,0 +1,871 @@
+{
+  "schema": 1,
+  "implementation_commit": "235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1",
+  "remote_draft_baseline": "3e4f9581c41d4e205c609f7293d2893c203b03f0",
+  "scope": "Initial multicast and version-2 authentication draft audit; not whole-library conformance",
+  "claims": [
+    {
+      "id": "MC-A01",
+      "section": "multicast#wire",
+      "claim": "Dispatch content is 60 bytes, magic 0x52574d01; integers decoded in network order.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/connection_group.cpp",
+        "needle": "MulticastDispatchDecodeResult decode_multicast_dispatch",
+        "line": 93,
+        "sha256": "e5e8748cbd940df37aec683b313efb2aaf81dd9fe4a38c632c57920c321421c9"
+      },
+      "tests": [
+        {
+          "path": "tests/test_connection_group.cpp",
+          "name": "multicast_dispatch_round_trips_ipv4_and_ipv6_announcements",
+          "line": 233,
+          "sha256": "ca158a5d6f3f3d9edb85c0090c77c5cc66cf3c75300265454f1af5975a7b9bf1",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        },
+        {
+          "path": "tests/test_connection_group.cpp",
+          "name": "multicast_dispatch_decoder_rejects_malformed_wire_content",
+          "line": 285,
+          "sha256": "ca158a5d6f3f3d9edb85c0090c77c5cc66cf3c75300265454f1af5975a7b9bf1",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "MC-A02",
+      "section": "multicast#wire",
+      "claim": "Group identifier validation requires bit 0x40000000, not a newly assigned group-number namespace.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "include/robotweax/srt/connection_group.hpp",
+        "needle": "inline constexpr std::uint32_t group_handle_mask",
+        "line": 14,
+        "sha256": "439aef0eb58e054b710fbf6dd075066b74fd3a4a21be79303254867ef3f2cc57"
+      },
+      "tests": [
+        {
+          "path": "tests/test_connection_group.cpp",
+          "name": "multicast_dispatch_encoder_rejects_invalid_announcements",
+          "line": 259,
+          "sha256": "ca158a5d6f3f3d9edb85c0090c77c5cc66cf3c75300265454f1af5975a7b9bf1",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "Portable identifier allocation and collision policy remain open."
+    },
+    {
+      "id": "MC-A03",
+      "section": "multicast#model",
+      "claim": "Caller requires announcement and matching group ID/type; missing or unsolicited announcement is rejected.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/handshake.cpp",
+        "needle": "const bool dispatch_expected",
+        "line": 939,
+        "sha256": "a501d5c48f019a9bbddc75a3f09260d85e6a6f5c3a9989a5d2d222cb2aa16a99"
+      },
+      "tests": [
+        {
+          "path": "tests/test_handshake_datagram.cpp",
+          "name": "hsv5_multicast_dispatch_is_rejected_without_policy_or_announcement",
+          "line": 612,
+          "sha256": "4e502dc6fd4217aa54376ebdae83b487021ec94d9f8f3c855495d7f5cc9dd38b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        },
+        {
+          "path": "tests/test_handshake_datagram.cpp",
+          "name": "hsv5_multicast_dispatch_negotiation_announces_the_group",
+          "line": 553,
+          "sha256": "4e502dc6fd4217aa54376ebdae83b487021ec94d9f8f3c855495d7f5cc9dd38b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "MC-A04",
+      "section": "multicast#wire",
+      "claim": "Sender emits zero timestamp delta; runtime consumption of nonzero delta is not implemented in inspected source.",
+      "status": "draft-correction",
+      "source": {
+        "path": "src/compat/group_registry.cpp",
+        "needle": ".timestamp_origin_delta_microseconds = 0",
+        "line": 1261,
+        "sha256": "2d32bd56fecebe7c8ff376a3e7461b9d377cfe7ff14472a7daa25ea03b7042e4"
+      },
+      "tests": [],
+      "gap": "Codec round-trip is not runtime clock support. Decide zero-only semantics or a versioned clock extension; add negative/nonzero runtime tests."
+    },
+    {
+      "id": "MC-A05",
+      "section": "multicast#wire",
+      "claim": "Receiver local interface override wins; otherwise sender hint is used. IPv6 interface index is host-local.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/connection.cpp",
+        "needle": "// The receiver's own interface choice wins",
+        "line": 814,
+        "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+      },
+      "tests": [],
+      "gap": "No cross-host interface-namespace test identified. Define whether hint should be ignored without local mapping."
+    },
+    {
+      "id": "MC-A06",
+      "section": "multicast#repair",
+      "claim": "Repair window is clamp(2*member SRTT,10000,1000000) microseconds, or 100000 without a sample, recalculated per request.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "const std::uint64_t window = std::clamp",
+        "line": 3070,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [],
+      "gap": "Tests of tally windows do not establish coverage of RTT clamp boundaries or heterogeneous-member RTT behavior."
+    },
+    {
+      "id": "MC-A07",
+      "section": "multicast#repair",
+      "claim": "Tally has 1024 sequence-indexed slots and up to 16 distinct receiver identities per slot.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/dispatch_transmit_state.hpp",
+        "needle": "static constexpr std::size_t tally_capacity",
+        "line": 23,
+        "sha256": "d3b39f12a797804c520cee69253e0e50f9d2723d9456b74eba34f6ae84de273f"
+      },
+      "tests": [
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_repair_member_capacity_preserves_unicast_fallback",
+          "line": 102,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        },
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_repair_threshold_counts_distinct_receivers_in_window",
+          "line": 117,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "These are implementation bounds, not automatically mandatory interoperable constants."
+    },
+    {
+      "id": "MC-A08",
+      "section": "multicast#repair",
+      "claim": "Only successful local UDP acceptance enables suppression; repeated member requests use unicast. Expired attempted entries stay unicast until eviction.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/dispatch_transmit_state.hpp",
+        "needle": "void complete_repeat",
+        "line": 97,
+        "sha256": "d3b39f12a797804c520cee69253e0e50f9d2723d9456b74eba34f6ae84de273f"
+      },
+      "tests": [
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_repair_does_not_suppress_before_submission",
+          "line": 30,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        },
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_repair_repeated_nak_uses_unicast",
+          "line": 58,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        },
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_repair_completion_cannot_mutate_a_new_tally",
+          "line": 76,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "MC-A09",
+      "section": "multicast#repair",
+      "claim": "Transient multicast repair send failure falls back to unicast; nontransient failure breaks the member. Transient ORIGINAL send failure relies on receiver NAK.",
+      "status": "draft-correction",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "if (!sent && !UdpSocket::is_transient_send_error",
+        "line": 3114,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [],
+      "gap": "Shared-loss transport test exists, but a dedicated local UDP error-injection test was not established in this pass."
+    },
+    {
+      "id": "MC-A10",
+      "section": "multicast#keys",
+      "claim": "Sequence mapping uses signed modular distance and an extended frontier; generation=floor(position/refresh).",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "std::uint64_t SharedTransmitKeySchedule::position_of",
+        "line": 337,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_maps_group_sequence_to_generation_and_selector",
+          "line": 3709,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_keeps_one_key_per_sequence_across_wraparound",
+          "line": 3780,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        }
+      ],
+      "gap": "Half-range assumptions and extended-position exhaustion policy still need normative treatment; active-path overflow was not established as a bug."
+    },
+    {
+      "id": "MC-A11",
+      "section": "multicast#keys",
+      "claim": "Refresh clamps to [2, cap]; preannouncement clamps to floor((refresh-1)/2); selector is generation parity.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "configuration_.refresh_rate_packets = std::clamp",
+        "line": 263,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_keeps_one_key_per_sequence_across_wraparound",
+          "line": 3780,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "MC-A12",
+      "section": "multicast#keys",
+      "claim": "A four-slot generation cache is bounded storage, not a promise of four consecutive populated generations after idle jumps.",
+      "status": "draft-correction",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "Error SharedTransmitKeySchedule::key_for",
+        "line": 421,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_maps_group_sequence_to_generation_and_selector",
+          "line": 3709,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_advances_unused_rotations_and_wraps",
+          "line": 3819,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        }
+      ],
+      "gap": "Clarify absent historical-generation behavior after idle jumps; do not promise historical repair availability."
+    },
+    {
+      "id": "MC-A13",
+      "section": "multicast#keys",
+      "claim": "Unused advance computes the destination generation before publishing position; failed generation preserves prior keys/frontier.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "Error SharedTransmitKeySchedule::advance_unused",
+        "line": 357,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_unused_advance_failure_preserves_keys_and_position",
+          "line": 3861,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_advances_unused_rotations_and_wraps",
+          "line": 3819,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "not-run"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "MC-A14",
+      "section": "multicast#model",
+      "claim": "Empty sender readiness and transmitter backpressure have a specific regression.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/message_io.cpp",
+        "needle": "group->dispatch->key_schedule->advance_unused",
+        "line": 1105,
+        "sha256": "a0373ba09a6cdd3e12f428d66592ceb855a9f1dbd809aa72f616c7be3b706fa9"
+      },
+      "tests": [
+        {
+          "path": "tests/test_compat_groups.cpp",
+          "name": "compat_multicast_dispatch_sender_epoll_tracks_empty_and_backpressure",
+          "line": 3706,
+          "sha256": "fb8b5f36eecfb743dc70ff6802b2284f1f85c5a7353e1d38d4535dc42b5701de",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "Separate local queue acceptance, UDP acceptance and receiver delivery in the final lifecycle specification."
+    },
+    {
+      "id": "MC-A15",
+      "section": "multicast#keys",
+      "claim": "CTR/GCM multicast rotation and late join have self-peer transport tests.",
+      "status": "test-source-only",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "Error CryptoSession::attach_shared_transmit_schedule",
+        "line": 902,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_group_encrypts_with_one_group_key_across_rotations",
+          "line": 904,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        },
+        {
+          "path": "tests/test_multicast_dispatch.cpp",
+          "name": "multicast_dispatch_group_authenticates_with_aes_gcm_group_key",
+          "line": 884,
+          "sha256": "28011ee90a12b5c93260e0a8964c32725ffcd3ba2915ced4aa3580bdcb0c8e2b",
+          "execution": "passed",
+          "evidence_log": "evidence/multicast-local-network.log"
+        }
+      ],
+      "gap": "GCM case is build-gated and multicast tests may skip on host capability. No test execution or physical-network qualification claimed."
+    },
+    {
+      "id": "AUTH-A01",
+      "section": "authentication#derivation",
+      "claim": "Version-2 PBKDF2 salt is 96 bytes: 16-byte label, two 32-byte nonces, two uint64 socket IDs.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/session_authentication.cpp",
+        "needle": "constexpr std::array<std::byte, 16> domain_label",
+        "line": 40,
+        "sha256": "4909ccee304317c6cac5ea275d249e8dae231c523f78429b4e50e58d1ebc1430"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_proofs_bind_both_peers_roles_and_key_material",
+          "line": 3510,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        }
+      ],
+      "gap": "Same-code proof tests do not replace independent complete KDF/proof vectors."
+    },
+    {
+      "id": "AUTH-A02",
+      "section": "authentication#derivation",
+      "claim": "Password is explicit-length bytes; public setter does not strip an embedded NUL or normalize text.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/socket_options.cpp",
+        "needle": "case SRTO_PASSPHRASE: {",
+        "line": 1313,
+        "sha256": "5aef3ecc85ef36a578ce6cff71cdf29d67574c7ce2407f9bc320cc8ea8600533"
+      },
+      "tests": [],
+      "gap": "Add an end-to-end embedded-NUL vector; UI/text encoding is a separate convention."
+    },
+    {
+      "id": "AUTH-A03",
+      "section": "authentication#handshake",
+      "claim": "Listener awaits final confirmation and retries challenge; invalid/missing proof cannot complete the tested state machine.",
+      "status": "test-source-only",
+      "source": {
+        "path": "tests/test_handshake.cpp",
+        "needle": "TEST(session_authentication_listener_requires_finish_and_retries_challenge)",
+        "line": 1354,
+        "sha256": "5bcaa10d34e97e10fd93482210e2f00c4bf7989288124503c4b9a73c9b52f5fb"
+      },
+      "tests": [
+        {
+          "path": "tests/test_handshake.cpp",
+          "name": "session_authentication_listener_requires_finish_and_retries_challenge",
+          "line": 1354,
+          "sha256": "5bcaa10d34e97e10fd93482210e2f00c4bf7989288124503c4b9a73c9b52f5fb",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        }
+      ],
+      "gap": "This test injects configured proof bytes: it proves handshake gating, not cryptographic proof computation. Admission tests cover a separate layer."
+    },
+    {
+      "id": "AUTH-A04",
+      "section": "authentication#runtime",
+      "claim": "Request counter advances only when material changes; identical retry preserves counter.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/session_authentication.cpp",
+        "needle": "Error SessionAuthentication::seal(",
+        "line": 218,
+        "sha256": "4909ccee304317c6cac5ea275d249e8dae231c523f78429b4e50e58d1ebc1430"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_rejects_cross_session_reflection_and_stale_controls",
+          "line": 3534,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "AUTH-A05",
+      "section": "authentication#runtime",
+      "claim": "Requests below highest authenticated counter fail; equal counter requires identical cached body; newer counter commits only after MAC verification.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/session_authentication.cpp",
+        "needle": "bool SessionAuthentication::open(",
+        "line": 252,
+        "sha256": "4909ccee304317c6cac5ea275d249e8dae231c523f78429b4e50e58d1ebc1430"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_rejects_cross_session_reflection_and_stale_controls",
+          "line": 3534,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_rejects_key_replay_beyond_bounded_crypto_history",
+          "line": 3599,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "AUTH-A06",
+      "section": "authentication#runtime",
+      "claim": "KMRSP counter must equal current sent counter. Authentication layer permits repeated valid responses; downstream key-material processing remains necessary.",
+      "status": "draft-correction",
+      "source": {
+        "path": "src/session_authentication.cpp",
+        "needle": "response ? counter != sent_counter_",
+        "line": 264,
+        "sha256": "4909ccee304317c6cac5ea275d249e8dae231c523f78429b4e50e58d1ebc1430"
+      },
+      "tests": [],
+      "gap": "Downstream KMRSP checks are traced in AUTH-B02/B03. Full runtime replay/failure tests remain to be executed."
+    },
+    {
+      "id": "AUTH-A07",
+      "section": "authentication#fec",
+      "claim": "Parity MAC covers complete encoded DATA header and body; independent 64-counter bitmap commits only after valid MAC.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/session_authentication.cpp",
+        "needle": "bool SessionAuthentication::open_fec(",
+        "line": 337,
+        "sha256": "4909ccee304317c6cac5ea275d249e8dae231c523f78429b4e50e58d1ebc1430"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_parity_binds_header_session_role_and_replay_window",
+          "line": 3635,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        }
+      ],
+      "gap": "Independent vector and execution evidence not yet collected."
+    },
+    {
+      "id": "AUTH-A08",
+      "section": "authentication#acp",
+      "claim": "ACP1 has its own direction-key envelope and replay state; it is not version-2 KM replay handling.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/session_authentication.cpp",
+        "needle": "bool SessionAuthentication::open_control(",
+        "line": 443,
+        "sha256": "4909ccee304317c6cac5ea275d249e8dae231c523f78429b4e50e58d1ebc1430"
+      },
+      "tests": [],
+      "gap": "ACP1 versions 3\u20136 not comprehensively audited in this pass; retain separate experimental scope."
+    },
+    {
+      "id": "AUTH-A09",
+      "section": "authentication#security",
+      "claim": "RNG/HMAC failure and cross-session/role separation have primitive-level tests.",
+      "status": "test-source-only",
+      "source": {
+        "path": "tests/test_crypto.cpp",
+        "needle": "TEST(session_authentication_fails_closed_without_rng_or_hmac)",
+        "line": 3578,
+        "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_fails_closed_without_rng_or_hmac",
+          "line": 3578,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "session_authentication_rejects_cross_session_reflection_and_stale_controls",
+          "line": 3534,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/session-authentication-local-network.log"
+        }
+      ],
+      "gap": "Primitive failure tests do not prove all runtime shutdown/liveness paths or cryptographic soundness."
+    },
+    {
+      "id": "MC-B01",
+      "section": "multicast#model",
+      "claim": "Group origin is initialized once from a local fallback; accepted members reuse the admitted group origin.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/connection.cpp",
+        "needle": "[[nodiscard]] Clock::time_point group_timestamp_origin(",
+        "line": 66,
+        "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+      },
+      "tests": [],
+      "gap": "Full peer handshake timestamp emission and delayed-admission path still need targeted review."
+    },
+    {
+      "id": "MC-B02",
+      "section": "multicast#model",
+      "claim": "Runtime Live setup passes handshake arrival and peer timestamp, then shares the receive group clock.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "session_.configure_live(",
+        "line": 1593,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [],
+      "gap": "Cross-host late-join timing needs a dedicated deterministic test, not only successful eventual delivery."
+    },
+    {
+      "id": "MC-B03",
+      "section": "multicast#model",
+      "claim": "Initial TSBPD base is handshake-arrival microseconds minus peer handshake timestamp.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/timing.cpp",
+        "needle": "TsbpdClock::TsbpdClock(",
+        "line": 356,
+        "sha256": "4b2753406f821812ed816cb0a60fe616a06ad5b64bd9d5e8411b6e571e7e4913"
+      },
+      "tests": [
+        {
+          "path": "tests/test_timing.cpp",
+          "name": "tsbpd_clock_schedules_delivery_and_unwraps_timestamp_rollover",
+          "line": 209,
+          "sha256": "fd28997f8a24ebd331ed2faac535081f2f574014b6d7c59bc9ab016aac52a490",
+          "execution": "passed",
+          "evidence_log": "evidence/timing.log"
+        }
+      ],
+      "gap": "Generic timing unit test is not multicast late-join qualification."
+    },
+    {
+      "id": "MC-B04",
+      "section": "multicast#model",
+      "claim": "Caller initializes inbound sequence from multicast announcement before installing runtime.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/connection.cpp",
+        "needle": "socket_.peer_connection_initial_sequence =",
+        "line": 1884,
+        "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+      },
+      "tests": [],
+      "gap": "Inspect packet arrival between announcement generation and completed join; delivery of intervening stream history is not guaranteed."
+    },
+    {
+      "id": "AUTH-B01",
+      "section": "authentication#runtime",
+      "claim": "Runtime authenticates private KM envelopes, rewrites subtype to ordinary KM, and rejects bare KM in protected sessions.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "const bool protected_request =",
+        "line": 4012,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [],
+      "gap": "Authentication-layer counters may commit before downstream semantic admission. Define rejection and retransmission behavior at both layers."
+    },
+    {
+      "id": "AUTH-B02",
+      "section": "authentication#runtime",
+      "claim": "KMRSP semantic processing accepts acknowledged-history bodies idempotently; otherwise requires exact pending KM bytes before marking secured.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "Error CryptoSession::acknowledge_key_material(",
+        "line": 1381,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_session_stale_response_cannot_release_a_pending_rotation",
+          "line": 2948,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/stale-kmrsp.log"
+        }
+      ],
+      "gap": "Bounded history success is not new pending-key acknowledgement; do not describe all successful returns as rotation advancement."
+    },
+    {
+      "id": "AUTH-B03",
+      "section": "authentication#runtime",
+      "claim": "Runtime forwards opened KMRSP to acknowledge_key_material with cloning disabled.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "const Error acknowledged =",
+        "line": 4137,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [],
+      "gap": "Full runtime counter exhaustion/failure teardown and all optional-encryption paths remain outside this focused pass."
+    },
+    {
+      "id": "MC-C01",
+      "section": "multicast#model",
+      "claim": "Caller stages CONNECTING, installs runtime, performs native dispatch attachment, then publishes CONNECTED.",
+      "status": "source-and-instrumented-native-check",
+      "source": {
+        "path": "src/compat/connection.cpp",
+        "needle": "[[nodiscard]] int publish_connection(",
+        "line": 1852,
+        "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+      },
+      "tests": [],
+      "evidence_log": "evidence/native-publication.log",
+      "gap": "Instrumented plaintext synchronous Caller/Listener on one host; async, encryption-readiness and teardown-race coverage remain separate."
+    },
+    {
+      "id": "MC-C02",
+      "section": "multicast#model",
+      "claim": "Native dispatch attachment failure returns through fail_connect before CONNECTED publication.",
+      "status": "source-and-instrumented-native-check",
+      "source": {
+        "path": "src/compat/connection.cpp",
+        "needle": "if (attach_dispatch_receiver(socket_, protocol) == SRT_ERROR)",
+        "line": 1914,
+        "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+      },
+      "tests": [],
+      "evidence_log": "evidence/native-publication.log",
+      "gap": "Instrumented plaintext synchronous Caller/Listener on one host; async, encryption-readiness and teardown-race coverage remain separate."
+    },
+    {
+      "id": "MC-C03",
+      "section": "multicast#model",
+      "claim": "The caller supplies a fresh microseconds_since(origin_) sample at attach_runtime, not a retained UDP-ingress timestamp.",
+      "status": "source-and-instrumented-native-check",
+      "source": {
+        "path": "src/compat/connection.cpp",
+        "needle": "if (attach_runtime(socket_, setup_.channel, origin_,",
+        "line": 1902,
+        "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+      },
+      "tests": [],
+      "evidence_log": "evidence/native-publication.log",
+      "gap": "Instrumented plaintext synchronous Caller/Listener on one host; async, encryption-readiness and teardown-race coverage remain separate."
+    },
+    {
+      "id": "MC-D01",
+      "section": "multicast#security",
+      "claim": "KM retry cadence follows RTT with a peer-idle-derived ceiling; no separate elapsed-key deadline appears in this retry block.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "    const auto retry_ceiling =",
+        "line": 3555,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [
+        {
+          "path": "tests/test_compat_runtime.cpp",
+          "name": "compat_runtime_key_material_retry_tracks_rtt_and_timestamp_zero",
+          "line": 1254,
+          "sha256": "eeffb3578cbe4c8fbb57beb93206d26fc2e975ffbe8447d3b35886177531416d",
+          "execution": "passed",
+          "evidence_log": "evidence/key-retry-focused.log"
+        },
+        {
+          "path": "tests/test_compat_runtime.cpp",
+          "name": "compat_runtime_key_material_retry_starts_after_udp_acceptance",
+          "line": 9119,
+          "sha256": "eeffb3578cbe4c8fbb57beb93206d26fc2e975ffbe8447d3b35886177531416d",
+          "execution": "passed",
+          "evidence_log": "evidence/key-retry-focused.log"
+        }
+      ],
+      "gap": "Narrow retry and peer-idle behavior; not proof of a universal maximum KM completion time."
+    },
+    {
+      "id": "MC-D02",
+      "section": "multicast#security",
+      "claim": "Runtime peer-idle expiry compares elapsed time since last peer activity to the configured idle horizon.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/compat/transport_runtime.cpp",
+        "needle": "    if (now > last_peer_activity_microseconds_",
+        "line": 4452,
+        "sha256": "f4c65c041cd1d105756b43b232ce47a5f0e324536a6ea5697d82530aa93c1440"
+      },
+      "tests": [
+        {
+          "path": "tests/test_compat_runtime.cpp",
+          "name": "compat_runtime_peer_idle_timeout_uses_last_valid_packet",
+          "line": 8160,
+          "sha256": "eeffb3578cbe4c8fbb57beb93206d26fc2e975ffbe8447d3b35886177531416d",
+          "execution": "passed",
+          "evidence_log": "evidence/peer-idle-focused.log"
+        }
+      ],
+      "gap": "Narrow retry and peer-idle behavior; not proof of a universal maximum KM completion time."
+    },
+    {
+      "id": "MC-E01",
+      "section": "multicast#keys",
+      "claim": "Unused advancement prepares the target key before publishing the frontier; selected mapping/wrap/failure tests pass.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "Error SharedTransmitKeySchedule::advance_unused(",
+        "line": 357,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_maps_group_sequence_to_generation_and_selector",
+          "line": 3709,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/shared-schedule-focused.log"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_keeps_one_key_per_sequence_across_wraparound",
+          "line": 3780,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/shared-schedule-focused.log"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_advances_unused_rotations_and_wraps",
+          "line": 3819,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/shared-schedule-focused.log"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_shared_schedule_unused_advance_failure_preserves_keys_and_position",
+          "line": 3861,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/shared-schedule-focused.log"
+        }
+      ],
+      "gap": "Not exhaustive retention, exhaustion or independent post-rotation DATA qualification."
+    },
+    {
+      "id": "KEY-E01",
+      "section": "base#keys",
+      "claim": "Ordinary initial directional confirmation and bounded overrun have focused execution evidence; shared-schedule readiness has different later-generation semantics.",
+      "status": "source-confirmed",
+      "source": {
+        "path": "src/crypto.cpp",
+        "needle": "bool CryptoSession::ready_to_send_data() const noexcept",
+        "line": 1642,
+        "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+      },
+      "tests": [
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_session_confirms_distinct_initial_bidirectional_data_keys",
+          "line": 619,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/directional-initial-focused.log"
+        },
+        {
+          "path": "tests/test_crypto.cpp",
+          "name": "crypto_session_pauses_after_the_bounded_refresh_overrun",
+          "line": 2646,
+          "sha256": "5d0ef020ff4a4e7f03e7a6bbafb46308b788942b3ba20063f541f6f732634711",
+          "execution": "passed",
+          "evidence_log": "evidence/directional-overrun-focused.log"
+        }
+      ],
+      "gap": "Not exhaustive retention, exhaustion or independent post-rotation DATA qualification."
+    }
+  ]
+}

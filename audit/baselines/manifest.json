@@ -1,0 +1,21 @@
+{
+  "retrieved": "2026-11-06",
+  "supplemental_commit": "461a1fea85baaa4a928fa634d30c846dfd047ab8",
+  "supplemental_git_blob": "e74908bb3c8f680f42bb76926fef2f79e6c3d083",
+  "commit_date": "2025-09-22",
+  "hosted_page_identity": "Not asserted: displayed January 2024 date is not a source revision identifier.",
+  "files": [
+    {
+      "path": "audit/baselines/haivision-461a1fea.md.txt",
+      "url": "https://github.com/Haivision/srt-rfc/blob/461a1fea85baaa4a928fa634d30c846dfd047ab8/draft-sharabayko-srt.md",
+      "bytes": 162025,
+      "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+    },
+    {
+      "path": "audit/baselines/draft-sharabayko-srt-01.txt",
+      "url": "https://www.ietf.org/archive/id/draft-sharabayko-srt-01.txt",
+      "bytes": 185460,
+      "sha256": "5a8dd79821c44c33b8292b5753213715b1b4293338f74684a01a8ccc57933e3b"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+1793966416585419/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793966416831015/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793966416893979/0x16bcdf000W:connection: connection setup failed socket=297164740 peer=127.0.0.1:59733 peer_socket=103013199 reason=1 name=SYSTEM wire=1001
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=392 observed_us=5596820472745
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=392 observed_us=5596820534400
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=392 observed_us=5596820534598
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=392 observed_us=5596820534630
+TIMING sample_minus_barrier_us=61185 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=328 observed_us=5596820718173
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=328 observed_us=5596820779854
+TIMING sample_minus_barrier_us=61089 sample_after_release=1
+PASS native join failure never publishes CONNECTED

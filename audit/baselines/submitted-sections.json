@@ -1,0 +1,674 @@
+[
+  {
+    "section": "1",
+    "title": "Introduction",
+    "line": 156,
+    "supplemental_line": 182,
+    "disposition": "Scope",
+    "action": "Separate base SRT from opt-in extensions; preserve attribution."
+  },
+  {
+    "section": "1.1",
+    "title": "Motivation",
+    "line": 173,
+    "supplemental_line": 184,
+    "disposition": "Scope",
+    "action": "Separate base SRT from opt-in extensions; preserve attribution."
+  },
+  {
+    "section": "1.2",
+    "title": "Secure Reliable Transport Protocol",
+    "line": 229,
+    "supplemental_line": 219,
+    "disposition": "Scope",
+    "action": "Separate base SRT from opt-in extensions; preserve attribution."
+  },
+  {
+    "section": "2",
+    "title": "Terms and Definitions",
+    "line": 298,
+    "supplemental_line": 270,
+    "disposition": "Clarify",
+    "action": "Separate wire version, library version, cipher and delivery profile."
+  },
+  {
+    "section": "3",
+    "title": "Packet Structure",
+    "line": 311,
+    "supplemental_line": 283,
+    "disposition": "Retain boundary",
+    "action": "Keep base header/namespace structure; add explicit extension references."
+  },
+  {
+    "section": "3.1",
+    "title": "Data Packets",
+    "line": 375,
+    "supplemental_line": 343,
+    "disposition": "Reconcile",
+    "action": "GCM tag/header treatment; multicast destination identity and authenticated parity are extension-specific."
+  },
+  {
+    "section": "3.2",
+    "title": "Control Packets",
+    "line": 456,
+    "supplemental_line": 409,
+    "disposition": "Retain boundary",
+    "action": "Keep base header/namespace structure; add explicit extension references."
+  },
+  {
+    "section": "3.2.1",
+    "title": "Handshake",
+    "line": 535,
+    "supplemental_line": 472,
+    "disposition": "Reconcile",
+    "action": "Namespace/version negotiation and rejection; list provisional Robotweax records separately."
+  },
+  {
+    "section": "3.2.1.1",
+    "title": "Handshake Extension Message",
+    "line": 760,
+    "supplemental_line": 611,
+    "disposition": "Reconcile",
+    "action": "Resolve Control REXMITFLG exception and explicitly enumerate negotiated flags."
+  },
+  {
+    "section": "3.2.1.1.1",
+    "title": "Handshake Extension Message Flags",
+    "line": 800,
+    "supplemental_line": 644,
+    "disposition": "Reconcile",
+    "action": "Resolve Control REXMITFLG exception and explicitly enumerate negotiated flags."
+  },
+  {
+    "section": "3.2.1.2",
+    "title": "Key Material Extension Message",
+    "line": 859,
+    "supplemental_line": 679,
+    "disposition": "Reconcile",
+    "action": "GCM cipher/Auth values and failure outcomes; keep authentication envelopes separately negotiated."
+  },
+  {
+    "section": "3.2.1.3",
+    "title": "Stream ID Extension Message",
+    "line": 875,
+    "supplemental_line": 716,
+    "disposition": "Retain boundary",
+    "action": "Stream ID remains routing/application metadata, not proof of identity."
+  },
+  {
+    "section": "3.2.1.4",
+    "title": "Group Membership Extension",
+    "line": 921,
+    "supplemental_line": 745,
+    "disposition": "Extend separately",
+    "action": "Specify multicast dispatch and other group topologies without treating reserved type 4 as a complete protocol."
+  },
+  {
+    "section": "3.2.2",
+    "title": "Key Material",
+    "line": 983,
+    "supplemental_line": 796,
+    "disposition": "Reconcile",
+    "action": "GCM cipher/Auth values and failure outcomes; keep authentication envelopes separately negotiated."
+  },
+  {
+    "section": "3.2.3",
+    "title": "Keep-Alive",
+    "line": 1181,
+    "supplemental_line": 952,
+    "disposition": "Retain boundary",
+    "action": "No new base encoding proposed; specify any authenticated-control wrapper separately."
+  },
+  {
+    "section": "3.2.4",
+    "title": "ACK (Acknowledgment)",
+    "line": 1237,
+    "supplemental_line": 997,
+    "disposition": "Clarify",
+    "action": "ACK/NAK validation and per-member feedback; ACP1 coverage is a separate profile."
+  },
+  {
+    "section": "3.2.5",
+    "title": "NAK (Negative Acknowledgement or Loss Report)",
+    "line": 1356,
+    "supplemental_line": 1095,
+    "disposition": "Clarify",
+    "action": "ACK/NAK validation and per-member feedback; ACP1 coverage is a separate profile."
+  },
+  {
+    "section": "3.2.6",
+    "title": "Congestion Warning",
+    "line": 1415,
+    "supplemental_line": 1148,
+    "disposition": "Retain boundary",
+    "action": "No new base encoding proposed; specify any authenticated-control wrapper separately."
+  },
+  {
+    "section": "3.2.7",
+    "title": "Shutdown",
+    "line": 1461,
+    "supplemental_line": 1189,
+    "disposition": "Retain boundary",
+    "action": "No new base encoding proposed; specify any authenticated-control wrapper separately."
+  },
+  {
+    "section": "3.2.8",
+    "title": "ACKACK (Acknowledgement of Acknowledgement)",
+    "line": 1498,
+    "supplemental_line": 1227,
+    "disposition": "Clarify",
+    "action": "ACK/NAK validation and per-member feedback; ACP1 coverage is a separate profile."
+  },
+  {
+    "section": "3.2.9",
+    "title": "Message Drop Request",
+    "line": 1548,
+    "supplemental_line": 1267,
+    "disposition": "Clarify",
+    "action": "Map drop request semantics to Live/Control/Sensor profiles and sender deadlines."
+  },
+  {
+    "section": "3.2.10",
+    "title": "Peer Error",
+    "line": 1629,
+    "supplemental_line": 1327,
+    "disposition": "Reconcile",
+    "action": "Namespace/version negotiation and rejection; list provisional Robotweax records separately."
+  },
+  {
+    "section": "4",
+    "title": "SRT Data Transmission and Control",
+    "line": 1669,
+    "supplemental_line": 1367,
+    "disposition": "Scope",
+    "action": "Separate base state machines from negotiated extension state machines."
+  },
+  {
+    "section": "4.1",
+    "title": "Stream Multiplexing",
+    "line": 1691,
+    "supplemental_line": 1378,
+    "disposition": "Extend separately",
+    "action": "Add dispatch group routing and source admission in multicast document."
+  },
+  {
+    "section": "4.2",
+    "title": "Data Transmission Modes",
+    "line": 1701,
+    "supplemental_line": 1388,
+    "disposition": "Extend separately",
+    "action": "Control and Sensor need named delivery rules; multicast scope remains Live Message."
+  },
+  {
+    "section": "4.2.1",
+    "title": "Message Mode",
+    "line": 1718,
+    "supplemental_line": 1398,
+    "disposition": "Extend separately",
+    "action": "Control and Sensor need named delivery rules; multicast scope remains Live Message."
+  },
+  {
+    "section": "4.2.2",
+    "title": "Buffer Mode",
+    "line": 1763,
+    "supplemental_line": 1426,
+    "disposition": "Extend separately",
+    "action": "Control and Sensor need named delivery rules; multicast scope remains Live Message."
+  },
+  {
+    "section": "4.3",
+    "title": "Handshake Messages",
+    "line": 1772,
+    "supplemental_line": 1434,
+    "disposition": "Reconcile",
+    "action": "Adopt reviewed negotiation/error clarifications; keep authentication proof and multicast admission transitions separate."
+  },
+  {
+    "section": "4.3.1",
+    "title": "Caller-Listener Handshake",
+    "line": 1965,
+    "supplemental_line": 1536,
+    "disposition": "Reconcile",
+    "action": "Adopt reviewed negotiation/error clarifications; keep authentication proof and multicast admission transitions separate."
+  },
+  {
+    "section": "4.3.1.1",
+    "title": "The Induction Phase",
+    "line": 1971,
+    "supplemental_line": 1542,
+    "disposition": "Reconcile",
+    "action": "Adopt reviewed negotiation/error clarifications; keep authentication proof and multicast admission transitions separate."
+  },
+  {
+    "section": "4.3.1.2",
+    "title": "The Conclusion Phase",
+    "line": 2049,
+    "supplemental_line": 1590,
+    "disposition": "Reconcile",
+    "action": "Adopt reviewed negotiation/error clarifications; keep authentication proof and multicast admission transitions separate."
+  },
+  {
+    "section": "4.3.2",
+    "title": "Rendezvous Handshake",
+    "line": 2094,
+    "supplemental_line": 1648,
+    "disposition": "Reconcile",
+    "action": "Review corrected cookie contest and state descriptions; multicast/v2 Caller-Listener scope does not inherit Rendezvous."
+  },
+  {
+    "section": "4.3.2.1",
+    "title": "Serial Handshake Flow",
+    "line": 2140,
+    "supplemental_line": 1789,
+    "disposition": "Reconcile",
+    "action": "Review corrected cookie contest and state descriptions; multicast/v2 Caller-Listener scope does not inherit Rendezvous."
+  },
+  {
+    "section": "4.3.2.2",
+    "title": "Parallel Handshake Flow",
+    "line": 2270,
+    "supplemental_line": 1876,
+    "disposition": "Reconcile",
+    "action": "Review corrected cookie contest and state descriptions; multicast/v2 Caller-Listener scope does not inherit Rendezvous."
+  },
+  {
+    "section": "4.4",
+    "title": "SRT Buffer Latency",
+    "line": 2434,
+    "supplemental_line": 1982,
+    "disposition": "Clarify",
+    "action": "Separate negotiated delivery latency from application deadlines and peer-idle timeout."
+  },
+  {
+    "section": "4.5",
+    "title": "Timestamp-Based Packet Delivery",
+    "line": 2469,
+    "supplemental_line": 2007,
+    "disposition": "Decision",
+    "action": "Specify setup sample versus ingress capture, timestamp delta, rollover and group clock origin."
+  },
+  {
+    "section": "4.5.1",
+    "title": "Packet Delivery Time",
+    "line": 2566,
+    "supplemental_line": 2082,
+    "disposition": "Decision",
+    "action": "Specify setup sample versus ingress capture, timestamp delta, rollover and group clock origin."
+  },
+  {
+    "section": "4.5.1.1",
+    "title": "TSBPD Time Base Calculation",
+    "line": 2610,
+    "supplemental_line": 2110,
+    "disposition": "Decision",
+    "action": "Specify setup sample versus ingress capture, timestamp delta, rollover and group clock origin."
+  },
+  {
+    "section": "4.6",
+    "title": "Too-Late Packet Drop",
+    "line": 2652,
+    "supplemental_line": 2143,
+    "disposition": "Decision",
+    "action": "Specify unsent/repair retirement and late DATA behavior per profile; do not generalize pressure-test outcomes."
+  },
+  {
+    "section": "4.7",
+    "title": "Drift Management",
+    "line": 2749,
+    "supplemental_line": 2208,
+    "disposition": "Clarify",
+    "action": "Reconcile drift estimation and initialized versus measured RTT; preserve base behavior unless explicitly changed."
+  },
+  {
+    "section": "4.8",
+    "title": "Acknowledgement and Lost Packet Handling",
+    "line": 2811,
+    "supplemental_line": 2261,
+    "disposition": "Extend separately",
+    "action": "Document ARQ-first/tail probes and multicast repair election; retain baseline ACK/NAK interoperability."
+  },
+  {
+    "section": "4.8.1",
+    "title": "Packet Acknowledgement (ACKs, ACKACKs)",
+    "line": 2844,
+    "supplemental_line": 2287,
+    "disposition": "Extend separately",
+    "action": "Document ARQ-first/tail probes and multicast repair election; retain baseline ACK/NAK interoperability."
+  },
+  {
+    "section": "4.8.2",
+    "title": "Packet Retransmission (NAKs)",
+    "line": 2894,
+    "supplemental_line": 2316,
+    "disposition": "Extend separately",
+    "action": "Document ARQ-first/tail probes and multicast repair election; retain baseline ACK/NAK interoperability."
+  },
+  {
+    "section": "4.9",
+    "title": "Bidirectional Transmission Queues",
+    "line": 2984,
+    "supplemental_line": 2374,
+    "disposition": "Retain boundary",
+    "action": "No new base queue wire format; describe directional keys and failure independently."
+  },
+  {
+    "section": "4.10",
+    "title": "Round-Trip Time Estimation",
+    "line": 2989,
+    "supplemental_line": 2378,
+    "disposition": "Clarify",
+    "action": "Distinguish valid RTT samples from initial estimates, including retry and standby probes."
+  },
+  {
+    "section": "5",
+    "title": "SRT Packet Pacing and Congestion Control",
+    "line": 3048,
+    "supplemental_line": 2432,
+    "disposition": "Decision",
+    "action": "Specify aggregate multicast/repair congestion limits; per-member pacing is insufficient as a group policy."
+  },
+  {
+    "section": "5.1",
+    "title": "SRT Packet Pacing and Live Congestion Control (LiveCC)",
+    "line": 3066,
+    "supplemental_line": 2449,
+    "disposition": "Decision",
+    "action": "Specify aggregate multicast/repair congestion limits; per-member pacing is insufficient as a group policy."
+  },
+  {
+    "section": "5.1.1",
+    "title": "Configuring Maximum Bandwidth",
+    "line": 3116,
+    "supplemental_line": 2489,
+    "disposition": "Decision",
+    "action": "Specify aggregate multicast/repair congestion limits; per-member pacing is insufficient as a group policy."
+  },
+  {
+    "section": "5.1.2",
+    "title": "SRT's Default LiveCC Algorithm",
+    "line": 3203,
+    "supplemental_line": 2561,
+    "disposition": "Decision",
+    "action": "Specify aggregate multicast/repair congestion limits; per-member pacing is insufficient as a group policy."
+  },
+  {
+    "section": "5.2",
+    "title": "File Transfer Congestion Control (FileCC)",
+    "line": 3283,
+    "supplemental_line": 2638,
+    "disposition": "Retain boundary",
+    "action": "Control uses FileCC with distinct delivery semantics; audit controller compatibility before any algorithm change."
+  },
+  {
+    "section": "5.2.1",
+    "title": "SRT's Default FileCC Algorithm",
+    "line": 3289,
+    "supplemental_line": 2644,
+    "disposition": "Retain boundary",
+    "action": "Control uses FileCC with distinct delivery semantics; audit controller compatibility before any algorithm change."
+  },
+  {
+    "section": "5.2.1.1",
+    "title": "Slow Start",
+    "line": 3336,
+    "supplemental_line": 2683,
+    "disposition": "Retain boundary",
+    "action": "Control uses FileCC with distinct delivery semantics; audit controller compatibility before any algorithm change."
+  },
+  {
+    "section": "5.2.1.2",
+    "title": "Congestion Avoidance",
+    "line": 3441,
+    "supplemental_line": 2773,
+    "disposition": "Retain boundary",
+    "action": "Control uses FileCC with distinct delivery semantics; audit controller compatibility before any algorithm change."
+  },
+  {
+    "section": "5.2.1.3",
+    "title": "Link Capacity and Receiving Rate Estimation",
+    "line": 3660,
+    "supplemental_line": 2960,
+    "disposition": "Retain boundary",
+    "action": "Control uses FileCC with distinct delivery semantics; audit controller compatibility before any algorithm change."
+  },
+  {
+    "section": "6",
+    "title": "Encryption",
+    "line": 3701,
+    "supplemental_line": 2993,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1",
+    "title": "Overview",
+    "line": 3708,
+    "supplemental_line": 2999,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1.1",
+    "title": "Encryption Scope",
+    "line": 3718,
+    "supplemental_line": 3006,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1.2",
+    "title": "AES Counter",
+    "line": 3728,
+    "supplemental_line": 3013,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1.3",
+    "title": "Stream Encrypting Key (SEK)",
+    "line": 3757,
+    "supplemental_line": 3032,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1.4",
+    "title": "Key Encrypting Key (KEK)",
+    "line": 3772,
+    "supplemental_line": 3045,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1.5",
+    "title": "Key Material Exchange",
+    "line": 3788,
+    "supplemental_line": 3057,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.1.6",
+    "title": "KM Refresh",
+    "line": 3827,
+    "supplemental_line": 3082,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.2",
+    "title": "Encryption Process",
+    "line": 3876,
+    "supplemental_line": 3113,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.2.1",
+    "title": "Generating the Stream Encrypting Key",
+    "line": 3878,
+    "supplemental_line": 3115,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.2.2",
+    "title": "Encrypting the Payload",
+    "line": 3906,
+    "supplemental_line": 3140,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.3",
+    "title": "Decryption Process",
+    "line": 3928,
+    "supplemental_line": 3156,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.3.1",
+    "title": "Restoring the Stream Encrypting Key",
+    "line": 3930,
+    "supplemental_line": 3158,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "6.3.2",
+    "title": "Decrypting the Payload",
+    "line": 3962,
+    "supplemental_line": 3186,
+    "disposition": "Reconcile",
+    "action": "Complete GCM algorithm contract beyond added field codes; separately specify shared group schedule and authentication-v2 coverage."
+  },
+  {
+    "section": "7",
+    "title": "Best Practices and Configuration Tips for Data Transmission via SRT",
+    "line": 3984,
+    "supplemental_line": 3202,
+    "disposition": "Scope",
+    "action": "Update deployment examples only for supported profile combinations; separate loopback evidence from WAN/scale claims."
+  },
+  {
+    "section": "7.1",
+    "title": "Live Streaming",
+    "line": 3986,
+    "supplemental_line": 3204,
+    "disposition": "Scope",
+    "action": "Update deployment examples only for supported profile combinations; separate loopback evidence from WAN/scale claims."
+  },
+  {
+    "section": "7.2",
+    "title": "File Transmission",
+    "line": 4045,
+    "supplemental_line": 3236,
+    "disposition": "Scope",
+    "action": "Update deployment examples only for supported profile combinations; separate loopback evidence from WAN/scale claims."
+  },
+  {
+    "section": "7.2.1",
+    "title": "File Transmission in Buffer Mode",
+    "line": 4071,
+    "supplemental_line": 3246,
+    "disposition": "Scope",
+    "action": "Update deployment examples only for supported profile combinations; separate loopback evidence from WAN/scale claims."
+  },
+  {
+    "section": "7.2.2",
+    "title": "File Transmission in Message Mode",
+    "line": 4099,
+    "supplemental_line": 3254,
+    "disposition": "Scope",
+    "action": "Update deployment examples only for supported profile combinations; separate loopback evidence from WAN/scale claims."
+  },
+  {
+    "section": "8",
+    "title": "Security Considerations",
+    "line": 4119,
+    "supplemental_line": 3263,
+    "disposition": "Decision",
+    "action": "State shared-key insider, revocation, replay, downgrade and amplification limits; independent security review remains open."
+  },
+  {
+    "section": "9",
+    "title": "IANA Considerations",
+    "line": 4176,
+    "supplemental_line": 3300,
+    "disposition": "Decision",
+    "action": "Coordinate identifier ownership and collision migration; provisional values are not allocations."
+  },
+  {
+    "section": "A",
+    "title": "Packet Sequence List Coding",
+    "line": 4356,
+    "supplemental_line": 3337,
+    "disposition": "Retain boundary",
+    "action": "No new sequence-list encoding proposed; preserve 31-bit serial validation and extension repair behavior."
+  },
+  {
+    "section": "B",
+    "title": "SRT Access Control",
+    "line": 4396,
+    "supplemental_line": 3368,
+    "disposition": "Retain boundary",
+    "action": "Keep access-control text distinct from cryptographic authentication and authorization."
+  },
+  {
+    "section": "B.1",
+    "title": "General Syntax",
+    "line": 4429,
+    "supplemental_line": 3386,
+    "disposition": "Retain boundary",
+    "action": "Keep access-control text distinct from cryptographic authentication and authorization."
+  },
+  {
+    "section": "B.2",
+    "title": "Standard Keys",
+    "line": 4455,
+    "supplemental_line": 3409,
+    "disposition": "Retain boundary",
+    "action": "Keep access-control text distinct from cryptographic authentication and authorization."
+  },
+  {
+    "section": "B.3",
+    "title": "Examples",
+    "line": 4526,
+    "supplemental_line": 3448,
+    "disposition": "Retain boundary",
+    "action": "Keep access-control text distinct from cryptographic authentication and authorization."
+  },
+  {
+    "section": "C",
+    "title": "Changelog",
+    "line": 4550,
+    "supplemental_line": 3464,
+    "disposition": "Editorial",
+    "action": "Preserve historical provenance; add an accurate revision changelog."
+  },
+  {
+    "section": "C.1",
+    "title": "Since draft-sharabayko-mops-srt-00",
+    "line": 4552,
+    "supplemental_line": 3466,
+    "disposition": "Editorial",
+    "action": "Preserve historical provenance; add an accurate revision changelog."
+  },
+  {
+    "section": "C.2",
+    "title": "Since draft-sharabayko-mops-srt-01",
+    "line": 4577,
+    "supplemental_line": 3478,
+    "disposition": "Editorial",
+    "action": "Preserve historical provenance; add an accurate revision changelog."
+  },
+  {
+    "section": "C.3",
+    "title": "Since draft-sharabayko-srt-00",
+    "line": 4610,
+    "supplemental_line": 3489,
+    "disposition": "Editorial",
+    "action": "Preserve historical provenance; add an accurate revision changelog."
+  }
+]

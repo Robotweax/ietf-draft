@@ -1,0 +1,13 @@
+{
+  "result": "pass",
+  "file": {
+    "path": "/Users/marc/Documents/Codex/robotweax-srt-public/output/ietf-draft-local/build/draft-robotweax-srt-authentication-00.txt",
+    "size": 15739
+  },
+  "nitsBySeverity": {
+    "error": 0,
+    "warning": 0,
+    "comment": 0
+  },
+  "nits": []
+}

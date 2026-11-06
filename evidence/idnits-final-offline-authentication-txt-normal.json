@@ -1,0 +1,62 @@
+{
+  "result": "pass",
+  "file": {
+    "path": "/Users/marc/Documents/Codex/robotweax-srt-public/output/ietf-draft-local/build/draft-robotweax-srt-authentication-00.txt",
+    "size": 15739
+  },
+  "nitsBySeverity": {
+    "error": 0,
+    "warning": 1,
+    "comment": 3
+  },
+  "nits": [
+    {
+      "severity": "ValidationComment",
+      "code": "UNDEFINED_STATUS",
+      "desc": "The informative reference RFC 8018 does not have a defined status or could not be fetched.",
+      "ref": "https://www.rfc-editor.org/info/rfc8018",
+      "line": [
+        {
+          "line": 327,
+          "pos": 4
+        }
+      ]
+    },
+    {
+      "severity": "ValidationComment",
+      "code": "UNDEFINED_STATUS",
+      "desc": "The informative reference RFC 2104 does not have a defined status or could not be fetched.",
+      "ref": "https://www.rfc-editor.org/info/rfc2104",
+      "line": [
+        {
+          "line": 341,
+          "pos": 4
+        }
+      ]
+    },
+    {
+      "severity": "ValidationComment",
+      "code": "UNDEFINED_STATUS",
+      "desc": "The informative reference RFC 3394 does not have a defined status or could not be fetched.",
+      "ref": "https://www.rfc-editor.org/info/rfc3394",
+      "line": [
+        {
+          "line": 346,
+          "pos": 4
+        }
+      ]
+    },
+    {
+      "severity": "ValidationWarning",
+      "code": "UNDEFINED_STATE",
+      "desc": "The draft reference draft-sharabayko-srt does not have a defined state or could not be fetched.",
+      "ref": "https://datatracker.ietf.org/doc/draft-sharabayko-srt",
+      "line": [
+        {
+          "line": 320,
+          "pos": 54
+        }
+      ]
+    }
+  ]
+}

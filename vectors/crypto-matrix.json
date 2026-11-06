@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "provenance": "C++ outputs independently recomputed with Python cryptography; deterministic public test material, not independent peer interoperability",
+  "cases": [
+    {
+      "mode": "ctr",
+      "key_bytes": 16,
+      "km_body_hex": "12202901000000000200020000000404505152535455565758595a5b5c5d5e5f6ba9f87a4c45d80be9bca58eca9432d3ec8a3abe2e0dff4e",
+      "salt_hex": "505152535455565758595a5b5c5d5e5f",
+      "kek_hex": "572044c568cd59175d32672851827d23",
+      "sek_hex": "606162636465666768696a6b6c6d6e6f",
+      "iv_hex": "505152535455565758595a5b5c390000",
+      "header_hex": "00000064e80000070001e24005060708",
+      "plaintext_hex": "00112233445566778899aabbccddeeff10203040",
+      "ciphertext_hex": "4e54a4e72e6a8dcbf308f32154aa819fc1043933",
+      "tag_hex": null
+    },
+    {
+      "mode": "ctr",
+      "key_bytes": 24,
+      "km_body_hex": "12202901000000000200020000000406505152535455565758595a5b5c5d5e5f009138500d1b2ba0e79a1a1146d140f8a5e54328b9c96dbc994540ebda1829a6",
+      "salt_hex": "505152535455565758595a5b5c5d5e5f",
+      "kek_hex": "572044c568cd59175d32672851827d23cdef28e7c84828bf",
+      "sek_hex": "606162636465666768696a6b6c6d6e6f7071727374757677",
+      "iv_hex": "505152535455565758595a5b5c390000",
+      "header_hex": "00000064e80000070001e24005060708",
+      "plaintext_hex": "00112233445566778899aabbccddeeff10203040",
+      "ciphertext_hex": "30601c0c44e8a8216f86961c1f94e55ba93f800a",
+      "tag_hex": null
+    },
+    {
+      "mode": "ctr",
+      "key_bytes": 32,
+      "km_body_hex": "12202901000000000200020000000408505152535455565758595a5b5c5d5e5f7255645f2a357d27a9bf22c57c9e0f3828e1b4b495e2cdb8624685d71f844b616c7429695785e25e",
+      "salt_hex": "505152535455565758595a5b5c5d5e5f",
+      "kek_hex": "572044c568cd59175d32672851827d23cdef28e7c84828bf36ee4acc541ecd76",
+      "sek_hex": "606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
+      "iv_hex": "505152535455565758595a5b5c390000",
+      "header_hex": "00000064e80000070001e24005060708",
+      "plaintext_hex": "00112233445566778899aabbccddeeff10203040",
+      "ciphertext_hex": "39d3602f69789340985a1e6a2a6a4a82caa008f2",
+      "tag_hex": null
+    },
+    {
+      "mode": "gcm",
+      "key_bytes": 16,
+      "km_body_hex": "12202901000000000401020000000404505152535455565758595a5b5c5d5e5f6ba9f87a4c45d80be9bca58eca9432d3ec8a3abe2e0dff4e",
+      "salt_hex": "505152535455565758595a5b5c5d5e5f",
+      "kek_hex": "572044c568cd59175d32672851827d23",
+      "sek_hex": "606162636465666768696a6b6c6d6e6f",
+      "iv_hex": "505152535455565758595a3f",
+      "header_hex": "00000064e80000070001e24005060708",
+      "plaintext_hex": "00112233445566778899aabbccddeeff10203040",
+      "ciphertext_hex": "0feef1acefac5c1cfa88ac9def6e9c752489c1a7",
+      "tag_hex": "78383a5c15f0fc47babbe9a303c734ef"
+    },
+    {
+      "mode": "gcm",
+      "key_bytes": 24,
+      "km_body_hex": "12202901000000000401020000000406505152535455565758595a5b5c5d5e5f009138500d1b2ba0e79a1a1146d140f8a5e54328b9c96dbc994540ebda1829a6",
+      "salt_hex": "505152535455565758595a5b5c5d5e5f",
+      "kek_hex": "572044c568cd59175d32672851827d23cdef28e7c84828bf",
+      "sek_hex": "606162636465666768696a6b6c6d6e6f7071727374757677",
+      "iv_hex": "505152535455565758595a3f",
+      "header_hex": "00000064e80000070001e24005060708",
+      "plaintext_hex": "00112233445566778899aabbccddeeff10203040",
+      "ciphertext_hex": "6ab9415b3c43b86022e090dc8637d96d7e590d49",
+      "tag_hex": "aa2b2ca69be7fe8ffab0a06afdebafa6"
+    },
+    {
+      "mode": "gcm",
+      "key_bytes": 32,
+      "km_body_hex": "12202901000000000401020000000408505152535455565758595a5b5c5d5e5f7255645f2a357d27a9bf22c57c9e0f3828e1b4b495e2cdb8624685d71f844b616c7429695785e25e",
+      "salt_hex": "505152535455565758595a5b5c5d5e5f",
+      "kek_hex": "572044c568cd59175d32672851827d23cdef28e7c84828bf36ee4acc541ecd76",
+      "sek_hex": "606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
+      "iv_hex": "505152535455565758595a3f",
+      "header_hex": "00000064e80000070001e24005060708",
+      "plaintext_hex": "00112233445566778899aabbccddeeff10203040",
+      "ciphertext_hex": "ca7d11fac43661f518a98122ecfa8c80d38351bd",
+      "tag_hex": "410e21df95fadb6af0847e462f1debaf"
+    }
+  ]
+}

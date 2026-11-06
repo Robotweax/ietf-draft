@@ -9,9 +9,9 @@ All Robotweax paths below are relative to the immutable
 | BASE-01 | HSv5 flags, section 3.2.1.1 | docs/control-profile.md | Resolve base MUST-set REXMITFLG versus Control omission | Explicit profile exception or implementation change undecided |
 | BASE-02 | TSBPD, drift and RTT, sections 4.5, 4.7, 4.10 | docs/release-notes-0.3.2.md; docs/live-timing.md | Distinguish initialized RTT from valid measurement | Reported timing regressions; extract exact cases |
 | BASE-03 | Drop/recovery, sections 4.6, 4.8 | docs/sender-drop-semantics.md; docs/protocol-edge-cases.md | Reconcile first-transmission deadline, ACK validation and rollover | Clause-by-clause audit pending |
-| AEAD-01 | Encryption, sections 3.2.2 and 6; newer working copy | docs/aes-gcm-contract.md; compat/robotweax-0.2-aead-fixtures.json | Freeze negotiation, IV/AAD, tag, retransmission and lifetime | Existing fixture corpus; independent validation pending |
+| AEAD-01 | Encryption, sections 3.2.2 and 6; newer working copy | docs/aes-gcm-contract.md; compat/robotweax-0.2-aead-fixtures.json | Freeze negotiation, IV/AAD, tag, retransmission and lifetime | Six initial DATA/KM calculations independently matched; post-rotation DATA and full GCM base text remain open |
 | GROUP-01 | Group membership, section 3.2.1.4 | docs/connection-groups.md | Specify Broadcast/Backup sequence, clocks, join/failover and deduplication | Per-topology evidence must be extracted |
-| MC-01 | Reserved group type 4 | include/robotweax/srt/connection_group.hpp; src/connection_group.cpp | Document 60-byte dispatch record and validation | Exact field layout inspected; vectors pending |
+| MC-01 | Reserved group type 4 | include/robotweax/srt/connection_group.hpp; src/connection_group.cpp | Document 60-byte dispatch record and validation | Pinned codec vectors and native admission evidence available; independent peer absent |
 | MC-02 | New dispatch transport | docs/connection-groups.md | Admission, group destination ID, feedback and repair | Reported lifecycle, epoll and media tests; independent peer absent |
 | MC-03 | Group encryption | docs/encryption.md | Positional shared keys, late joins, wrap and receiver-free progression | Reported CTR/GCM tests; no sender identity or leave revocation |
 | MC-04 | Congestion and deployment | docs/multicast-media.md | Aggregate repair budget, heterogeneous receivers, network qualification | Per-member cap exists; aggregate policy and physical fan-out unresolved |
@@ -25,7 +25,16 @@ All Robotweax paths below are relative to the immutable
 | REC-01 | ARQ-first/tail probes, sections 4.8 and 5 | docs/arq-first-fec.md; docs/socket-options.md | Optional sender algorithm, pacing and cold-start limits | Reported measured-RTT UDP tests; no general deadline/bandwidth claim |
 | EXP-01 | Compiled controllers and filters | docs/experimental-controllers.md; docs/experimental-filters.md | Specify selected named wire algorithms only if promoted | Private provider API is out of scope |
 
-Next evidence pass: map each row to exact test names and immutable result
-artifacts, record platform/topology/cipher, then add captured wire vectors.
+Multicast/authentication rows now have selected pinned execution evidence.
+Map the remaining base/profile/ancillary rows to exact test names and immutable
+artifacts before extending conformance claims.
 Missing evidence remains missing; a passing same-code peer pair is not a second
 independent implementation.
+
+## Detailed local follow-up
+
+The original [source audit](source-audit-2026-11-06.md) is historical; the current [claim ledger](../audit/source-map.json) verifies 36 source claims and associated test evidence. The [validation record](local-audit-validation.md) distinguishes evidence checks from protocol test execution. Broader base-protocol and ancillary-extension rows above remain planned work.
+
+The [baseline comparison](baseline-comparison.md) covers all numbered sections
+of the submitted text and maps the supplemental source by heading and line.
+Its editorial dispositions complement, rather than replace, this feature map.

@@ -1,0 +1,110 @@
+{
+  "tool": "@ietf-tools/idnits",
+  "version": "3.3.0",
+  "runs": [
+    {
+      "log": "idnits-final-offline-multicast-xml-submission.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-multicast-00.xml",
+      "input_sha256": "59bc097766086702f41e54b8aebabeb67c41c424111f0450efd7ef3ab83ab0ed",
+      "mode": "submission",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-offline-multicast-xml-normal.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-multicast-00.xml",
+      "input_sha256": "59bc097766086702f41e54b8aebabeb67c41c424111f0450efd7ef3ab83ab0ed",
+      "mode": "normal",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 1,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-offline-multicast-txt-submission.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-multicast-00.txt",
+      "input_sha256": "07441e4bcef27e76b04554a6ce3e2cd46512d4b6e2608275f212d306407cefdd",
+      "mode": "submission",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-offline-multicast-txt-normal.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-multicast-00.txt",
+      "input_sha256": "07441e4bcef27e76b04554a6ce3e2cd46512d4b6e2608275f212d306407cefdd",
+      "mode": "normal",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 1,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-offline-authentication-xml-submission.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-authentication-00.xml",
+      "input_sha256": "07e74f6e431cc7d834abe23601da0c39b62db9407c74e0a772be65847ed64aa5",
+      "mode": "submission",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-offline-authentication-xml-normal.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-authentication-00.xml",
+      "input_sha256": "07e74f6e431cc7d834abe23601da0c39b62db9407c74e0a772be65847ed64aa5",
+      "mode": "normal",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 1,
+        "comment": 3
+      }
+    },
+    {
+      "log": "idnits-final-offline-authentication-txt-submission.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-authentication-00.txt",
+      "input_sha256": "f610c9addac821ed29015addea29c43112afc6a38fdff9279abfd2b859912a1b",
+      "mode": "submission",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-offline-authentication-txt-normal.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-authentication-00.txt",
+      "input_sha256": "f610c9addac821ed29015addea29c43112afc6a38fdff9279abfd2b859912a1b",
+      "mode": "normal",
+      "offline": true,
+      "counts": {
+        "error": 0,
+        "warning": 1,
+        "comment": 3
+      }
+    }
+  ]
+}

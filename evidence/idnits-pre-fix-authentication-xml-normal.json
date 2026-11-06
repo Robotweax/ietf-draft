@@ -1,0 +1,79 @@
+{
+  "result": "fail",
+  "file": {
+    "path": "/Users/marc/Documents/Codex/robotweax-srt-public/output/ietf-draft-local/drafts/draft-robotweax-srt-authentication-00.xml",
+    "size": 14344
+  },
+  "nitsBySeverity": {
+    "error": 1,
+    "warning": 3,
+    "comment": 3
+  },
+  "nits": [
+    {
+      "severity": "ValidationError",
+      "code": "MISSING_INTRODUCTION_SECTION",
+      "desc": "The introduction section is missing.",
+      "ref": "https://authors.ietf.org/en/required-content#introduction",
+      "path": "rfc.middle.section",
+      "line": [
+        {
+          "line": 13,
+          "pos": 3
+        }
+      ]
+    },
+    {
+      "severity": "ValidationComment",
+      "code": "UNDEFINED_STATUS",
+      "desc": "The informative reference RFC 8018 does not have a defined status or could not be fetched.",
+      "ref": "https://www.rfc-editor.org/info/rfc8018"
+    },
+    {
+      "severity": "ValidationComment",
+      "code": "UNDEFINED_STATUS",
+      "desc": "The informative reference RFC 2104 does not have a defined status or could not be fetched.",
+      "ref": "https://www.rfc-editor.org/info/rfc2104"
+    },
+    {
+      "severity": "ValidationComment",
+      "code": "UNDEFINED_STATUS",
+      "desc": "The informative reference RFC 3394 does not have a defined status or could not be fetched.",
+      "ref": "https://www.rfc-editor.org/info/rfc3394"
+    },
+    {
+      "severity": "ValidationWarning",
+      "code": "UNDEFINED_STATE",
+      "desc": "The draft reference draft-sharabayko-srt does not have a defined state or could not be fetched.",
+      "ref": "https://datatracker.ietf.org/doc/draft-sharabayko-srt"
+    },
+    {
+      "severity": "ValidationWarning",
+      "code": "TEXT_DOC_REF",
+      "desc": "Text occurs that looks like a text-document reference (e.g. [1] or [RFC...]). A reference should instead use an <eref> tag.",
+      "ref": "https://authors.ietf.org/en/references-in-rfcxml",
+      "path": "rfc.middle.section[1].t[0]",
+      "label": "Section 2 (Version 2 Handshake), paragraph 1",
+      "line": [
+        {
+          "line": 22,
+          "pos": 7
+        }
+      ]
+    },
+    {
+      "severity": "ValidationWarning",
+      "code": "TEXT_DOC_REF",
+      "desc": "Text occurs that looks like a text-document reference (e.g. [1] or [RFC...]). A reference should instead use an <eref> tag.",
+      "ref": "https://authors.ietf.org/en/references-in-rfcxml",
+      "path": "rfc.middle.section[5].t[0]",
+      "label": "Section 6 (Separate Experimental ACP1 Work), paragraph 1",
+      "line": [
+        {
+          "line": 47,
+          "pos": 7
+        }
+      ]
+    }
+  ]
+}

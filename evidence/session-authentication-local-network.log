@@ -1,0 +1,51 @@
+[RUN] session_authentication_hmac_sha256_rfc4231
+[PASS] session_authentication_hmac_sha256_rfc4231
+[RUN] session_authentication_proofs_bind_both_peers_roles_and_key_material
+[PASS] session_authentication_proofs_bind_both_peers_roles_and_key_material
+[RUN] session_authentication_rejects_cross_session_reflection_and_stale_controls
+[PASS] session_authentication_rejects_cross_session_reflection_and_stale_controls
+[RUN] session_authentication_fails_closed_without_rng_or_hmac
+[PASS] session_authentication_fails_closed_without_rng_or_hmac
+[RUN] session_authentication_rejects_key_replay_beyond_bounded_crypto_history
+[PASS] session_authentication_rejects_key_replay_beyond_bounded_crypto_history
+[RUN] session_authentication_parity_binds_header_session_role_and_replay_window
+[PASS] session_authentication_parity_binds_header_session_role_and_replay_window
+[RUN] session_authentication_listener_requires_finish_and_retries_challenge
+[PASS] session_authentication_listener_requires_finish_and_retries_challenge
+[RUN] session_authentication_datagram_rejects_unknown_version_duplicate_and_truncation
+[PASS] session_authentication_datagram_rejects_unknown_version_duplicate_and_truncation
+[RUN] srt_compat_session_authentication_is_explicit_and_preconnection_only
+[PASS] srt_compat_session_authentication_is_explicit_and_preconnection_only
+[RUN] srt_compat_session_authentication_connects_and_rotates_in_both_directions
+1793965524265171/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524268717/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524389488/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524392375/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524498831/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524502919/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524621327/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524626312/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] srt_compat_session_authentication_connects_and_rotates_in_both_directions
+[RUN] srt_compat_session_authentication_rejects_mode_mismatch_and_wrong_secret
+1793965524734822/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524736808/0x16da9b000W:connection: handshake rejected socket=937392893 peer=127.0.0.1:51621 peer_socket=487974008 reason=11 name=UNSECURE wire=1011
+1793965524736891/0x1f1e5e180W:connection: connection setup failed socket=487974008 peer=127.0.0.1:63589 peer_socket=0 reason=11 name=UNSECURE wire=1011
+1793965524736923/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524737092/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524738393/0x16da0f000W:connection: handshake rejected socket=941439626 peer=127.0.0.1:53094 peer_socket=308437931 reason=11 name=UNSECURE wire=1011
+1793965524738544/0x1f1e5e180W:connection: connection setup failed socket=308437931 peer=127.0.0.1:51235 peer_socket=0 reason=11 name=UNSECURE wire=1011
+1793965524738575/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524739158/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965524740233/0x16d983000W:connection: handshake rejected socket=788310536 peer=127.0.0.1:51792 peer_socket=985197549 reason=10 name=BADSECRET wire=1010
+1793965524740281/0x1f1e5e180W:connection: connection setup failed socket=985197549 peer=127.0.0.1:54107 peer_socket=0 reason=10 name=BADSECRET wire=1010
+1793965524740295/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] srt_compat_session_authentication_rejects_mode_mismatch_and_wrong_secret
+[RUN] session_authentication_fec_budget_is_opt_in_and_order_independent
+[PASS] session_authentication_fec_budget_is_opt_in_and_order_independent
+[RUN] session_authentication_rejects_insufficient_fec_mss_without_mutation
+[PASS] session_authentication_rejects_insufficient_fec_mss_without_mutation
+[RUN] session_authentication_runtime_drops_foreign_and_bare_key_controls
+[PASS] session_authentication_runtime_drops_foreign_and_bare_key_controls
+[RUN] session_authentication_fec_recovers_after_forgery_and_replay
+[PASS] session_authentication_fec_recovers_after_forgery_and_replay
+15/15 tests passed

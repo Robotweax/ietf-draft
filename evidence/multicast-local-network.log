@@ -1,0 +1,58 @@
+[RUN] group_membership_admits_multicast_dispatch_only_by_policy
+[PASS] group_membership_admits_multicast_dispatch_only_by_policy
+[RUN] multicast_dispatch_round_trips_ipv4_and_ipv6_announcements
+[PASS] multicast_dispatch_round_trips_ipv4_and_ipv6_announcements
+[RUN] multicast_dispatch_encoder_rejects_invalid_announcements
+[PASS] multicast_dispatch_encoder_rejects_invalid_announcements
+[RUN] multicast_dispatch_decoder_rejects_malformed_wire_content
+[PASS] multicast_dispatch_decoder_rejects_malformed_wire_content
+[RUN] hsv5_multicast_dispatch_negotiation_announces_the_group
+[PASS] hsv5_multicast_dispatch_negotiation_announces_the_group
+[RUN] hsv5_multicast_dispatch_is_rejected_without_policy_or_announcement
+[PASS] hsv5_multicast_dispatch_is_rejected_without_policy_or_announcement
+[RUN] compat_multicast_dispatch_group_creation_and_receiver_shape
+[PASS] compat_multicast_dispatch_group_creation_and_receiver_shape
+[RUN] compat_multicast_dispatch_sender_epoll_tracks_empty_and_backpressure
+[PASS] compat_multicast_dispatch_sender_epoll_tracks_empty_and_backpressure
+[RUN] compat_multicast_dispatch_backpressure_preserves_original_and_tail
+[PASS] compat_multicast_dispatch_backpressure_preserves_original_and_tail
+[RUN] compat_multicast_dispatch_lost_or_failed_repair_uses_unicast_within_budget
+[PASS] compat_multicast_dispatch_lost_or_failed_repair_uses_unicast_within_budget
+[RUN] multicast_dispatch_repair_does_not_suppress_before_submission
+[PASS] multicast_dispatch_repair_does_not_suppress_before_submission
+[RUN] multicast_dispatch_repair_repeated_nak_uses_unicast
+[PASS] multicast_dispatch_repair_repeated_nak_uses_unicast
+[RUN] multicast_dispatch_repair_completion_cannot_mutate_a_new_tally
+[PASS] multicast_dispatch_repair_completion_cannot_mutate_a_new_tally
+[RUN] multicast_dispatch_repair_member_capacity_preserves_unicast_fallback
+[PASS] multicast_dispatch_repair_member_capacity_preserves_unicast_fallback
+[RUN] multicast_dispatch_repair_threshold_counts_distinct_receivers_in_window
+[PASS] multicast_dispatch_repair_threshold_counts_distinct_receivers_in_window
+[RUN] multicast_dispatch_group_repeats_a_shared_loss_once_over_multicast
+1793965543769798/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] multicast_dispatch_group_repeats_a_shared_loss_once_over_multicast
+[RUN] multicast_dispatch_group_recovers_when_original_and_multicast_repair_are_lost
+1793965544130579/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] multicast_dispatch_group_recovers_when_original_and_multicast_repair_are_lost
+[RUN] multicast_dispatch_group_delivers_one_stream_to_several_receivers
+1793965544494627/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] multicast_dispatch_group_delivers_one_stream_to_several_receivers
+[RUN] multicast_dispatch_group_authenticates_with_aes_gcm_group_key
+1793965545165314/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] multicast_dispatch_group_authenticates_with_aes_gcm_group_key
+[RUN] multicast_dispatch_group_encrypts_with_one_group_key_across_rotations
+1793965546111707/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] multicast_dispatch_group_encrypts_with_one_group_key_across_rotations
+[RUN] multicast_dispatch_listener_rejects_joins_without_key_or_as_bonding
+1793965547136212/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965547137291/0x16db3f000W:connection: handshake rejected socket=221486470 peer=127.0.0.1:51316 peer_socket=111372820 reason=0 name=UNKNOWN wire=1000
+1793965547148818/0x16d7f7000W:connection: connection setup failed socket=111372820 peer=127.0.0.1:53141 peer_socket=0 reason=0 name=UNKNOWN wire=1000
+1793965547160648/0x16d7f7000W:connection: connection setup failed socket=825157876 peer=127.0.0.1:53141 peer_socket=0 reason=15 name=GROUP wire=1015
+1793965547160799/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793965547161345/0x16d99b000W:connection: handshake rejected socket=234558539 peer=127.0.0.1:63802 peer_socket=296330256 reason=11 name=UNSECURE wire=1011
+1793965547173268/0x16d7f7000W:connection: connection setup failed socket=296330256 peer=127.0.0.1:49397 peer_socket=0 reason=11 name=UNSECURE wire=1011
+[PASS] multicast_dispatch_listener_rejects_joins_without_key_or_as_bonding
+[RUN] multicast_dispatch_group_joins_with_a_full_accept_backlog
+1793965547173516/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+[PASS] multicast_dispatch_group_joins_with_a_full_accept_backlog
+22/22 tests passed

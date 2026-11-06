@@ -1,0 +1,3 @@
+[RUN] compat_runtime_peer_idle_timeout_uses_last_valid_packet
+[PASS] compat_runtime_peer_idle_timeout_uses_last_valid_packet
+1/1 tests passed

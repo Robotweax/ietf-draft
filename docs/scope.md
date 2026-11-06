@@ -17,11 +17,7 @@ Unreleased aggregation branches and adjacent projects are outside this baseline.
 
 - Submitted: [draft-sharabayko-srt-01](https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01),
   2021-09-07, expired individual Informational draft, Independent Submission stream.
-- Supplemental: [Haivision working copy](https://haivision.github.io/srt-rfc/draft-sharabayko-srt.html),
-  displaying 2024-01-08 at review. It includes AES-GCM and handshake clarifications.
-  This mutable page must be replaced with a verified immutable revision for the
-  final reconciliation. Robotweax's GCM contract cites upstream draft revision
-  `461a1fea85baaa4a928fa634d30c846dfd047ab8`; do not assume it is the page revision.
+- Supplemental: [Haivision source at commit 461a1fea85baaa4a928fa634d30c846dfd047ab8](https://github.com/Haivision/srt-rfc/blob/461a1fea85baaa4a928fa634d30c846dfd047ab8/draft-sharabayko-srt.md), committed 2025-09-22. The snapshot matches Git blob `e74908bb3c8f680f42bb76926fef2f79e6c3d083`. This is the revision cited by Robotweax's GCM contract. It is now the explicit supplemental baseline; identity with the hosted page displaying 2024-01-08 is not asserted. See [snapshot provenance](../audit/baselines/manifest.json) and the [section comparison](baseline-comparison.md).
 
 The submitted draft reserves multicast group type 4 but does not specify this
 dispatch protocol. AES-GCM is not exclusively a Robotweax invention. Existing
@@ -46,8 +42,11 @@ defines a distinct on-wire algorithm.
 
 ## Evidence boundary
 
-This seed is based on documentation and selected source inspection. It does not
-report new test executions, independent protocol implementations, WAN benchmarks,
-multicast scale qualification, or independent cryptographic review. Repository
-validation checks document structure only. The initial drafts are intentionally
-incomplete and identify their missing normative material.
+The current local package includes source inspection, independent formula-level
+vectors, selected release regressions, crypto/handshake adapters and an instrumented
+native loopback suite. See the [status report](status-report-2026-11-06.md) and
+[native results](native-publication-results.md) for counts and limits. The baseline
+comparison assigns an editorial disposition to all 84 numbered submitted sections
+and appendices; clause-level conformance and replacement base text remain work.
+Independent interoperability, physical-network scale and cryptographic review
+remain open. Structural checks and rendering do not establish protocol conformance.

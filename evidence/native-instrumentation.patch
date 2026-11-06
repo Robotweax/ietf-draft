@@ -1,0 +1,44 @@
+--- a/src/compat/connection.cpp
++++ b/src/compat/connection.cpp
+@@ -41,6 +41,9 @@
+ #include <string>
+ #include <thread>
+ #include <utility>
++
++extern "C" void srt_draft_native_probe(const char*, void*, unsigned) noexcept;
++extern "C" void srt_draft_native_timing(void*, unsigned long long, unsigned, long long) noexcept;
+ 
+ namespace robotweax::srt::compat {
+ namespace {
+@@ -1105,6 +1108,7 @@
+     StandbyRttIdentity standby_rtt_identity = {},
+     bool standby_rtt_caller = true) noexcept
+ {
++    srt_draft_native_timing(&socket, handshake_arrival_microseconds, peer_handshake_timestamp.value(), std::chrono::duration_cast<std::chrono::microseconds>(origin.time_since_epoch()).count());
+     std::shared_ptr<ConnectionRuntime> runtime;
+     std::optional<ConnectionRuntime::Configuration> configuration;
+     try {
+@@ -1899,6 +1903,7 @@
+         if (socket_was_closed(socket_)) {
+             return fail(SRT_ESCLOSED);
+         }
++        if (protocol.has_peer_multicast_dispatch()) srt_draft_native_probe("before_runtime", &socket_, peer_handshake_timestamp.value());
+         if (attach_runtime(socket_, setup_.channel, origin_,
+                 microseconds_since(origin_), peer_handshake_timestamp,
+                 setup_.options.session_authentication()
+@@ -1911,12 +1916,15 @@
+                 last_error().system_error);
+         }
+         confirm_peer_group(socket_);
++        if (protocol.has_peer_multicast_dispatch()) srt_draft_native_probe("before_join", &socket_, peer_handshake_timestamp.value());
+         if (attach_dispatch_receiver(socket_, protocol) == SRT_ERROR) {
+             return fail_connect(socket_,
+                 static_cast<SRT_ERRNO>(last_error().code),
+                 last_error().system_error);
+         }
++        if (protocol.has_peer_multicast_dispatch()) srt_draft_native_probe("joined_before_publish", &socket_, peer_handshake_timestamp.value());
+         publish_connected_state(socket_, SRTS_CONNECTED);
++        if (protocol.has_peer_multicast_dispatch()) srt_draft_native_probe("published", &socket_, peer_handshake_timestamp.value());
+         return 0;
+     }
+ 

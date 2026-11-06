@@ -1,0 +1,369 @@
+{
+  "implementation_commit": "235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1",
+  "supplemental_commit": "461a1fea85baaa4a928fa634d30c846dfd047ab8",
+  "document": "docs/proposed-base-clauses.md",
+  "clauses": [
+    {
+      "id": "P01",
+      "targets": [
+        "3.1",
+        "3.2.2",
+        "6"
+      ],
+      "status": "proposed-not-approved",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "docs/aes-gcm-contract.md",
+          "needle": "## Protected DATA layout",
+          "line": 172,
+          "sha256": "dadc4544649e568809124fb85ec3a1599145ee6264f224c2939cbb67cdfa11de"
+        },
+        {
+          "kind": "implementation",
+          "path": "docs/aes-gcm-contract.md",
+          "needle": "## Key material and suites",
+          "line": 151,
+          "sha256": "dadc4544649e568809124fb85ec3a1599145ee6264f224c2939cbb67cdfa11de"
+        },
+        {
+          "kind": "supplemental",
+          "path": "audit/baselines/haivision-461a1fea.md.txt",
+          "needle": "Cipher: 8 bits, value = {0..2}.",
+          "line": 876,
+          "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+        },
+        {
+          "kind": "supplemental",
+          "path": "audit/baselines/haivision-461a1fea.md.txt",
+          "needle": "Authentication (Auth): 8 bits, value = {0}.",
+          "line": 887,
+          "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+        }
+      ],
+      "remaining": "Common GCM algorithm adoption, full lifecycle and independent interoperability remain open."
+    },
+    {
+      "id": "P02",
+      "targets": [
+        "3.2.1",
+        "4.3.1"
+      ],
+      "status": "proposed-not-approved",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "docs/aes-gcm-contract.md",
+          "needle": "## Negotiation",
+          "line": 128,
+          "sha256": "dadc4544649e568809124fb85ec3a1599145ee6264f224c2939cbb67cdfa11de"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/handshake.cpp",
+          "needle": "            // A successful CONCLUSION need not echo the accepted controller.",
+          "line": 847,
+          "sha256": "a501d5c48f019a9bbddc75a3f09260d85e6a6f5c3a9989a5d2d222cb2aa16a99"
+        },
+        {
+          "kind": "supplemental",
+          "path": "audit/baselines/haivision-461a1fea.md.txt",
+          "needle": "### Caller-Listener Handshake",
+          "line": 1536,
+          "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+        }
+      ],
+      "remaining": "Do not generalize cipher tables into plaintext fallback or a universal error precedence."
+    },
+    {
+      "id": "P03",
+      "targets": [
+        "3.2.1.1.1"
+      ],
+      "status": "proposed-not-approved",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "docs/control-profile.md",
+          "needle": "## Wire identity and compatibility",
+          "line": 44,
+          "sha256": "f8da64a796695bfa77a45dc149f73a3bf65510a134669bd0aca9c1e9283deb2d"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/socket_options.cpp",
+          "needle": "        if (value == static_cast<std::int64_t>(TransmissionType::control))",
+          "line": 401,
+          "sha256": "6f261237b851d316396b22de47aef68f93d131cebf9dded511c2fbaa435f19e8"
+        },
+        {
+          "kind": "supplemental",
+          "path": "audit/baselines/haivision-461a1fea.md.txt",
+          "needle": "- REXMITFLG flag MUST be set.",
+          "line": 670,
+          "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+        }
+      ],
+      "remaining": "Explicit negotiated exception is proposed, not yet adopted base text."
+    },
+    {
+      "id": "P04",
+      "targets": [
+        "4.5.1.1",
+        "multicast#admission-timing"
+      ],
+      "status": "proposed-not-approved",
+      "sources": [
+        {
+          "kind": "supplemental",
+          "path": "audit/baselines/haivision-461a1fea.md.txt",
+          "needle": "#### TSBPD Time Base Calculation",
+          "line": 2110,
+          "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/compat/connection.cpp",
+          "needle": "    [[nodiscard]] int publish_connection(",
+          "line": 1852,
+          "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/compat/connection.cpp",
+          "needle": "        if (attach_runtime(socket_, setup_.channel, origin_,",
+          "line": 1902,
+          "sha256": "f3543b2006bc7e6e2b3bce9c4cefd028423b56f9bbb074a28c242ec448918192"
+        }
+      ],
+      "remaining": "Future ingress capture and zero-delta rejection remain unapproved."
+    },
+    {
+      "id": "P05",
+      "targets": [
+        "3.2.1",
+        "3.2",
+        "9"
+      ],
+      "status": "proposed-not-approved",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "include/robotweax/srt/handshake_extensions.hpp",
+          "needle": "    session_authentication = 0x7f10,",
+          "line": 29,
+          "sha256": "f16a3221bec62a59863b65a47ef7b334c9815c1ac98eb22d4bd2fec6d56e605c"
+        },
+        {
+          "kind": "implementation",
+          "path": "include/robotweax/srt/session_authentication.hpp",
+          "needle": "inline constexpr std::uint16_t authenticated_key_request_subtype",
+          "line": 14,
+          "sha256": "d7c693e7179d802dd907d5ead40fdf2757c1ba6ba93f268288c2e9542fd500eb"
+        },
+        {
+          "kind": "implementation",
+          "path": "include/robotweax/srt/session_authentication.hpp",
+          "needle": "inline constexpr std::uint16_t authenticated_control_subtype",
+          "line": 34,
+          "sha256": "d7c693e7179d802dd907d5ead40fdf2757c1ba6ba93f268288c2e9542fd500eb"
+        },
+        {
+          "kind": "implementation",
+          "path": "include/robotweax/srt/standby_rtt.hpp",
+          "needle": "inline constexpr std::uint16_t standby_rtt_subtype",
+          "line": 12,
+          "sha256": "a0a261b90fca66e1de11be64ad86363c1b6195fd3e9f23f9c6a5ef511ad0db72"
+        },
+        {
+          "kind": "implementation",
+          "path": "docs/control-profile.md",
+          "needle": "The HSv5 CONFIG congestion extension (type 6)",
+          "line": 46,
+          "sha256": "f8da64a796695bfa77a45dc149f73a3bf65510a134669bd0aca9c1e9283deb2d"
+        },
+        {
+          "kind": "supplemental",
+          "path": "audit/baselines/haivision-461a1fea.md.txt",
+          "needle": "#### Group Membership Extension",
+          "line": 745,
+          "sha256": "3434248d0f5ffc9bae9c4618c78e1c2fec010806de00c0ee2155e055e8638706"
+        }
+      ],
+      "remaining": "Values remain provisional; migration and unknown-record policy need decisions."
+    },
+    {
+      "id": "P06",
+      "targets": [
+        "extension-combinations"
+      ],
+      "status": "proposed-not-approved",
+      "detail_document": "docs/extension-combination-matrix.md",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "docs/aes-gcm-contract.md",
+          "needle": "### Valid transport bundles",
+          "line": 96,
+          "sha256": "dadc4544649e568809124fb85ec3a1599145ee6264f224c2939cbb67cdfa11de"
+        },
+        {
+          "kind": "implementation",
+          "path": "docs/session-authentication.md",
+          "needle": "## Per-child selection on a shared listener",
+          "line": 27,
+          "sha256": "d3a01717b5a3f88878c346802afafef4ca5979d9a35d602c1f748a1f99839164"
+        },
+        {
+          "kind": "implementation",
+          "path": "docs/experimental-acp1.md",
+          "needle": "The prototype supports ordinary Caller/Listener",
+          "line": 45,
+          "sha256": "a360e1db096d537cc694188fa4cf6a84dba2992f42bdf35a022b7cca2a7dd606"
+        },
+        {
+          "kind": "implementation",
+          "path": "docs/connection-groups.md",
+          "needle": "Group transports require Live mode and TSBPD.",
+          "line": 207,
+          "sha256": "ba0260bac983f6712fd25b4a310a404f326a5030e70fa9bc7c0f1c23b4096e1c"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/compat/group_registry.cpp",
+          "needle": "        if (configured.native_options.transmission_type()",
+          "line": 884,
+          "sha256": "2d32bd56fecebe7c8ff376a3e7461b9d377cfe7ff14472a7daa25ea03b7042e4"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/compat/group_registry.cpp",
+          "needle": "    if (listener_native_options.packet_filter_configuration().enabled)",
+          "line": 1246,
+          "sha256": "2d32bd56fecebe7c8ff376a3e7461b9d377cfe7ff14472a7daa25ea03b7042e4"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/compat/group_api.cpp",
+          "needle": "    // A dispatch receiver has exactly one control link:",
+          "line": 275,
+          "sha256": "1519426a43681bff1fd005dcba0d486196a560e94789a7ddf1b503600b5e09ef"
+        }
+      ],
+      "remaining": "Combined multicast/authentication, ancillary and profile cells remain unqualified unless explicitly evidenced."
+    },
+    {
+      "id": "P07",
+      "targets": [
+        "multicast#keys"
+      ],
+      "status": "proposed-not-approved",
+      "detail_document": "docs/proposed-key-lifecycle.md",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "SharedTransmitKeySchedule::SharedTransmitKeySchedule(",
+          "line": 255,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "std::uint64_t SharedTransmitKeySchedule::position_of(",
+          "line": 337,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "Error SharedTransmitKeySchedule::advance_unused(",
+          "line": 357,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "Error SharedTransmitKeySchedule::key_for(",
+          "line": 421,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "Error CryptoSession::prepare_shared_sender()",
+          "line": 877,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "Error CryptoSession::attach_shared_transmit_schedule(",
+          "line": 902,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "Error CryptoSession::prepare_data_sequence(",
+          "line": 950,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "        // The initial key must be acknowledged;",
+          "line": 1662,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "include/robotweax/srt/sequence.hpp",
+          "needle": "    [[nodiscard]] constexpr std::int32_t distance_from(",
+          "line": 34,
+          "sha256": "6df78b3ed294135acd8f4fc3fd2cd727fa7996454f55856382c8eedbaa26209d"
+        },
+        {
+          "kind": "implementation",
+          "path": "docs/encryption.md",
+          "needle": "### Multicast dispatch groups: one traffic key per group",
+          "line": 545,
+          "sha256": "6e3be940fc0d1f9f2eaefc6daa2f96af959d76f291b32fa1c2cc6ee54464afc2"
+        }
+      ],
+      "remaining": "Serial ambiguity, exhaustion, missing historical generation policy and independent post-rotation DATA remain open."
+    },
+    {
+      "id": "P08",
+      "targets": [
+        "6.1.5",
+        "6.1.6"
+      ],
+      "status": "proposed-not-approved",
+      "sources": [
+        {
+          "kind": "implementation",
+          "path": "docs/encryption.md",
+          "needle": "## Key rotation",
+          "line": 207,
+          "sha256": "6e3be940fc0d1f9f2eaefc6daa2f96af959d76f291b32fa1c2cc6ee54464afc2"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "bool CryptoSession::ready_to_send_data() const noexcept",
+          "line": 1642,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        },
+        {
+          "kind": "implementation",
+          "path": "src/crypto.cpp",
+          "needle": "std::uint64_t CryptoSession::refresh_overrun_limit() const noexcept",
+          "line": 1687,
+          "sha256": "dd83e8417c88c9a077b1da7e026637d840ddfce616333d94d57138fd1fa0cbf5"
+        }
+      ],
+      "remaining": "Optional fallback, adaptive windows, skip/retirement, receive retention and independent post-rotation DATA remain incomplete."
+    }
+  ]
+}

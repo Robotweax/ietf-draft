@@ -1,0 +1,5 @@
+PASS frozen authentication vectors and KM/FEC retry distinction
+PASS frozen IPv4/IPv6 dispatch decode/encode and reserved-byte rejection
+KM_BODY_HEX 12202901000000000200020000000404505152535455565758595a5b5c5d5e5f6ba9f87a4c45d80be9bca58eca9432d3ec8a3abe2e0dff4e
+PASS valid wrapped KM transaction, authenticated rotation and stale-body semantic check
+PASS deterministic late-join clock component cases (not full network admission)

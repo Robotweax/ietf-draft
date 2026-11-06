@@ -1,0 +1,3 @@
+[RUN] crypto_session_stale_response_cannot_release_a_pending_rotation
+[PASS] crypto_session_stale_response_cannot_release_a_pending_rotation
+1/1 tests passed

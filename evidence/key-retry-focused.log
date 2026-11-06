@@ -1,0 +1,5 @@
+[RUN] compat_runtime_key_material_retry_tracks_rtt_and_timestamp_zero
+[PASS] compat_runtime_key_material_retry_tracks_rtt_and_timestamp_zero
+[RUN] compat_runtime_key_material_retry_starts_after_udp_acceptance
+[PASS] compat_runtime_key_material_retry_starts_after_udp_acceptance
+2/2 tests passed

@@ -1,0 +1,8 @@
+1793966304180396/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793966304305218/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=361 observed_us=5596708063930
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=361 observed_us=5596708064170
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=361 observed_us=5596708064239
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=361 observed_us=5596708064249
+PASS native join completes before CONNECTED and delivers DATA
+FAIL native publication ordering or join failure invariant

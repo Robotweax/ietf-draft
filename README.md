@@ -4,6 +4,52 @@ Initial editorial work for extensions implemented by Robotweax SRT 0.3.2.
 These documents are **unsubmitted working drafts**, not IETF standards,
 IANA allocations, or a claim of independent cryptographic review.
 
+## Audit and publication status
+
+This repository contains working drafts, proposals and audit evidence. Repository
+commits do not submit an Internet-Draft. Further external commits, pushes, review
+comments, outreach and submissions require explicit user instruction.
+See the [source audit](docs/source-audit-2026-11-06.md) and
+[machine-readable evidence](audit/source-map.json). Verify references with:
+
+```sh
+python3 tools/check_audit.py --source-repo /path/to/robotweax-srt
+```
+
+See also the [integration follow-up](docs/integration-audit-2026-11-06.md) and
+[vector scope](vectors/README.md).
+
+```sh
+python3 tools/wire_vectors.py
+# Optional separate crypto-tool invocation:
+python3 tools/wire_vectors.py --openssl /path/to/openssl-3
+```
+
+The [C++ conformance adapter](conformance/README.md) and
+[execution manifest](evidence/run-manifest.json) record the subsequent pinned
+implementation checks. Earlier audit reports retain their historical no-test-run
+status; the manifest and claim ledger now contain executed evidence.
+
+Latest: [conformance results](docs/conformance-results-2026-11-06.md).
+
+Latest continuation: [crypto matrix and handoff results](docs/matrix-and-handoff-results.md).
+
+Latest native-path evidence: [publication and timestamp capture](docs/native-publication-results.md).
+
+Latest editorial pass: [pinned baseline comparison](docs/baseline-comparison.md) and
+[decision package](docs/decision-package-2026-11-06.md), with
+[proposed base clauses](docs/proposed-base-clauses.md),
+[combination matrix](docs/extension-combination-matrix.md), and
+[key-lifecycle proposal](docs/proposed-key-lifecycle.md).
+
+Earlier reports retain their status at the time of writing; statements that work
+was local/uncommitted are historical snapshots. The author details are confirmed,
+while draft names, publication route and protocol decisions remain provisional.
+
+Latest validation: [submission readiness](docs/submission-readiness-2026-11-06.md).
+
+Recommended next decisions: [version 00 disposition](docs/initial-draft-disposition.md).
+
 ## Start here
 
 - [Scope and source baseline](docs/scope.md)
@@ -14,8 +60,8 @@ IANA allocations, or a claim of independent cryptographic review.
 
 The first drafting pass concentrates on multicast and authentication. Base-SRT
 corrections and delivery/group extensions are tracked separately so experimental
-features do not silently redefine ordinary SRT. Draft names and organizational
-author entries are placeholders pending editor confirmation.
+features do not silently redefine ordinary SRT. Draft names remain provisional. The author/contact is Marc Cymontkowski,
+Robotweax GmbH, marc@robotweax.ai, as confirmed by the user.
 
 ## Validate and render
 

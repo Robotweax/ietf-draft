@@ -1,0 +1,242 @@
+CASE api=sync crypto=0 key_bytes=0 pressure=0 delay_keys=0 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=441 receive_key_state=0 observed_us=5598320700340
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=441 receive_key_state=0 observed_us=5598320765910
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=441 receive_key_state=0 observed_us=5598320766122
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=441 receive_key_state=0 observed_us=5598320766234
+TIMING sample_minus_barrier_us=65062 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=0 key_bytes=0 pressure=0 delay_keys=0 fail_join=1
+EPOLL barrier=before_runtime receiver_flags=0
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=568 receive_key_state=0 observed_us=5598320955014
+EPOLL barrier=before_join receiver_flags=0
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=568 receive_key_state=0 observed_us=5598321016347
+TIMING sample_minus_barrier_us=60604 sample_after_release=1
+JOIN_FAILED state=6 count=1 flags=13
+PASS native join failure never publishes CONNECTED
+CASE api=sync crypto=1 key_bytes=32 pressure=0 delay_keys=0 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1951 receive_key_state=0 observed_us=5598321022723
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1951 receive_key_state=2 observed_us=5598321088454
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1951 receive_key_state=2 observed_us=5598321088551
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1951 receive_key_state=2 observed_us=5598321088564
+TIMING sample_minus_barrier_us=64908 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=1 key_bytes=32 pressure=0 delay_keys=0 fail_join=1
+EPOLL barrier=before_runtime receiver_flags=0
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1785 receive_key_state=0 observed_us=5598321276996
+EPOLL barrier=before_join receiver_flags=0
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1785 receive_key_state=2 observed_us=5598321340562
+TIMING sample_minus_barrier_us=62865 sample_after_release=1
+JOIN_FAILED state=6 count=1 flags=13
+PASS native join failure never publishes CONNECTED
+CASE api=sync crypto=2 key_bytes=32 pressure=0 delay_keys=0 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1723 receive_key_state=0 observed_us=5598321343602
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1723 receive_key_state=2 observed_us=5598321408059
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1723 receive_key_state=2 observed_us=5598321408155
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1723 receive_key_state=2 observed_us=5598321408169
+TIMING sample_minus_barrier_us=63806 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=2 key_bytes=32 pressure=0 delay_keys=0 fail_join=1
+EPOLL barrier=before_runtime receiver_flags=0
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=4089 receive_key_state=0 observed_us=5598321601125
+EPOLL barrier=before_join receiver_flags=0
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=4089 receive_key_state=2 observed_us=5598321668104
+TIMING sample_minus_barrier_us=65089 sample_after_release=1
+JOIN_FAILED state=6 count=1 flags=13
+PASS native join failure never publishes CONNECTED
+CASE api=async crypto=0 key_bytes=0 pressure=0 delay_keys=0 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=247 receive_key_state=0 observed_us=5598321669589
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=247 receive_key_state=0 observed_us=5598321732622
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=247 receive_key_state=0 observed_us=5598321732815
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=247 receive_key_state=0 observed_us=5598321732989
+TIMING sample_minus_barrier_us=62675 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=0 key_bytes=0 pressure=0 delay_keys=0 fail_join=1
+EPOLL barrier=before_runtime receiver_flags=0
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=111 receive_key_state=0 observed_us=5598321918790
+EPOLL barrier=before_join receiver_flags=0
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=111 receive_key_state=0 observed_us=5598321984017
+TIMING sample_minus_barrier_us=65041 sample_after_release=1
+JOIN_FAILED state=6 count=1 flags=13
+PASS native join failure never publishes CONNECTED
+CASE api=async crypto=1 key_bytes=32 pressure=0 delay_keys=0 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=4223 receive_key_state=0 observed_us=5598321993363
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=4223 receive_key_state=2 observed_us=5598322061506
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=4223 receive_key_state=2 observed_us=5598322061802
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=4223 receive_key_state=2 observed_us=5598322061823
+TIMING sample_minus_barrier_us=65048 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=1 key_bytes=32 pressure=0 delay_keys=0 fail_join=1
+EPOLL barrier=before_runtime receiver_flags=0
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=4704 receive_key_state=0 observed_us=5598322257435
+EPOLL barrier=before_join receiver_flags=0
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=4704 receive_key_state=2 observed_us=5598322321580
+TIMING sample_minus_barrier_us=62261 sample_after_release=1
+JOIN_FAILED state=6 count=1 flags=13
+PASS native join failure never publishes CONNECTED
+CASE api=async crypto=2 key_bytes=32 pressure=0 delay_keys=0 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=3538 receive_key_state=0 observed_us=5598322330697
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=3538 receive_key_state=2 observed_us=5598322396430
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=3538 receive_key_state=2 observed_us=5598322396546
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=3538 receive_key_state=2 observed_us=5598322396556
+TIMING sample_minus_barrier_us=65021 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=2 key_bytes=32 pressure=0 delay_keys=0 fail_join=1
+EPOLL barrier=before_runtime receiver_flags=0
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=4050 receive_key_state=0 observed_us=5598322590967
+EPOLL barrier=before_join receiver_flags=0
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=4050 receive_key_state=2 observed_us=5598322658053
+TIMING sample_minus_barrier_us=65051 sample_after_release=1
+JOIN_FAILED state=6 count=1 flags=13
+PASS native join failure never publishes CONNECTED
+CASE api=sync crypto=1 key_bytes=32 pressure=0 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1872 receive_key_state=0 observed_us=5598322665626
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1872 receive_key_state=0 observed_us=5598322730698
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1872 receive_key_state=0 observed_us=5598322731002
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1872 receive_key_state=0 observed_us=5598322731058
+TIMING sample_minus_barrier_us=64935 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+EARLY_SEND result=20 error=0 key=1
+EARLY_RECEIVE result=20 error=0 exact=1
+KEY_RELEASED sender_key=2 receiver_flags=4 sender_flags=4
+DATA_READY receiver_flags=1
+CLOSE_WAIT result=-1 error=1005
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=2 key_bytes=32 pressure=0 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=2037 receive_key_state=0 observed_us=5598323165378
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=2037 receive_key_state=0 observed_us=5598323231620
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=2037 receive_key_state=0 observed_us=5598323231992
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=2037 receive_key_state=0 observed_us=5598323232026
+TIMING sample_minus_barrier_us=65557 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+EARLY_SEND result=20 error=0 key=1
+EARLY_RECEIVE result=20 error=0 exact=1
+KEY_RELEASED sender_key=2 receiver_flags=4 sender_flags=4
+DATA_READY receiver_flags=1
+CLOSE_WAIT result=-1 error=1005
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=1 key_bytes=32 pressure=0 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1803 receive_key_state=0 observed_us=5598323666459
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1803 receive_key_state=0 observed_us=5598323731675
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1803 receive_key_state=0 observed_us=5598323731879
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1803 receive_key_state=0 observed_us=5598323731907
+TIMING sample_minus_barrier_us=65091 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+EARLY_SEND result=20 error=0 key=1
+EARLY_RECEIVE result=20 error=0 exact=1
+KEY_RELEASED sender_key=2 receiver_flags=4 sender_flags=4
+DATA_READY receiver_flags=1
+CLOSE_WAIT result=-1 error=1005
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=2 key_bytes=32 pressure=0 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=11821 receive_key_state=0 observed_us=5598324173472
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=11821 receive_key_state=0 observed_us=5598324238886
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=11821 receive_key_state=0 observed_us=5598324239151
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=11821 receive_key_state=0 observed_us=5598324239209
+TIMING sample_minus_barrier_us=65184 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+EARLY_SEND result=20 error=0 key=1
+EARLY_RECEIVE result=20 error=0 exact=1
+KEY_RELEASED sender_key=2 receiver_flags=4 sender_flags=4
+DATA_READY receiver_flags=1
+CLOSE_WAIT result=-1 error=1005
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=1 key_bytes=32 pressure=1 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1769 receive_key_state=0 observed_us=5598324670409
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1769 receive_key_state=0 observed_us=5598324735517
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1769 receive_key_state=0 observed_us=5598324735686
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1769 receive_key_state=0 observed_us=5598324735697
+TIMING sample_minus_barrier_us=65028 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+PRESSURE accepted=32 result=-1 error=6001 sender_flags=0
+PROLONGED dropped=11 sender_key=1 receiver_state=5 receiver_flags=4
+PRESSURE_CLOSE read_pending=1 poll_pending=1 read=-1 read_error=1005 poll=1 poll_detail=8
+PASS prolonged key loss pressure and close observations
+CASE api=sync crypto=2 key_bytes=32 pressure=1 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=3598 receive_key_state=0 observed_us=5598325801877
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=3598 receive_key_state=0 observed_us=5598325865398
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=3598 receive_key_state=0 observed_us=5598325865817
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=3598 receive_key_state=0 observed_us=5598325865850
+TIMING sample_minus_barrier_us=63333 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+PRESSURE accepted=32 result=-1 error=6001 sender_flags=0
+PROLONGED dropped=11 sender_key=1 receiver_state=5 receiver_flags=4
+PRESSURE_CLOSE read_pending=1 poll_pending=1 read=-1 read_error=1005 poll=1 poll_detail=8
+PASS prolonged key loss pressure and close observations
+CASE api=async crypto=1 key_bytes=32 pressure=1 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1847 receive_key_state=0 observed_us=5598326934627
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1847 receive_key_state=0 observed_us=5598327000426
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1847 receive_key_state=0 observed_us=5598327001191
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1847 receive_key_state=0 observed_us=5598327001340
+TIMING sample_minus_barrier_us=65080 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+PRESSURE accepted=32 result=-1 error=6001 sender_flags=0
+PROLONGED dropped=11 sender_key=1 receiver_state=5 receiver_flags=4
+PRESSURE_CLOSE read_pending=1 poll_pending=1 read=-1 read_error=1005 poll=1 poll_detail=8
+PASS prolonged key loss pressure and close observations
+CASE api=async crypto=2 key_bytes=32 pressure=1 delay_keys=1 fail_join=0
+EPOLL barrier=before_runtime receiver_flags=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=2440 receive_key_state=0 observed_us=5598328074010
+EPOLL barrier=before_join receiver_flags=0
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=2440 receive_key_state=0 observed_us=5598328139223
+EPOLL barrier=joined_before_publish receiver_flags=0
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=2440 receive_key_state=0 observed_us=5598328139451
+EPOLL barrier=published receiver_flags=4
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=2440 receive_key_state=0 observed_us=5598328139489
+TIMING sample_minus_barrier_us=65056 sample_after_release=1
+KEY_HELD dropped=1 sender_key=1 receiver_flags=4 sender_flags=4
+PRESSURE accepted=32 result=-1 error=6001 sender_flags=0
+PROLONGED dropped=11 sender_key=1 receiver_state=5 receiver_flags=4
+PRESSURE_CLOSE read_pending=1 poll_pending=1 read=-1 read_error=1005 poll=1 poll_detail=8
+PASS prolonged key loss pressure and close observations

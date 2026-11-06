@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "provenance": "Deterministic output from pinned Robotweax C++ adapter; RFC3394 wrap cross-checked with Python cryptography 41.0.3, not an independent peer",
+  "mode": "AES-128-CTR",
+  "km_body_hex": "12202901000000000200020000000404505152535455565758595a5b5c5d5e5f6ba9f87a4c45d80be9bca58eca9432d3ec8a3abe2e0dff4e",
+  "password_hex": "636f6e666f726d616e636520666978747572652070617373776f7264",
+  "salt_hex": "505152535455565758595a5b5c5d5e5f",
+  "kek_hex": "572044c568cd59175d32672851827d23",
+  "sek_hex": "606162636465666768696a6b6c6d6e6f",
+  "wrapped_key_hex": "6ba9f87a4c45d80be9bca58eca9432d3ec8a3abe2e0dff4e"
+}

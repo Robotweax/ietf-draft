@@ -1,47 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <rfc version="3" ipr="trust200902" category="exp" submissionType="independent" docName="draft-robotweax-srt-multicast-00" tocInclude="true" symRefs="true">
-<front><title abbrev="SRT Extensions">Multicast Dispatch for the Secure Reliable Transport Protocol</title><author fullname="Robotweax Editorial Team"><organization>Robotweax</organization></author><date year="2026" month="November" day="6"/><abstract><t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.2. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t></abstract></front>
-<middle>
-<section anchor="status"><name>Status and Scope</name>
-<t>This is an unsubmitted editorial draft. The organizational author and document name are placeholders. It is not a complete independently implementable specification. Statements describing version 0.3.2 are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
-<t>The baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
-</section>
-<section anchor="model"><name>Transport Model</name>
-<t>The Listener is the sole DATA sender. Each Caller receiver has a unicast session for admission, acknowledgments, negative acknowledgments, key exchange and repairs. Original DATA is emitted once to the multicast destination. Every original and repair names the dispatch group in the DATA destination-socket field, including unicast repairs. The receiver routes both paths into one member reliability state.</t>
-<t>Membership uses group type 4, reserved for multicast in the base SRT draft. Use of that value does not imply allocation of the additional handshake extension. The receiver accepts multicast DATA only for the announced group identity and sender source. Source filtering is not cryptographic sender authentication.</t>
-<t>Each receiver retains its own control and repair state. The sender remains open without receivers, and accepted sends advance the group position without delivery. Initial joining position, timestamp mapping and retained-history boundaries require complete serial-arithmetic definitions; see Open Issues.</t>
-</section>
-<section anchor="wire"><name>Dispatch Handshake Record</name>
-<t>The Listener CONCLUSION carries CONFIG extension type 0x7f14. This provisional value is not an IANA allocation. Content is exactly 60 bytes, excluding the normal four-byte extension header; its length is 15 four-byte words. Integers use network byte order.</t>
-<t>Offsets and widths: 0/4 magic 0x52574d01; 4/4 dispatch group ID; 8/1 address family (4 or 6); 9/1 flags; 10/2 destination UDP port; 12/16 multicast address; 28/16 interface selector; 44/4 initial sequence; 48/8 signed timestamp-origin delta in microseconds; 56/1 hop limit; 57/3 reserved zero.</t>
-<t>Flag bit 0 indicates an interface hint; other bits are zero. IPv4 addresses occupy the first four bytes of address slots and the remaining bytes are zero. For IPv6, the interface-selector slot contains twelve zero bytes followed by a 32-bit scope index. With no hint, the entire selector is zero. A local receiver interface override takes precedence; an index is host-local and its cross-host meaning remains an open issue.</t>
-<t>The implementation rejects wrong length or magic, unknown family/flags, nonzero reserved/padding bytes, a non-multicast destination, port zero, an initial sequence above 0x7fffffff, and invalid group/interface identity. The group-ID mask and its relationship to SRT socket identifiers require a portable definition. Duplicate records and unsupported combinations must be included in the conformance corpus.</t>
-</section>
-<section anchor="repair"><name>Delivery and Repairs</name>
-<t>Unicast repair is the default. With a configured threshold of 1 through 16 distinct requesting receivers, a bounded per-sequence tally can cause one multicast repair for shared loss. Suppression begins only after local UDP acceptance. A repeated request by the same receiver uses unicast, permitting recovery if the multicast repair was lost. Transient multicast send failure falls back to unicast.</t>
-<t>The current implementation uses a tally window described as a couple of round trips. A normative formula, expiration rules, capacity/eviction rules and duplicate-request handling remain to be specified from code and tests. This draft does not turn that informal description into a requirement.</t>
-<t>The elected transmitting member must accept a message before suppressed members commit it. Backpressure does not advance the group sequence. Per-member bandwidth caps constrain the elected multicast transmitter and individual repairs; there is no separate aggregate cap. A network-suitable aggregate feedback and repair policy remains unresolved.</t>
-</section>
-<section anchor="keys"><name>Shared Traffic Keys</name>
-<t>Each receiver has its own key exchange and key-encrypting context, but the sender shares one traffic-key schedule and salt across the dispatch group. Admission requires matching encryption mode and key length. A receiver starts participating only after initial group-key confirmation. A dispatch receiver does not retain the ordinary handshake key clone as an alternate DATA key.</t>
-<t>Rotations follow consumed group sequence positions, including receiver-free intervals. Members preannounce successor keys separately. Rotation is positional rather than waiting for all receivers to acknowledge; a receiver missing a key leaves affected DATA unacknowledged and may recover through unicast repair within its latency budget. The implementation retains four generations for repairs.</t>
-<t>CTR and GCM use sequence-based IV derivation. A repeated packet reuses its protected representation, with the GCM retransmission bit normalized for AAD. The same key and nonce must not protect different plaintext/header inputs. A complete extended-position/generation algorithm, wrap vectors, key-retention boundary and failure-atomicity rules are still required.</t>
-</section>
-<section anchor="security"><name>Security Considerations</name>
-<t>Shared keys permit admitted receivers to forge traffic authentic under the group key. AES-GCM therefore does not establish sender identity against group insiders; AES-CTR does not provide DATA integrity. Source-address filtering does not fix either limitation.</t>
-<t>Leaving does not revoke learned keys; admission does not guarantee that a joiner cannot decrypt retained historical ciphertext protected by its newly learned keys. There is no per-receiver forward/backward access guarantee. Deployments must treat the group as one trusted domain unless a future version supplies stronger protection.</t>
-<t>Review must cover handshake tampering, redirection to multicast destinations, unauthorized membership, feedback amplification, receiver state exhaustion, forged control traffic, congestion and denial of service. An implementation source review is not independent cryptographic or network-scale qualification.</t>
-</section>
-<section anchor="iana"><name>IANA Considerations</name>
-<t>No allocation request is made in this initial editorial version. Type 0x7f14 is a provisional implementation value; no private-use reservation is asserted. Before publication, coordinate the extension namespace and group-type semantics, decide an allocation policy and specify migration if a collision is found.</t>
-</section>
-<section anchor="issues"><name>Open Issues</name>
-<t>Define full admission/retry and receiver lifecycle state machines, timestamp-origin mapping, serial arithmetic, extended generation positions, cipher interactions, key-generation failure and repair retention. Produce independent wire vectors for IPv4/IPv6 encodings, rollover, late joining and empty-group progression.</t>
-<t>Decide aggregate congestion and feedback policy, slow-receiver handling, supported multicast deployment scope, interface-hint semantics and combinations with authentication extensions. Qualify physical network behavior separately from loopback media tests. A second independent implementation is desirable maturity evidence.</t>
-</section>
-<section anchor="sources"><name>Source Baseline</name><t>The base protocol is described in <xref target="SRT"/>. Implementation behavior is taken from <xref target="RWSRT"/>. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t></section>
-</middle><back><references><name>Informative References</name>
-<reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01"><front><title>The SRT Protocol</title><author fullname="Maria Sharabayko"/><date year="2021" month="September"/></front><seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01"/></reference>
-<reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1"><front><title>Robotweax SRT 0.3.2 source and protocol contracts</title><author fullname="Robotweax"/><date year="2026"/></front></reference>
-</references></back></rfc>
-
+  <front>
+    <title abbrev="SRT Multicast">Multicast Dispatch for the Secure Reliable Transport Protocol</title>
+    <author fullname="Marc Cymontkowski" initials="M." surname="Cymontkowski">
+      <organization>Robotweax GmbH</organization>
+      <address>
+        <email>marc@robotweax.ai</email>
+      </address>
+    </author>
+    <date year="2026" month="November" day="6" />
+    <abstract>
+      <t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.2. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="status">
+      <name>Introduction</name>
+      <t>This is an unsubmitted editorial draft. The document name remains provisional. It is not a complete independently implementable specification. Statements describing version 0.3.2 are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
+      <t>The baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
+      <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
+    </section>
+    <section anchor="model">
+      <name>Transport Model</name>
+      <t>The Listener is the sole DATA sender. Each Caller receiver has a unicast session for admission, acknowledgments, negative acknowledgments, key exchange and repairs. Original DATA is emitted once to the multicast destination. Every original and repair names the dispatch group in the DATA destination-socket field, including unicast repairs. The receiver routes both paths into one member reliability state.</t>
+      <t>Membership uses group type 4, reserved for multicast in the base SRT draft. Use of that value does not imply allocation of the additional handshake extension. The receiver accepts multicast DATA only for the announced group identity and sender source. Source filtering is not cryptographic sender authentication.</t>
+      <t>Each receiver retains its own control and repair state. The sender remains open without receivers, and accepted sends advance the group position without delivery. The announcement carries the current next-send sequence. Version 0.3.2 emits a timestamp-origin delta of zero: members share the group timestamp origin. The field is serialized and decoded, but no runtime application of a nonzero delta was found in the audited source. Nonzero clock mapping is therefore not specified by this profile. Whether to require zero on reception is an open protocol decision, not a claim about current decoder rejection.</t>
+    </section>
+    <section anchor="admission-timing">
+      <name>Admission and Clock Initialization</name>
+      <t>The Caller selects its inbound sequence from the dispatch announcement before installing the runtime. Native receive membership and ingress routes are attached before the implementation publishes CONNECTED. Attachment failure terminates admission without that publication. An asynchronous connect return indicates work has started; it does not establish successful admission.</t>
+      <t>The Caller initializes its Live receive-clock base from the local time sampled during runtime attachment minus the peer handshake timestamp. This sample includes setup scheduling delay; it is not a retained UDP-ingress timestamp. Members share receive-clock state within the group. Accepted sender members use the group timestamp origin. The announced timestamp delta is not applied.</t>
+      <t>Connection publication and group-key confirmation are distinct. CONNECTED and API writable readiness may precede key acknowledgement. Queue acceptance does not promise UDP emission or receiver delivery. Terminal failure can also report writable readiness together with error; applications must inspect the connection state. These API observations do not define additional wire signals.</t>
+    </section>
+    <section anchor="wire">
+      <name>Dispatch Handshake Record</name>
+      <t>The Listener CONCLUSION carries CONFIG extension type 0x7f14. This provisional value is not an IANA allocation. Content is exactly 60 bytes, excluding the normal four-byte extension header; its length is 15 four-byte words. Integers use network byte order.</t>
+      <t>Offsets and widths: 0/4 magic 0x52574d01; 4/4 dispatch group ID; 8/1 address family (4 or 6); 9/1 flags; 10/2 destination UDP port; 12/16 multicast address; 28/16 interface selector; 44/4 initial sequence; 48/8 signed timestamp-origin delta in microseconds; 56/1 hop limit; 57/3 reserved zero.</t>
+      <t>Flag bit 0 indicates an interface hint; other bits are zero. IPv4 addresses occupy the first four bytes of address slots and the remaining bytes are zero. For IPv6, the interface-selector slot contains twelve zero bytes followed by a 32-bit scope index. With no hint, the entire selector is zero. A local receiver interface override takes precedence; an index is host-local and its cross-host meaning remains an open issue.</t>
+      <t>The implementation rejects wrong length or magic, unknown family/flags, nonzero reserved/padding bytes, a non-multicast destination, port zero, an initial sequence above 0x7fffffff, and invalid group/interface identity. The group ID must have bit 0x40000000 set. This implementation check does not define a global identifier allocation scheme. Duplicate records and unsupported combinations require conformance cases. The timestamp delta is not a validated zero-only reserved field in the current decoder.</t>
+    </section>
+    <section anchor="repair">
+      <name>Delivery and Repairs</name>
+      <t>Unicast repair is the default. With a configured threshold of 1 through 16 distinct requesting receivers, a bounded per-sequence tally can cause one multicast repair for shared loss. Suppression begins only after local UDP acceptance. A repeated request by the same receiver uses unicast, permitting recovery if the multicast repair was lost. Transient multicast send failure falls back to unicast.</t>
+      <t>At each repair decision, the implementation computes a window in microseconds from the requesting member: clamp(2 * smoothed_RTT, 10000, 1000000) when that member has an RTT sample, otherwise 100000. The window is measured from the tally entry first-request time, but recalculated for each requesting member; it is not a fixed shared group RTT. Expiry occurs when elapsed time is strictly greater than this window, or the local clock moves before the recorded first time.</t>
+      <t>The tally uses 1024 slots indexed by sequence modulo 1024, with at most 16 remembered receiver identities per slot. A repeated receiver request or an unrecordable additional receiver uses unicast. Once an entry has attempted multicast, expiry restores unicast until eviction rather than starting another multicast attempt. Completion is bound to the sequence and attempt identity, preventing stale completion from modifying a replacement entry. These are observed implementation bounds, not yet mandatory limits for independent implementations.</t>
+      <t>The elected transmitting member must accept a message before suppressed members commit it. Per-member caps do not provide an aggregate repair cap. A transient local failure of an original multicast DATA send records submission and relies on receiver NAK recovery; a transient multicast repair failure falls back to the ordinary unicast path. A nontransient send failure breaks the member. Queue acceptance, successful UDP emission and receiver delivery are different events.</t>
+    </section>
+    <section anchor="keys">
+      <name>Shared Traffic Keys</name>
+      <t>Each receiver has its own key exchange and key-encrypting context, but the sender shares one traffic-key schedule and salt across the dispatch group. Admission requires matching encryption mode and key length. Encrypted group DATA participation requires initial group-key confirmation; admission publication and application queue acceptance can precede that confirmation. A dispatch receiver does not retain the ordinary handshake key clone as an alternate DATA key.</t>
+      <t>Rotation uses an extended local sequence-position frontier. Generation is floor(position / refresh_rate); the even/odd selector is generation parity. Serial comparison uses the signed distance in the 31-bit sequence space and requires an unambiguous half-range interpretation. Refresh is clamped between 2 and 2^30 positions; preannouncement is at most floor((refresh_rate - 1) / 2). The schedule has four generation-cache slots. This is not a promise of four consecutive populated historical generations after idle jumps.</t>
+      <t>CTR and GCM use sequence-based IV derivation. A repeated packet reuses its protected representation, with the GCM retransmission bit normalized for AAD. The same key and nonce must not protect different plaintext/header inputs. A complete extended-position/generation algorithm, wrap vectors, key-retention boundary and failure-atomicity rules are still required.</t>
+      <t>Pending KM requests are retried using the runtime RTT-dependent cadence. Peer-idle expiry measures inactivity since peer activity, independently of the existence of pending key material. This document does not specify a separate maximum KM-completion deadline. Recovery remains subject to configured inactivity limits, queue capacity and packet lifetime.</t>
+      <t>On a generation-cache miss, the implementation can create a missing key within its retained numeric window, not only the next generation. An idle jump may skip unpopulated generations; generating such a key does not recover a previous cryptogram. Historical repair eligibility must therefore be specified separately from cache capacity. The unused-position advance checks 64-bit overflow before committing its frontier, while the ordinary signed-distance advance does not contain the same explicit check. Complete position-exhaustion semantics remain unresolved.</t>
+    </section>
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>Shared keys permit admitted receivers to forge traffic authentic under the group key. AES-GCM therefore does not establish sender identity against group insiders; AES-CTR does not provide DATA integrity. Source-address filtering does not fix either limitation.</t>
+      <t>Leaving does not revoke learned keys; admission does not guarantee that a joiner cannot decrypt retained historical ciphertext protected by its newly learned keys. There is no per-receiver forward/backward access guarantee. Deployments must treat the group as one trusted domain unless a future version supplies stronger protection.</t>
+      <t>Review must cover handshake tampering, redirection to multicast destinations, unauthorized membership, feedback amplification, receiver state exhaustion, forged control traffic, congestion and denial of service. An implementation source review is not independent cryptographic or network-scale qualification.</t>
+    </section>
+    <section anchor="iana">
+      <name>IANA Considerations</name>
+      <t>No allocation request is made in this initial editorial version. Type 0x7f14 is a provisional implementation value; no private-use reservation is asserted. Before publication, coordinate the extension namespace and group-type semantics, decide an allocation policy and specify migration if a collision is found.</t>
+    </section>
+    <section anchor="issues">
+      <name>Open Issues</name>
+      <t>Proposed compatibility baseline: document the emitted zero timestamp delta and the setup-time receive-clock initialization without silently imposing new receiver rejection or ingress-capture rules. Decide whether a future negotiated profile should change either behavior. Specify complete admission, retry and key-lifecycle state machines, serial arithmetic, position exhaustion, historical repair eligibility and key-retention boundaries.</t>
+      <t>Define aggregate congestion and repair budgets, receiver and feedback limits, slow-receiver behavior, interface-hint semantics and the supported extension-combination matrix. Decide whether a separate pending-key deadline is required. These policy choices remain proposals; the current implementation bounds do not automatically become protocol requirements.</t>
+      <t>Extend validation where a proposed requirement needs evidence: independent post-rotation DATA vectors, exhaustive lifetime/replay boundaries, independent peer interoperability and physical-network qualification. Existing vectors and local tests do not remove the need for independent security review.</t>
+    </section>
+    <section anchor="sources">
+      <name>Source Baseline</name>
+      <t>The base protocol is described in <xref target="SRT" />. Implementation behavior is taken from <xref target="RWSRT" />. These are informative references in this incomplete editorial version; the normative dependency classification is an open editorial task.</t>
+    </section>
+    <section anchor="implementation-evidence">
+      <name>Implementation Evidence</name>
+      <t>The local evidence package includes frozen codec/authentication vectors, six CTR/GCM key-size calculations, serialized handshake/runtime checks and 28 instrumented native loopback scenarios. It distinguishes source-confirmed behavior, executed assertions and unresolved requirements. Logs, hashes, failure explanations and reproduction details are retained outside this protocol text.</t>
+      <t>The native scenarios cover synchronous/asynchronous admission, join failure, controlled KM loss, bounded queue pressure, selected receive/epoll close schedules, recovery and peer-idle expiry. They support the behavior described here within those fixtures, not independent interoperability, arbitrary deadline guarantees, race freedom or physical-network scale. The release source is unchanged; the native probe uses a separately instrumented export.</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>Informative References</name>
+      <reference anchor="SRT" target="https://datatracker.ietf.org/doc/html/draft-sharabayko-srt-01">
+        <front>
+          <title>The SRT Protocol</title>
+          <author fullname="Maxim Sharabayko" />
+          <author fullname="Maria Sharabayko" />
+          <author fullname="Jean Dube" />
+          <author fullname="Jeongseok Kim" />
+          <author fullname="Joonwoong Kim" />
+          <date year="2021" month="September" />
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
+      </reference>
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1">
+        <front>
+          <title>Robotweax SRT 0.3.2 source and protocol contracts</title>
+          <author fullname="Robotweax" />
+          <date year="2026" />
+        </front>
+      </reference>
+    </references>
+  </back>
+</rfc>

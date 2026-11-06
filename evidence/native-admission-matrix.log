@@ -1,0 +1,90 @@
+1793967023685231/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967023939877/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967024004985/0x16d48f000W:connection: connection setup failed socket=909021501 peer=127.0.0.1:63989 peer_socket=583781872 reason=1 name=SYSTEM wire=1001
+1793967024005498/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967024268553/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967024339916/0x16d403000W:connection: connection setup failed socket=1006550206 peer=127.0.0.1:61438 peer_socket=844178745 reason=1 name=SYSTEM wire=1001
+1793967024340060/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967024596769/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967024666447/0x16d48f000W:connection: connection setup failed socket=305221625 peer=127.0.0.1:54160 peer_socket=267849617 reason=1 name=SYSTEM wire=1001
+1793967024666708/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967024917442/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+CASE api=sync crypto=0 key_bytes=0 fail_join=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=362 receive_key_state=0 observed_us=5597427563246
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=362 receive_key_state=0 observed_us=5597427629450
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=362 receive_key_state=0 observed_us=5597427629647
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=362 receive_key_state=0 observed_us=5597427629682
+TIMING sample_minus_barrier_us=65747 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=0 key_bytes=0 fail_join=1
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=553 receive_key_state=0 observed_us=5597427818891
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=553 receive_key_state=0 observed_us=5597427881500
+TIMING sample_minus_barrier_us=61597 sample_after_release=1
+PASS native join failure never publishes CONNECTED
+CASE api=sync crypto=1 key_bytes=32 fail_join=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=3180 receive_key_state=0 observed_us=5597427889493
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=3180 receive_key_state=2 observed_us=5597427957378
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=3180 receive_key_state=2 observed_us=5597427957611
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=3180 receive_key_state=2 observed_us=5597427957647
+TIMING sample_minus_barrier_us=65054 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=1 key_bytes=32 fail_join=1
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=3002 receive_key_state=0 observed_us=5597428150715
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=3002 receive_key_state=2 observed_us=5597428216594
+TIMING sample_minus_barrier_us=65022 sample_after_release=1
+PASS native join failure never publishes CONNECTED
+CASE api=sync crypto=2 key_bytes=32 fail_join=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1814 receive_key_state=0 observed_us=5597428219686
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1814 receive_key_state=0 observed_us=5597428284821
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=1814 receive_key_state=0 observed_us=5597428284910
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=1814 receive_key_state=0 observed_us=5597428284920
+TIMING sample_minus_barrier_us=65028 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=sync crypto=2 key_bytes=32 fail_join=1
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1695 receive_key_state=0 observed_us=5597428476331
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=1695 receive_key_state=2 observed_us=5597428543080
+TIMING sample_minus_barrier_us=65046 sample_after_release=1
+PASS native join failure never publishes CONNECTED
+CASE api=async crypto=0 key_bytes=0 fail_join=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=214 receive_key_state=0 observed_us=5597428544436
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=214 receive_key_state=0 observed_us=5597428608239
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=214 receive_key_state=0 observed_us=5597428608357
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=214 receive_key_state=0 observed_us=5597428608368
+TIMING sample_minus_barrier_us=63722 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=0 key_bytes=0 fail_join=1
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=1793967024982263/0x16d403000W:connection: connection setup failed socket=279653118 peer=127.0.0.1:64265 peer_socket=579428701 reason=1 name=SYSTEM wire=1001
+1793967024985153/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967025250657/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967025327277/0x16d48f000W:connection: connection setup failed socket=7599285 peer=127.0.0.1:51179 peer_socket=807765989 reason=1 name=SYSTEM wire=1001
+1793967025329897/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967025593173/0x1f1e5e180W:socket: UDP receive buffer: requested=12288000 effective=8388608 kernel=8388608 bytes; attempts=1 fallback=no
+1793967025665655/0x16d403000W:connection: connection setup failed socket=392967312 peer=127.0.0.1:53486 peer_socket=828790969 reason=1 name=SYSTEM wire=1001
+383 receive_key_state=0 observed_us=5597428796279
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=383 receive_key_state=0 observed_us=5597428858784
+TIMING sample_minus_barrier_us=62225 sample_after_release=1
+PASS native join failure never publishes CONNECTED
+CASE api=async crypto=1 key_bytes=32 fail_join=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=4386 receive_key_state=0 observed_us=5597428870108
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=4386 receive_key_state=2 observed_us=5597428937895
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=4386 receive_key_state=2 observed_us=5597428938235
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=4386 receive_key_state=2 observed_us=5597428938268
+TIMING sample_minus_barrier_us=65061 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=1 key_bytes=32 fail_join=1
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=4440 receive_key_state=0 observed_us=5597429135923
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=4440 receive_key_state=2 observed_us=5597429203784
+TIMING sample_minus_barrier_us=65054 sample_after_release=1
+PASS native join failure never publishes CONNECTED
+CASE api=async crypto=2 key_bytes=32 fail_join=0
+SUCCESS_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=3912 receive_key_state=0 observed_us=5597429213547
+SUCCESS_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=3912 receive_key_state=2 observed_us=5597429281530
+SUCCESS_PATH joined_before_publish state=4 group=4 runtime=1 joined=1 peer_timestamp=3912 receive_key_state=2 observed_us=5597429281936
+SUCCESS_PATH published state=5 group=5 runtime=1 joined=1 peer_timestamp=3912 receive_key_state=2 observed_us=5597429281983
+TIMING sample_minus_barrier_us=65049 sample_after_release=1
+PASS native join completes before CONNECTED and delivers DATA
+CASE api=async crypto=2 key_bytes=32 fail_join=1
+FAILURE_PATH before_runtime state=4 group=4 runtime=0 joined=0 peer_timestamp=5309 receive_key_state=0 observed_us=5597429477722
+FAILURE_PATH before_join state=4 group=4 runtime=1 joined=0 peer_timestamp=5309 receive_key_state=2 observed_us=5597429542299
+TIMING sample_minus_barrier_us=62389 sample_after_release=1
+PASS native join failure never publishes CONNECTED
