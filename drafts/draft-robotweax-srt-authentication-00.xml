@@ -8,7 +8,7 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="6" />
+    <date year="2026" month="November" day="14" />
     <abstract>
       <t>This initial editorial draft records Robotweax SRT session authentication version 2 and scopes the separate experimental ACP1 authenticated-control work. It describes current implementation behavior and outstanding security and specification decisions. It is not a complete security protocol specification or a claim of independent cryptographic review.</t>
     </abstract>
@@ -16,7 +16,7 @@
   <middle>
     <section anchor="status">
       <name>Introduction</name>
-      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
+      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 69bd5328bf654ebbed894c77fd30ae5b2dfba9d7. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
       <t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
       <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
     </section>
@@ -29,7 +29,7 @@
       <name>Key Derivation and Proof Input</name>
       <t>The 32-byte authentication key is PBKDF2-HMAC-SHA1 with 2048 iterations over the passphrase. Salt is the 16-byte label consisting of ASCII RWSRT-SESSION-2 followed by one zero byte, then caller nonce, listener nonce, caller socket ID encoded as uint64, and listener socket ID encoded as uint64. All integers are network order.</t>
       <t>HMAC-SHA256 input is the same 16-byte label, uint8 domain, uint8 sender role, uint64 counter, uint16 body length, and complete KM body. Domains are 1 for handshake, 2 for KMREQ and 3 for KMRSP. Roles are 1 caller and 2 listener. The handshake counter is zero and the proof covers the original initial KM body.</t>
-      <t>The label is exactly 15 ASCII bytes plus one zero byte, confirmed against src/session_authentication.cpp at the baseline commit. Salt length is 96 bytes. The public passphrase setter passes an explicit byte length and copies those bytes without text normalization or embedded-NUL stripping. Frozen formula-level KDF/proof vectors include an embedded-NUL password and match the pinned implementation. Their synthetic KM body does not establish a complete independently implemented handshake. Any human-readable password encoding convention is separate.</t>
+      <t>The label is exactly 15 ASCII bytes plus one zero byte, confirmed against src/session_authentication.cpp at the baseline commit. Salt length is 96 bytes. The public passphrase setter passes an explicit byte length and copies those bytes without text normalization or embedded-NUL stripping. Frozen formula-level KDF/proof vectors include an embedded-NUL password and matched the pinned 0.3.2 implementation in that historical execution. Their synthetic KM body does not establish a complete independently implemented handshake. Any human-readable password encoding convention is separate.</t>
       <t>The underlying PBKDF2 construction is described in <xref target="RFC8018" />, HMAC in <xref target="RFC2104" />, and the AES key-wrap mechanism used by SRT key material in <xref target="RFC3394" />. These references identify primitives; they do not constitute review of this profile or approval of its parameters.</t>
     </section>
     <section anchor="runtime">
@@ -50,6 +50,12 @@
       <t>ACP1 uses user-defined control type 0x7fff and provisional subtype 0x7f05. Its envelope is 16-byte outer header, uint32 envelope version 1, uint64 counter, original control packet (16-byte header plus body), and 32-byte HMAC-SHA256 tag. It adds 60 bytes. Direction keys and a 64-position replay window protect runtime controls before transport-state mutation.</t>
       <t>Session-authentication versions 3, 4, 5 and 6 select ordinary Caller/Listener, Rendezvous, Caller/Listener group members and Group Rendezvous respectively. They bind different nonce, cookie and membership contexts. They are not interchangeable versions of one topology. Full KDF/context/envelope and state-machine definitions are deferred to a separate drafting pass.</t>
       <t>ACP1 does not authenticate all handshake fields and does not change CTR DATA integrity. Its PBKDF-to-HKDF construction, coverage, loss/replay behavior and per-member lifecycle require independent review. No support or full-transport-security claim follows from this summary.</t>
+    </section>
+    <section anchor="hybrid">
+      <name>Separate Hybrid Authentication Context</name>
+      <t>The 0.3.3 delta adds a separately gated component authentication version 7 for hybrid control. It is not an additional accepted version of the normal 0x7f10 handshake: native handshake decoders still reject it. Activation requires both experimental ACP1 and hybrid-control build options, explicit owner attachment and independently provisioned pairwise credentials.</t>
+      <t>The hybrid context binds the existing 60-byte dispatch announcement, new 32-byte fixed-source announcement and two 48-byte capabilities in a 192-byte context. A separate four-record exchange under provisional runtime subtype 0x7f17 supplies nonces and conclusion proofs. Version 7 permits only recovery controls with inner subtype 0x7f16 inside the existing ACP1 envelope 0x7f05. It refuses ordinary controls, authenticated KM and FEC; versions 2 through 6 retain their distinct formats. A separate working draft records this experimental scope.</t>
+      <t>Ordinary session-authentication proofs do not bind either multicast announcement. Hybrid binds their context later, after the receiver has joined and installed its source filter; it does not provide authenticated admission for those records. Shared DATA keys still permit insider forgery and departure does not revoke them. Pairwise hybrid control credentials must not be confused with the shared DATA passphrase.</t>
     </section>
     <section anchor="security">
       <name>Security Considerations</name>
@@ -72,8 +78,9 @@
     </section>
     <section anchor="implementation-evidence">
       <name>Implementation Evidence</name>
-      <t>Independent formula-level derivation, proof, KM-envelope and parity vectors match the pinned C++ implementation, including explicit-length password bytes. The initial vector bodies are synthetic and are not a complete peer implementation. A separate six-case CTR/GCM matrix checks valid KM, initial DATA and selected rotation semantics with independent KEK, key-wrap, IV and ciphertext/tag calculations.</t>
+      <t>Independent formula-level derivation, proof, KM-envelope and parity vectors matched the pinned 0.3.2 C++ implementation, including explicit-length password bytes. The initial vector bodies are synthetic and are not a complete peer implementation. A separate six-case CTR/GCM matrix checks valid KM, initial DATA and selected rotation semantics with independent KEK, key-wrap, IV and ciphertext/tag calculations.</t>
       <t>Selected authentication, replay/tamper and stale-response checks passed. Detailed execution logs and fixture provenance remain in the local evidence package. ACP1 was disabled in these runs. The evidence does not constitute independent cryptographic review, exhaustive transcript/replay coverage or independent peer interoperability.</t>
+      <t>The execution results summarized above belong to the earlier 0.3.2 audit, whose annotated tag object is 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1 and peeled commit is e45d0edd346e5c427d85e4c3b1ac605c81a23397. They were not rerun against 0.3.3 for this editorial update. The 0.3.3 delta is source-reviewed separately; release qualification reports are upstream evidence, not new independent execution.</t>
     </section>
   </middle>
   <back>
@@ -91,9 +98,9 @@
         </front>
         <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
       </reference>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/69bd5328bf654ebbed894c77fd30ae5b2dfba9d7">
         <front>
-          <title>Robotweax SRT 0.3.2 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.3 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>

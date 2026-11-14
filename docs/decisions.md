@@ -117,3 +117,23 @@ two directional-key focused regressions passed; their limits remain explicit.
 Author/contact details were explicitly supplied and applied to both drafts:
 Marc Cymontkowski, Robotweax GmbH, marc@robotweax.ai. Draft names and route remain
 provisional.
+
+## 0.3.3 dispositions (2026-11-14)
+
+See [release review](release-review-0.3.3.md). These document released behavior;
+they do not approve a future standards profile or close earlier review gates.
+
+| Decision | Updated disposition |
+|---|---|
+| D03 identifiers | Add CONFIG 0x7f15, runtime 0x7f16/0x7f17 and component context v7; preserve namespace distinctions and provisional status |
+| D04 resource policy | Record ordinary and coordinated aggregate budgets separately; congestion, feedback, fairness and deployment decisions stay open |
+| D05/D06 positions and keys | Include coordinated ACK eligibility and 0.3.3 accepted-position receive routing/retirement; retain independent wrap, retention and crypto review gaps |
+| D07/D09 trust | Shared DATA-key trust and no departure revocation remain; later pairwise context binding does not authenticate initial source admission |
+| D10 document scope | Keep v2 unchanged; new hybrid working draft is separate from ACP1 v3–v6 and its incomplete full specification |
+| D12 combinations | Coordinated sender excludes session-authentication profiles; separate hybrid owner is not a contradictory DATA-session option |
+| D13/D14 evidence | Preserve 0.3.2 execution; 0.3.3 source review and upstream qualification are distinct; do not claim new independent interop |
+| D17 fixed-source admission | Complete source-record vectors and retry/route lifecycle requirements; C API IPv4 scope remains explicit |
+| D18 hybrid state machines | Complete transcript/KDF, per-kind validity, policy/replay/retry/return state machines and credential lifecycle before claiming independent implementability |
+
+All three draft names remain unsubmitted `-00` working versions. A product release
+number does not automatically increment an Internet-Draft submission revision.

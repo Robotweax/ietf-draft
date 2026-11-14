@@ -1,8 +1,15 @@
 # SRT protocol draft work
 
-Initial editorial work for extensions implemented by Robotweax SRT 0.3.2.
+Editorial work for extensions implemented by Robotweax SRT 0.3.3, retaining the historical 0.3.2 audit.
 These documents are **unsubmitted working drafts**, not IETF standards,
 IANA allocations, or a claim of independent cryptographic review.
+
+## Current release review
+
+See the [0.3.3 release review](docs/release-review-0.3.3.md),
+[source delta ledger](audit/release-0.3.3.json), and
+[0.3.3 validation](docs/validation-0.3.3.md). Historical 0.3.2 execution and
+idnits results do not qualify the changed drafts or the new hybrid profile.
 
 ## Audit and publication status
 
@@ -30,13 +37,13 @@ The [C++ conformance adapter](conformance/README.md) and
 implementation checks. Earlier audit reports retain their historical no-test-run
 status; the manifest and claim ledger now contain executed evidence.
 
-Latest: [conformance results](docs/conformance-results-2026-11-06.md).
+Historical 0.3.2: [conformance results](docs/conformance-results-2026-11-06.md).
 
-Latest continuation: [crypto matrix and handoff results](docs/matrix-and-handoff-results.md).
+Historical 0.3.2 continuation: [crypto matrix and handoff results](docs/matrix-and-handoff-results.md).
 
-Latest native-path evidence: [publication and timestamp capture](docs/native-publication-results.md).
+Historical 0.3.2 native-path evidence: [publication and timestamp capture](docs/native-publication-results.md).
 
-Latest editorial pass: [pinned baseline comparison](docs/baseline-comparison.md) and
+Historical 0.3.2 editorial pass: [pinned baseline comparison](docs/baseline-comparison.md) and
 [decision package](docs/decision-package-2026-11-06.md), with
 [proposed base clauses](docs/proposed-base-clauses.md),
 [combination matrix](docs/extension-combination-matrix.md), and
@@ -46,7 +53,7 @@ Earlier reports retain their status at the time of writing; statements that work
 was local/uncommitted are historical snapshots. The author details are confirmed,
 while draft names, publication route and protocol decisions remain provisional.
 
-Latest validation: [submission readiness](docs/submission-readiness-2026-11-06.md).
+Historical 0.3.2 validation: [submission readiness](docs/submission-readiness-2026-11-06.md).
 
 Recommended next decisions: [version 00 disposition](docs/initial-draft-disposition.md).
 
@@ -57,8 +64,9 @@ Recommended next decisions: [version 00 disposition](docs/initial-draft-disposit
 - [Open decisions and submission gates](docs/decisions.md)
 - [Multicast dispatch draft](drafts/draft-robotweax-srt-multicast-00.xml)
 - [Session authentication draft](drafts/draft-robotweax-srt-authentication-00.xml)
+- [Experimental hybrid control draft](drafts/draft-robotweax-srt-hybrid-control-00.xml)
 
-The first drafting pass concentrates on multicast and authentication. Base-SRT
+The drafts cover multicast, authentication and separately gated hybrid control. Base-SRT
 corrections and delivery/group extensions are tracked separately so experimental
 features do not silently redefine ordinary SRT. Draft names remain provisional. The author/contact is Marc Cymontkowski,
 Robotweax GmbH, marc@robotweax.ai, as confirmed by the user.
@@ -80,7 +88,15 @@ python3 -m venv .venv
 make render XML2RFC=.venv/bin/xml2rfc
 ```
 
-Run the IETF `idnits` tool against the rendered text before submission. The
+Run the IETF `idnits` tool against XML and rendered text before submission.
+The runner discovers all working drafts and can retain release-specific evidence:
+
+```sh
+python3 tools/check_nits.py --idnits /path/to/idnits --online \
+  --evidence-dir evidence/release-0.3.3
+```
+
+The `--online` flag permits reference metadata lookups; it does not submit documents. The
 structural check is not a substitute for xml2rfc or idnits. No command in this
 repository submits a draft. Generated output belongs in `build/`.
 

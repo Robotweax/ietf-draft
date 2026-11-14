@@ -1,5 +1,12 @@
 # SRT extension combination matrix
 
+**Version boundary:** the original proposals and execution references below are
+pinned to 0.3.2. The [0.3.3 release review](release-review-0.3.3.md) and its delta
+ledger supersede them where source negotiation, repair budgets, coordinated
+sending, hybrid controls or receive-generation routing changed. Historical
+passed tests are not new 0.3.3 evidence.
+
+
 This matrix is a review proposal against Robotweax SRT 0.3.2, not a declaration
 that every cross-product has been tested. It separates the release contract from
 executed local evidence. The pinned [source ledger](../audit/proposed-clauses.json)
@@ -62,3 +69,17 @@ key separation. For each cell record both peers' settings, role, cipher/key size
 build gates, expected accept/reject result, and whether the result was observed
 or only inferred from a contract. Do not expand the published profile by taking
 the union of isolated passing features.
+
+## 0.3.3 additions and exclusions
+
+These rows are source/contract-reviewed, not newly executed conformance tests.
+
+| Profile | Contract | Evidence boundary |
+|---|---|---|
+| Independent-source multicast | Both peers opt in; Live Message, IPv4 C API, single Listener/control endpoint, existing cipher/FEC restrictions | 32-byte CONFIG 0x7f15; IPv6 engine codec does not qualify native IPv6 |
+| Coordinated sender | Sender-local; independent source and positive group MAXBW required; at most 64 members, unfragmented messages | No new receiver wire record; rejects packet filters and session-authentication profiles; shared multicast repair threshold disabled |
+| Coordinated plus separate hybrid owner | ACP1 and HYBRID_CONTROL builds explicitly enabled; distinct pairwise control credentials; internal owner attachment | Component v7 uses separate exchange, not the native handshake or DATA member authentication; default-off and outside supported security/Haivision interop |
+| Ordinary multicast repair cap | Positive group MAXBW gives aggregate unicast-repeat cap; nonpositive values remain uncapped | SRT-byte accounting differs from coordinated IP-wire accounting; no fairness/deadline promise |
+
+The earlier multicast-plus-authentication unknown row must not override the
+coordinated profile's explicit session-authentication exclusion.

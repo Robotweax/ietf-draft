@@ -1,0 +1,4 @@
+PASS structural XML: drafts/draft-robotweax-srt-authentication-00.xml
+PASS structural XML: drafts/draft-robotweax-srt-hybrid-control-00.xml
+PASS structural XML: drafts/draft-robotweax-srt-multicast-00.xml
+PASS local Markdown link targets

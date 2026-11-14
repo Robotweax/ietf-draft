@@ -1,0 +1,27 @@
+{
+  "result": "fail",
+  "file": {
+    "path": "/private/tmp/robotweax-ietf-draft/drafts/draft-robotweax-srt-hybrid-control-00.xml",
+    "size": 12772
+  },
+  "nitsBySeverity": {
+    "error": 1,
+    "warning": 0,
+    "comment": 0
+  },
+  "nits": [
+    {
+      "severity": "ValidationError",
+      "code": "MISSING_INTRODUCTION_SECTION",
+      "desc": "The introduction section is missing.",
+      "ref": "https://authors.ietf.org/en/required-content#introduction",
+      "path": "rfc.middle.section",
+      "line": [
+        {
+          "line": 16,
+          "pos": 3
+        }
+      ]
+    }
+  ]
+}

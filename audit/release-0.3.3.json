@@ -1,0 +1,1960 @@
+{
+  "review_date": "2026-11-14",
+  "base_tag_object": "235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1",
+  "base_commit": "e45d0edd346e5c427d85e4c3b1ac605c81a23397",
+  "release_tag_object": "29c741d35f89a412926c374d6ccb15fa1270833c",
+  "implementation_commit": "69bd5328bf654ebbed894c77fd30ae5b2dfba9d7",
+  "comparison": "peeled v0.3.2 release commit to peeled v0.3.3 release commit",
+  "claims": [
+    {
+      "id": "R033-01",
+      "description": "Fixed-source record preserves legacy dispatch and adds 32-byte CONFIG 0x7f15",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#fixed-source",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "include/robotweax/srt/connection_group.hpp",
+          "sha256": "d56aceec3981e6ed4b78bb1cc34e80537a47fd21f4a5ca73423d1b703f151187",
+          "needle": "inline constexpr std::size_t multicast_source_content_size = 32;",
+          "line": 182
+        },
+        {
+          "path": "src/connection_group.cpp",
+          "sha256": "1b541439d3358dc9cd84600746ae17d42fa0c1639c45a64514f566d2da722a68",
+          "needle": "MulticastSourceDecodeResult decode_multicast_source(",
+          "line": 204
+        },
+        {
+          "path": "include/robotweax/srt/handshake_extensions.hpp",
+          "sha256": "8708cbc62fcc1dee5724e296b7a253e595a50c86a9f240a7ad27fb7a0a6a5a9d",
+          "needle": "multicast_source = 0x7f15",
+          "line": 36
+        }
+      ]
+    },
+    {
+      "id": "R033-02",
+      "description": "Bilateral negotiation, context checks and frozen retries",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#fixed-source",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "src/handshake.cpp",
+          "sha256": "eed44998c97a895328b02ff6149c68da0a0211d29d7409c344777b1514c90def",
+          "needle": "bool HandshakeMachine::accepts_multicast_source_offer(",
+          "line": 264
+        },
+        {
+          "path": "src/handshake_datagram.cpp",
+          "sha256": "af7891018fe05be6041085d1253128d2a094edde67142139337284056c0974b5",
+          "needle": "[[nodiscard]] bool valid_multicast_source_context(",
+          "line": 46
+        },
+        {
+          "path": "tests/test_handshake_datagram.cpp",
+          "sha256": "f4fb7b5593250773fef24e1029b667d42c7361c7a6c049466aabe04523425948",
+          "needle": "TEST(multicast_source_datagram_preserves_legacy_bytes_and_exact_mtu_budget)",
+          "line": 1335
+        }
+      ]
+    },
+    {
+      "id": "R033-03",
+      "description": "Independent native source and coordinated profile limits",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#budgets",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "docs/connection-groups.md",
+          "sha256": "4ff7df37e0b41b16e0bb89dbda10f6ded0d2a6566662c388b9fc134150ce3c77",
+          "needle": "### Independent IPv4 source (opt-in)",
+          "line": 693
+        },
+        {
+          "path": "docs/connection-groups.md",
+          "sha256": "4ff7df37e0b41b16e0bb89dbda10f6ded0d2a6566662c388b9fc134150ce3c77",
+          "needle": "### Coordinated IPv4 sender (opt-in)",
+          "line": 730
+        },
+        {
+          "path": "src/compat/group_send_coordinator.hpp",
+          "sha256": "384f2c8cb5d4f45ec351eed7e89ce5feb43f2224b54e0f8630397485a77c4209",
+          "needle": "class GroupSendCoordinator",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "R033-04",
+      "description": "Ordinary aggregate repeat budget differs from coordinated wire budget",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#budgets",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "src/compat/dispatch_transmit_state.hpp",
+          "sha256": "e5dfc77efc385152ab7c6db80f2feccd29b0df509cc9030821d1e4361c91c8cc",
+          "needle": "static constexpr std::int64_t unicast_repeat_rate_factor = 4;",
+          "line": 120
+        },
+        {
+          "path": "src/compat/group_unicast_budget.hpp",
+          "sha256": "d18b54d00e200eda137ac549e0dce75fa00760a6d822e0160fb2442b2a19ad77",
+          "needle": "class GroupUnicastBudget",
+          "line": 21
+        },
+        {
+          "path": "docs/connection-groups.md",
+          "sha256": "4ff7df37e0b41b16e0bb89dbda10f6ded0d2a6566662c388b9fc134150ce3c77",
+          "needle": "All canonical unicast DATA repairs share an aggregate wire budget",
+          "line": 752
+        }
+      ]
+    },
+    {
+      "id": "R033-05",
+      "description": "Receive-generation selection and failed authenticated opens",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#receive-generations",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "src/crypto.cpp",
+          "sha256": "9293e831d76d9ee0ffa0e102c3d56f49de20d210b03dc6f58deb8d6903283fc9",
+          "needle": "CryptoSession::ReceiveSelection CryptoSession::select_receive_generation(",
+          "line": 1806
+        },
+        {
+          "path": "src/crypto.cpp",
+          "sha256": "9293e831d76d9ee0ffa0e102c3d56f49de20d210b03dc6f58deb8d6903283fc9",
+          "needle": "Error CryptoSession::open(const DataHeader& header,",
+          "line": 2321
+        },
+        {
+          "path": "docs/encryption.md",
+          "sha256": "64c4d13a558002f8e5487d24acfca1cc7f5668b603a7dbc3c0477a33f168c99c",
+          "needle": "A delayed DATA packet names only its selector",
+          "line": 449
+        }
+      ]
+    },
+    {
+      "id": "R033-06",
+      "description": "Hybrid component v7 is separate from ordinary handshake authentication",
+      "destination": "drafts/draft-robotweax-srt-authentication-00.xml#hybrid",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "include/robotweax/srt/session_authentication.hpp",
+          "sha256": "f24fe9d9dfd222f2bd3ebf41dac1c518595b73ce20a904081a6cd395e0a4a7c6",
+          "needle": "inline constexpr std::uint8_t hybrid_control_session_version = 7;",
+          "line": 29
+        },
+        {
+          "path": "src/session_authentication.cpp",
+          "sha256": "fa5bd5e9bd6dc02c103584bd848b005c42d7cdeffdcef539080b9943d2b7f196",
+          "needle": "bool hybrid_version(std::uint8_t version) noexcept",
+          "line": 14
+        },
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "Native handshakes still",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "R033-07",
+      "description": "Capability, context and recovery control identities",
+      "destination": "drafts/draft-robotweax-srt-hybrid-control-00.xml#capability",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "src/compat/hybrid/hybrid_control.hpp",
+          "sha256": "40722f5a150d596326488657e4e44253b3875f8f118050be22bfb874bd2be53e",
+          "needle": "inline constexpr std::uint16_t control_subtype = 0x7f16;",
+          "line": 13
+        },
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "## Authenticated context",
+          "line": 89
+        },
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "## Control body",
+          "line": 2090
+        }
+      ]
+    },
+    {
+      "id": "R033-08",
+      "description": "Separate four-record exchange and native carrier",
+      "destination": "drafts/draft-robotweax-srt-hybrid-control-00.xml#exchange",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "## Bounded exchange and credential provider",
+          "line": 291
+        },
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "The provisional local user-defined subtype is **0x7f17**.",
+          "line": 425
+        }
+      ]
+    },
+    {
+      "id": "R033-09",
+      "description": "Semantic retries, policy admission, bounded fallback and return",
+      "destination": "drafts/draft-robotweax-srt-hybrid-control-00.xml#messages",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "## Bounded admission and retry semantics",
+          "line": 2137
+        },
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "## Bounded overlap and explicit multicast return",
+          "line": 1143
+        },
+        {
+          "path": "docs/release-notes-0.3.3.md",
+          "sha256": "bbe571af93297786b7fac41a3ce1067f5a54f305b0f64ed8d33bce263341c56d",
+          "needle": "Fallback uses a local live catch-up policy:",
+          "line": 35
+        },
+        {
+          "path": "docs/experimental-hybrid-control.md",
+          "sha256": "ffc46202cdd0f438810be88177a597b3b3b7212d53133cc189cdae98bd59e9a2",
+          "needle": "## Provisioned native startup admission",
+          "line": 1488
+        }
+      ]
+    },
+    {
+      "id": "R033-10",
+      "description": "Announcement admission and shared-key security limits remain",
+      "destination": "drafts/draft-robotweax-srt-hybrid-control-00.xml#security",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "docs/connection-groups.md",
+          "sha256": "4ff7df37e0b41b16e0bb89dbda10f6ded0d2a6566662c388b9fc134150ce3c77",
+          "needle": "The ordinary session-authentication proof (versions 2 to 6)",
+          "line": 861
+        },
+        {
+          "path": "docs/security-delta-0.3.3.md",
+          "sha256": "da846d4dbd4db85c2b2ea433032792e01c58f8d3a4e62a932774c543e7560bb2",
+          "needle": "## Reviewed boundaries",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "id": "R033-11",
+      "description": "Timer, listener, route and epoll hardening are implementation changes",
+      "destination": "docs/release-review-0.3.3.md",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "docs/release-notes-0.3.3.md",
+          "sha256": "bbe571af93297786b7fac41a3ce1067f5a54f305b0f64ed8d33bce263341c56d",
+          "needle": "Listener-close work cannot be starved by overdue timers.",
+          "line": 56
+        },
+        {
+          "path": "src/compat/connection.cpp",
+          "sha256": "2122f1e2a478f9c724f8eb3946f3c4e08666c039525c6fcf95c8f55712164eba",
+          "needle": "// Runtime installation precedes CONNECTED for every profile",
+          "line": 3753
+        }
+      ]
+    },
+    {
+      "id": "R033-12",
+      "description": "API/ABI compatibility differs from protocol capability",
+      "destination": "docs/release-review-0.3.3.md",
+      "evidence": "source-reviewed; runtime tests not run in this pass",
+      "sources": [
+        {
+          "path": "docs/release-notes-0.3.3.md",
+          "sha256": "bbe571af93297786b7fac41a3ce1067f5a54f305b0f64ed8d33bce263341c56d",
+          "needle": "Project version **0.3.3**, shared-library ABI **0.3**",
+          "line": 9
+        }
+      ]
+    }
+  ],
+  "changed_files": [
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/.gitignore",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/README.md",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/SHA256SUMS",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/build-settings.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failure-build-settings.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/canonical-drop-diagnostic.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/gcc-o0.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/gcc-o0.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/gcc-o1.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/gcc-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/gcc-og.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/gcc-og.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-bl1-default-before.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-bl2-win32-before.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-gcc-km-v1-soak-ctr.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-gcc-km-v1-soak-gcm.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-gcc-km-v2-load-ctr.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-gcc-km-v2-load-gcm.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-gcc-km-v2-soak-ctr.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-gcc-km-v2-soak-gcm.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-harness-before-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-harness-before-og.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-listener-close-before.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-partitions-gcc-og-key-debugger.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-partitions-gcc-og-key-deep-debugger.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-partitions-mac-before.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/failures/review-partitions-win-before.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/focused-test-names.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/linux-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/linux-release-native.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/linux-sanitized-native.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/mac-default-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/mac-enabled-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/mac-enabled-native.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/mac-sanitized-native.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-enabled-compat_group_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-enabled-compat_group_coordinator.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-enabled-compat_group_wire_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-enabled-investigation_hybrid.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-probe-linux-gcc-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-probe-linux-gcc-og.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-probe-linux-llvm.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-probe-linux-release.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-probe-mac-release.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-v2-crypto.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-gcc-km-v2-encoder.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-gcc-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-gcc-og.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-gcc-release.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-llvm-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-mac-release.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-mac-sanitized.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-pool-only-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-pool-only-og.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-harness-repository-default.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-gcc-o1-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-gcc-o1-data.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-gcc-o1-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-gcc-og-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-gcc-og-data.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-gcc-og-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-llvm-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-llvm-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-release-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-linux-release-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-asan-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-asan-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-default-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-default-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-release-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-release-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-listener-close-mac-tsan-scheduler.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-build-hybrid-control-compat_group_wire_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-build-hybrid-control-sanitized-compat_group_wire_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-build-review-default-compat_group_wire_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-gcc-o1-key.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-gcc-o1.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-gcc-og-key.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-gcc-og.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-llvm-key.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-llvm.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-release-key.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-linux-release.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-mac-default.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-mac-release-key.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-mac-release.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-mac-san-key.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-mac-san.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-partitions-python.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-repository-default-ctest.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-sanitized-compat_group_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-sanitized-compat_group_coordinator.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-sanitized-compat_group_wire_budget.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/logs/review-sanitized-investigation_hybrid.log",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/overview.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/provenance.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/linux-release.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/linux-sanitized.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/mac-enabled.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/mac-sanitized.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-build-fixes.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-gcc-km-overlay-v1.hpp.txt",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-gcc-km-overlay-v1.patch",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-gcc-km-overlay-v2.hpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-gcc-km-overlay-v2.patch",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-gcc-km-reproduction.md",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-gcc-km.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-harness-pool-only.patch",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-harness-windows-ci.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-harness.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-listener-close-regression.patch",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-listener-close.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/records/review-partitions.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/review-follow-up.md",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/sanitizer-log-audit.json",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/reviews/hybrid-multicast/sanitizer-selectors.txt",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/ci.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/experimental-acp1.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/workflows/experimental-hybrid-control.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": ".github/workflows/identity-timeout.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/linux-packages.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/package-managers.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/timing-diagnostics.yml",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "CHANGELOG.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "CMakeLists.txt",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "README.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "A",
+      "path": "benchmarks/coordinated_sender_benchmark.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "benchmarks/send_buffer_probe_benchmark.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "cmake/abi/robotweax-srt-0.3.3.txt",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "compat/robotweax-0.2-aead.json",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/aes-gcm-contract.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/api-compatibility.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/building.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/connect-variants.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/connection-groups.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/encryption.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "A",
+      "path": "docs/experimental-hybrid-control.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/ffmpeg-integration.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/file-mode.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/getting-started.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/integration.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/limitations.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/live-timing.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/migration-0.2.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/multicast-media.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/obs-desktop.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/obs-integration.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/obs-macos-desktop.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/obs-windows-desktop.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "A",
+      "path": "docs/release-notes-0.3.3.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "A",
+      "path": "docs/release-process-0.3.3.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/scheduler-shards.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "A",
+      "path": "docs/security-delta-0.3.3.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/socket-options.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/testing.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/udp-srt-bridge.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "docs/vlc-integration.md",
+      "category": "release and behavioral documentation"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/CMakeLists.txt",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/README.md",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "examples/applications/hybrid_multicast.hpp",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/media.hpp",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/multicast.cpp",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "examples/applications/test_hybrid_multicast.py",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "examples/srt_udp_bridge.cpp",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "examples/test_udp_bridge.py",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/connection_group.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/crypto.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/handshake.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/handshake_extensions.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/send_buffer.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/session.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/session_authentication.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/srt/srt.h",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "include/srt/version.h",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "interop/ci_changes.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/run_file_interop.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/run_identity_interop.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/srt_handshake_trace.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_aead_contract.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_ci_build_scope.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_ci_changes.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "interop/tests/test_hybrid_default_isolation.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "interop/tests/test_hybrid_soak_qualification.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "interop/tests/test_identity_interop.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_live_transmit.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_multicast_qualification.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_obs_harness.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_release_documentation.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_rendezvous_interop.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "interop/tests/test_udp_bridge_fixture.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_vlc_harness.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "packaging/README.md",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "packaging/acceptance-0.3.3.json",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/debian/changelog",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/fedora/robotweax-srt.spec",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/homebrew/robotweax-srt.rb",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "packaging/investigation-0.3.3.json",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/README.md",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/qualify-fedora.sh",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/qualify-ubuntu.sh",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "packaging/qualification-0.3.3.md",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "packaging/soak-0.3.3-macos.json",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "A",
+      "path": "packaging/source-0.3.3.json",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/tests/CMakeLists.txt",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/vcpkg/ports/robotweax-srt/portfile.cmake",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/vcpkg/ports/robotweax-srt/vcpkg.json",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/README.md",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/test-installers.ps1",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/test-upgrade-check.ps1",
+      "category": "build/package/integration; no new wire contract inferred"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/connection.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/connection.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/dispatch_transmit_state.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/group_api.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_multicast_emitter.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_multicast_emitter.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_packet_encoder.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_packet_encoder.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/group_registry.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/group_registry.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_runtime_admission.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_runtime_admission.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_send_coordinator.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_send_coordinator.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/group_unicast_budget.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_admission.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_admission.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_automatic.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_automatic.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_automatic_return.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_automatic_return.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_automatic_types.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_bridge.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_bridge.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_conclusions.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_conclusions.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_control.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_control.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_detector.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_detector.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_exchange.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_exchange.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_membership.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_membership.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_native.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_native.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_progress.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_progress.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_receiver.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_receiver.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_reporting.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_reporting.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_return.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_return.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_setup.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/hybrid/hybrid_setup.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/message_io.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/platform_timer.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/platform_timer.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/public_socket_options.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/runtime_scheduler.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/runtime_scheduler.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/runtime_scheduler_service.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_io.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_options.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_readiness.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_registry.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_registry.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/transport_runtime.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/transport_runtime.hpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/connection_group.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/crypto.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/handshake.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/handshake_datagram.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/handshake_extensions.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/send_buffer.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/session.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "src/session_authentication.cpp",
+      "category": "implementation delta; protocol-impact triage, not exhaustive security audit"
+    },
+    {
+      "status": "M",
+      "path": "tests/gstreamer/peer.c",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/hybrid_control_vectors.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/hybrid_fault_link.hpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/live_transmit/run_smoke.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/build_macos.sh",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/check_macos_cache.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/collect_macos_failure.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/configure.sh",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/obs/macos_core_backtrace.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/prepare_desktop_lifecycle.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/obs/prepare_desktop_swapchain.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/obs/prepare_desktop_trace.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/run_desktop_smoke.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/run_macos_desktop_smoke.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/obs/symbolize_allocations.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/obs/trace_allocations.h",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/windows_reference_peer.c",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_groups.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_runtime.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_connection_group.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_crypto.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_admission.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_emission_outcomes.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_multicast_emitter.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_packet_encoder.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_runtime_admission.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_send_coordinator.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_group_unicast_budget.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_handshake_datagram.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_admission.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_conclusions.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_control.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_detector.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_exchange.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_fault_link.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_native.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_progress.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_reporting.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_return.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_hybrid_setup.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_listener_handshake_sources.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_main.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_multicast_dispatch.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_send_buffer.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_session.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_srt_compat.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_timing.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tests/vlc/reference.c",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tests/vlc/run_smoke.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tools/diagnostics/crypto_receive_order.cpp",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "A",
+      "path": "tools/qualify_hybrid_soak.py",
+      "category": "qualification/tooling; not rerun by this review"
+    },
+    {
+      "status": "M",
+      "path": "tools/qualify_multicast.py",
+      "category": "qualification/tooling; not rerun by this review"
+    }
+  ]
+}

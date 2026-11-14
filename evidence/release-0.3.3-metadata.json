@@ -1,0 +1,13 @@
+{
+  "review_date": "2026-11-14",
+  "release_url": "https://github.com/Robotweax/srt/releases/tag/v0.3.3",
+  "published_at": "2026-11-14T07:29:44Z",
+  "release_id": 444105689,
+  "title": "Robotweax SRT 0.3.3 — Hybrid Multicast and Transport Hardening",
+  "draft": false,
+  "prerelease": false,
+  "tag_name": "v0.3.3",
+  "tag_object": "29c741d35f89a412926c374d6ccb15fa1270833c",
+  "commit": "69bd5328bf654ebbed894c77fd30ae5b2dfba9d7",
+  "evidence_kind": "GitHub release metadata; reported qualification not independently rerun"
+}

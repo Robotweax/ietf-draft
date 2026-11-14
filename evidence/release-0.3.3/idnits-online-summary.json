@@ -1,0 +1,162 @@
+{
+  "tool": "@ietf-tools/idnits",
+  "version": "3.3.0",
+  "runs": [
+    {
+      "log": "idnits-final-online-authentication-xml-submission.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-authentication-00.xml",
+      "input_sha256": "7385ee4d4a11ca6daf81d9981d7e6b8f0893bbe4ad5ca91ef9561d811af27a97",
+      "mode": "submission",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-authentication-xml-normal.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-authentication-00.xml",
+      "input_sha256": "7385ee4d4a11ca6daf81d9981d7e6b8f0893bbe4ad5ca91ef9561d811af27a97",
+      "mode": "normal",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-authentication-txt-submission.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-authentication-00.txt",
+      "input_sha256": "ca5d6744411dad49754c048e524a692c8ff99d6ec9759c5650630b9de3e15c6b",
+      "mode": "submission",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-authentication-txt-normal.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-authentication-00.txt",
+      "input_sha256": "ca5d6744411dad49754c048e524a692c8ff99d6ec9759c5650630b9de3e15c6b",
+      "mode": "normal",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-hybrid-control-xml-submission.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-hybrid-control-00.xml",
+      "input_sha256": "cfa2b32eaf46e53a959e101fd4b2ded32a3d62abff81c0ab4628dd180224501a",
+      "mode": "submission",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-hybrid-control-xml-normal.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-hybrid-control-00.xml",
+      "input_sha256": "cfa2b32eaf46e53a959e101fd4b2ded32a3d62abff81c0ab4628dd180224501a",
+      "mode": "normal",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-hybrid-control-txt-submission.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-hybrid-control-00.txt",
+      "input_sha256": "74dfebc3dee5a5b613777957d000de2cfc577f8173b4e3fa6eac4ab6ed34c2b3",
+      "mode": "submission",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-hybrid-control-txt-normal.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-hybrid-control-00.txt",
+      "input_sha256": "74dfebc3dee5a5b613777957d000de2cfc577f8173b4e3fa6eac4ab6ed34c2b3",
+      "mode": "normal",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-multicast-xml-submission.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-multicast-00.xml",
+      "input_sha256": "6e347b1156f25432295e7dd59caf9af327f31437c372d9511f4bade165e506bf",
+      "mode": "submission",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-multicast-xml-normal.json",
+      "exit_code": 0,
+      "input": "drafts/draft-robotweax-srt-multicast-00.xml",
+      "input_sha256": "6e347b1156f25432295e7dd59caf9af327f31437c372d9511f4bade165e506bf",
+      "mode": "normal",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-multicast-txt-submission.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-multicast-00.txt",
+      "input_sha256": "ec8645a58cbab456c683ff8c33ccd10e136633bec0c3e32c81a2227efa14c783",
+      "mode": "submission",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    },
+    {
+      "log": "idnits-final-online-multicast-txt-normal.json",
+      "exit_code": 0,
+      "input": "build/draft-robotweax-srt-multicast-00.txt",
+      "input_sha256": "ec8645a58cbab456c683ff8c33ccd10e136633bec0c3e32c81a2227efa14c783",
+      "mode": "normal",
+      "offline": false,
+      "counts": {
+        "error": 0,
+        "warning": 0,
+        "comment": 0
+      }
+    }
+  ]
+}

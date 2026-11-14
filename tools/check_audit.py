@@ -92,3 +92,36 @@ if clause_path.exists():
             text=data.decode()
             assert text[:text.index(source['needle'])].count('\n')+1==source['line'], clause['id']
     print(f'PASS {len(seen)} proposed-clause source mappings (not approval or conformance)')
+
+# Release deltas are separate ledgers: historical execution is never rebased.
+delta_path = root / 'audit/release-0.3.3.json'
+if delta_path.exists():
+    import xml.etree.ElementTree as ET
+    delta = json.loads(delta_path.read_text())
+    def git(*arguments):
+        return subprocess.check_output(['git', '-C', args.source_repo, *arguments])
+    for prefix in ('base', 'release'):
+        tag = delta[prefix + '_tag_object']
+        expected = delta['base_commit' if prefix == 'base' else 'implementation_commit']
+        assert git('cat-file', '-t', tag).strip() == b'tag', tag
+        assert git('rev-parse', tag + '^{commit}').decode().strip() == expected, tag
+    actual = [line.split('\t', 1) for line in git(
+        'diff', '--name-status', delta['base_commit'], delta['implementation_commit']
+    ).decode().splitlines()]
+    assert actual == [[row['status'], row['path']] for row in delta['changed_files']]
+    seen = set()
+    for claim in delta['claims']:
+        assert claim['id'] not in seen
+        seen.add(claim['id'])
+        assert claim['evidence'] == 'source-reviewed; runtime tests not run in this pass'
+        path, _, anchor = claim['destination'].partition('#')
+        destination = root / path
+        assert destination.exists(), claim['id']
+        if anchor:
+            assert any(e.get('anchor') == anchor for e in ET.parse(destination).iter()), claim['id']
+        for source in claim['sources']:
+            data = git('show', delta['implementation_commit'] + ':' + source['path'])
+            assert hashlib.sha256(data).hexdigest() == source['sha256'], claim['id']
+            text = data.decode()
+            assert text[:text.index(source['needle'])].count('\n') + 1 == source['line'], claim['id']
+    print(f"PASS 0.3.3 tag/commit identities, {len(actual)} changed paths and {len(seen)} source-reviewed delta claims (no runtime execution implied)")

@@ -1,0 +1,7 @@
+PASS: 38 claim anchors and their test references against 235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1; execution evidence checked where recorded
+PASS execution-log, fixture and adapter-source hashes
+PASS current matrix-adapter source hashes
+PASS native instrumentation source/patch hashes
+PASS baseline hashes, supplemental Git blob and 84 section mappings
+PASS 8 proposed-clause source mappings (not approval or conformance)
+PASS 0.3.3 tag/commit identities, 332 changed paths and 12 source-reviewed delta claims (no runtime execution implied)

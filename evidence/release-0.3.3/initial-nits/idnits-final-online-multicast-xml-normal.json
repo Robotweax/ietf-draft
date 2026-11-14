@@ -1,0 +1,13 @@
+{
+  "result": "pass",
+  "file": {
+    "path": "/private/tmp/robotweax-ietf-draft/drafts/draft-robotweax-srt-multicast-00.xml",
+    "size": 24229
+  },
+  "nitsBySeverity": {
+    "error": 0,
+    "warning": 0,
+    "comment": 0
+  },
+  "nits": []
+}

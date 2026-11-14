@@ -1,5 +1,12 @@
 # Requirement traceability
 
+**Version boundary:** the original proposals and execution references below are
+pinned to 0.3.2. The [0.3.3 release review](release-review-0.3.3.md) and its delta
+ledger supersede them where source negotiation, repair budgets, coordinated
+sending, hybrid controls or receive-generation routing changed. Historical
+passed tests are not new 0.3.3 evidence.
+
+
 All Robotweax paths below are relative to the immutable
 [0.3.2 source](https://github.com/Robotweax/srt/tree/235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1).
 “Reported” means recorded by that release, not rerun for this repository.

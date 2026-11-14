@@ -1,5 +1,12 @@
 # Proposed SRT base revision clauses
 
+**Version boundary:** the original proposals and execution references below are
+pinned to 0.3.2. The [0.3.3 release review](release-review-0.3.3.md) and its delta
+ledger supersede them where source negotiation, repair budgets, coordinated
+sending, hybrid controls or receive-generation routing changed. Historical
+passed tests are not new 0.3.3 evidence.
+
+
 These are reviewable replacement and insertion blocks, not an approved base draft.
 Uppercase MUST, MUST NOT and SHOULD express the proposed requirement strength.
 They do not assert IETF consensus or silently modify Robotweax SRT 0.3.2.

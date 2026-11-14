@@ -1,5 +1,12 @@
 # Proposed SRT multicast key lifecycle
 
+**Version boundary:** the original proposals and execution references below are
+pinned to 0.3.2. The [0.3.3 release review](release-review-0.3.3.md) and its delta
+ledger supersede them where source negotiation, repair budgets, coordinated
+sending, hybrid controls or receive-generation routing changed. Historical
+passed tests are not new 0.3.3 evidence.
+
+
 P07 describes the pinned shared multicast schedule and proposes specification
 boundaries. It does not replace ordinary directional-key rotation with multicast
 rules. Source anchors are in the [clause ledger](../audit/proposed-clauses.json).
@@ -115,3 +122,20 @@ cipher vectors, rotation exchange, and native KM-loss cases. Independent
 post-rotation DATA vectors, exhaustive wrap/retention/exhaustion transitions and
 an independent peer remain gaps. This lifecycle draft is review material, not a
 claim that all these requirements have already been implemented or tested.
+
+## 0.3.3 receiver delta
+
+The shared sender schedule above and the receive-generation selector are distinct.
+The new receiver records accepted position bounds per generation, uses companion
+selector bounds to distinguish old and replacement generations, and expires retired
+generations at half-range lifetime. A missing companion can leave ambiguity: GCM
+may authenticate only eligible alternatives; CTR applies its positional policy and
+cannot identify a generation by inspecting plaintext. Failed authenticated opens
+preserve encrypted inputs, including overlap, without publishing plaintext.
+
+The [release review](release-review-0.3.3.md) pins the implementation and contract.
+Its new multicast draft section records these changes. This narrows the retention
+work but does not close independent post-rotation vectors, wrap/exhaustion,
+long-horizon KM replay or security-review gates. Coordinated key-queue bounds
+prevent premature selector replacement for queued originals; they are not proof
+of remote receipt.

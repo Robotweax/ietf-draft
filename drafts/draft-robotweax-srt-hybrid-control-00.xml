@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rfc version="3" ipr="trust200902" category="exp" submissionType="independent" docName="draft-robotweax-srt-hybrid-control-00" tocInclude="true" symRefs="true">
+  <front>
+    <title abbrev="SRT Hybrid Control">Experimental Hybrid Multicast Control for the Secure Reliable Transport Protocol</title>
+    <author fullname="Marc Cymontkowski" initials="M." surname="Cymontkowski">
+      <organization>Robotweax GmbH</organization>
+      <address>
+        <email>marc@robotweax.ai</email>
+      </address>
+    </author>
+    <date year="2026" month="November" day="14" />
+    <abstract>
+      <t>This unsubmitted working draft inventories the separately enabled hybrid multicast control components in Robotweax SRT 0.3.3. It records their provisional wire identities, authentication boundary and delivery-policy constraints. It is not a complete independently implementable protocol or a supported security profile.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="status">
+      <name>Introduction</name>
+      <t>Implementation observations refer to commit 69bd5328bf654ebbed894c77fd30ae5b2dfba9d7. The document name and publication route are provisional. Hybrid control requires explicit experimental ACP1 and HYBRID_CONTROL build options, both default-off, plus explicitly provisioned internal owners. No public hybrid C API is introduced. IPv4 native integration and protocol-engine address encodings have different qualification boundaries.</t>
+      <t>The profile augments independent-source multicast and its coordinated sender with a separate pairwise control context. Native SRT handshake decoders still reject session-authentication version 7. There is no hybrid capability CONFIG extension. Ordinary multicast, authentication v2 and ACP1 v3 through v6 are not silently upgraded. Existing DATA cipher, KM and protected repair identity remain separate.</t>
+    </section>
+    <section anchor="capability">
+      <name>Capability and Context</name>
+      <t>The capability is exactly 48 bytes in network order. Offsets and widths are: 0/4 version 1; 4/4 kind (1 offer, 2 selection); 8/4 supported or selected feature mask; 12/4 required mask; 16/4 maximum prefix (1 through 256 packets); 20/4 reserved zero; 24/8 stream incarnation; 32/8 member incarnation; 40/8 initial absolute position. Offers have zero incarnation and position fields; selections have nonzero incarnations.</t>
+      <t>Masks 1, 2 and 4 select canonical unicast originals, prefix recovery and progress reports and are mandatory. Masks 8 and 16 select overlap and source recovery. Mask 32 enables policy queries and request-correlated responses. Mask 64 enables return and effective-boundary metadata and requires 8 and 32. Mask 128 enables staged-startup membership and requires 32. Unknown bits are rejected. Selection satisfies both required masks and the offered support, with the smaller prefix limit; failure does not silently reduce requirements.</t>
+      <t>The canonical 192-byte context is: 0/4 magic 0x52574801; 4/60 dispatch announcement; 64/32 fixed-source announcement; 96/48 receiver offer; 144/48 sender selection. Dispatch and source group IDs and families match. IPv6 scope selectors remain local. This binding is not native IPv6 deployment qualification.</t>
+    </section>
+    <section anchor="exchange">
+      <name>Separate Admission Exchange</name>
+      <t>Provisional user-defined subtype 0x7f17 carries exactly 176 content bytes, or 192 bytes with the ordinary SRT control header; its type-specific field is zero. Records are Caller OFFER (1), Listener SELECTION (2), Caller PROOF (3), and Listener RECEIPT (4). Integers use network order. Offsets and widths are: 0/4 magic 0x52575801; 4/4 kind; 8/4 Caller socket ID; 12/4 Listener socket ID; 16/16 credential ID; 32/48 capability; 80/32 Caller nonce; 112/32 Listener nonce; 144/32 proof.</t>
+      <t>Socket IDs are distinct and nonzero. Credential ID and Caller nonce are nonzero. OFFER has zero Listener nonce and proof. Later records require both nonces and proof. PROOF and RECEIPT have zero capability bytes. The context is built from the frozen dispatch/source announcements and actual offer/selection, not inferred from the exchange sender address.</t>
+      <t>Version 7 is implied by this separate record. Each endpoint resolves the provisioned pairwise credential, derives a context and verifies the opposite-role conclusion proof. The Listener can expose its root after verifying PROOF and constructing RECEIPT. The Caller waits until RECEIPT is verified. Root readiness is not evidence of DATA delivery, installed policy or both runtime owners becoming active.</t>
+      <t>The admission owner freezes both complete CONCLUSION payloads, excluding their outer control headers, and binds them into proof material. Proof material uses network-order fields: 0/4 magic 0x52574101; 4/4 total length; 8/4 Caller payload length; 12/4 Listener payload length; 16/16 credential ID; 32/192 canonical context; 224 onward exact Caller payload then exact Listener payload. Each payload is at most 1484 bytes; total material is at most 3192 bytes. This binds both conclusions, including accepted fields and suffix bytes, not the earlier INDUCTION exchange or routing provenance. Complete retry/deadline transitions and credential-provider authorization semantics remain to be specified.</t>
+    </section>
+    <section anchor="authentication">
+      <name>Authentication and Replay Boundary</name>
+      <t>The root salt consists of the 16-byte label RWSRT-SESSION-7 followed by NUL (15 ASCII bytes plus NUL), two 32-byte nonces, two network-order uint64 socket IDs and the 192-byte context. PBKDF2-HMAC-SHA1 uses 2048 iterations and yields 32 bytes. Direction expansion and control MAC construction follow the existing experimental ACP1 primitives; they require a complete separate specification and independent review.</t>
+      <t>The owner provisions a separate random 32-byte pairwise control secret and a nonzero 16-byte credential ID. The shared DATA passphrase is not a substitute. Receipt proof material consists of the 16-byte label RWSRT-HYB-READY followed by NUL (15 ASCII bytes plus NUL), then the 32-byte verified Caller conclusion proof. Opposite-role verification is required; one confirmed object admits only one gate. Closure cannot reset replay state or re-use an incarnation as a new session.</t>
+      <t>Runtime recovery controls use inner subtype 0x7f16 inside ACP1 subtype 0x7f05. The inner packet has a 16-byte header and 96-byte body; the full enveloped datagram is 172 bytes. Bare recovery controls are not accepted by the native carrier. Version 7 refuses ordinary controls, KM and FEC and cannot replace those profiles.</t>
+      <t>The cryptographic replay window covers 64 envelope counters. Separately, each direction retains 64 semantic records. An identical semantic serial/body retry uses a fresh envelope and is treated as duplicate; changed content under the same serial conflicts. Exhaustion cannot wrap to zero. Duplicate reports retain their first receive time, and authenticated advertised age plus local monotonic elapsed time determines freshness.</t>
+    </section>
+    <section anchor="messages">
+      <name>Recovery Messages and Policy</name>
+      <t>The 96-byte body uses network order: 0/4 version 1; 4/4 kind; 8/8 stream incarnation; 16/8 member incarnation; 24/8 nonzero semantic serial; 32/8 policy revision; 40/8 next absolute position; 48/4 corresponding 31-bit sequence; 52/4 mode; 56/8 retained floor; 64/8 multicast-next or negotiated boundary; 72/8 produced-next or negotiated request serial; 80/4 activity; 84/4 outcome; 88/4 interval in microseconds; 92/4 age in microseconds.</t>
+      <t>Sender kinds are STREAM_PROGRESS (1), DELIVERY_COMMIT (4) and DELIVERY_STATUS (5). Receiver kinds are PATH_REPORT (2), FALLBACK_REQUEST (3), MULTICAST_READY (6) and negotiated DELIVERY_QUERY (7). Modes are multicast 0, unicast 1 and overlap 2. Activities are startup, producing, paused, ended and source failed (0 through 4). Outcomes are OK, denied, history unavailable, budget, stale, busy and unsupported (0 through 6).</t>
+      <t>Word 64 carries the negotiated delivery-response effective boundary or return-ready coverage begin when applicable. Word 72 carries produced-next for STREAM_PROGRESS and the request serial in negotiated delivery responses; otherwise it is zero. A complete per-kind validity table and feature-dependent interpretation must be specified before independent implementation.</t>
+      <t>Authentication alone does not authorize a delivery-policy mutation. The sender bridge checks revisions, available history, deadlines, recipient quotas and aggregate wire budget. Reports alone are neither DATA progress nor multicast-failure evidence. Automatic fallback and return require explicitly attached controllers; return uses sustained recovery and committed overlap coverage. Provisioned startup stages the runtime and unicast route, authenticates the exchange and requires a fresh correlated commit or query result confirming sender-approved unicast policy before publishing CONNECTED. Multicast membership attempts begin after publication under bounded attempt, time and authorization limits. Unprovisioned public connect still fails on multicast join failure. Membership retries are bounded, not perpetual background reconnection.</t>
+    </section>
+    <section anchor="delivery">
+      <name>Application Delivery Limits</name>
+      <t>The hybrid media sample applies a local live catch-up policy. It can discard unread buffered media and reports skipped positions. It does not guarantee lossless failover or decoder continuity. Peer high-water reports do not independently authorize the local discard cursor. Source-failure recovery has a specific session-retention exception; other published member detachment closes the unicast connection.</t>
+      <t>Loopback and release-reported timing qualification do not establish IGMP behavior, WAN limits, arbitrary fan-out, throughput, fairness or hostile-network availability. Budget, history, expiry and manual recovery remain part of the deployment contract.</t>
+    </section>
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>The exchange occurs after ordinary multicast admission. Binding the source context later does not authenticate the earlier announcement or prevent initial join/source-filter steering. No complete-handshake authentication claim is made. Pairwise credentials isolate control authorization only to the extent that provisioning and owner lifetime are correct.</t>
+      <t>Shared DATA keys still permit insider forgery and provide no cryptographic departure revocation. There is no forward secrecy. The low-cost PBKDF and captured proof make weak credentials unsuitable; the contract requires independently provisioned high-entropy pairwise secrets. Bounded queues and authenticated controls do not guarantee availability. This profile remains outside the supported security and Haivision interoperability boundary.</t>
+    </section>
+    <section anchor="iana">
+      <name>IANA Considerations</name>
+      <t>No allocation is requested. Runtime subtypes 0x7f16 and 0x7f17 are provisional implementation values in the user-defined control namespace, not CONFIG records. Authentication version 7 is a component context selector, not a newly accepted ordinary handshake version. Existing ACP1 subtype 0x7f05 and multicast CONFIG types 0x7f14 and 0x7f15 retain their separate namespaces. Registry policy and collision migration remain unresolved.</t>
+    </section>
+    <section anchor="issues">
+      <name>Open Issues</name>
+      <t>Complete transcript serialization, ACP1 derivation and envelope definitions, per-message constraints, state machines, serial/position wrap and exhaustion, retry and terminal-control behavior, credential revocation and policy reconciliation. Specify which implementation resource bounds become interoperability requirements. Resolve identifier governance and the relationship to the multicast and authentication drafts.</t>
+      <t>Independent peer interoperability, complete vectors across transitions, physical multicast qualification and independent cryptographic review remain open. This editorial pass inspected pinned sources and release contracts; no hybrid runtime qualification was executed for it. Previous 0.3.2 audit tests do not cover this profile.</t>
+    </section>
+    <section anchor="sources">
+      <name>Source Baseline</name>
+      <t>The pinned implementation and its experimental hybrid-control contract are recorded in <xref target="RWSRT" />.</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>Informative References</name>
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/69bd5328bf654ebbed894c77fd30ae5b2dfba9d7">
+        <front>
+          <title>Robotweax SRT 0.3.3 source and protocol contracts</title>
+          <author fullname="Robotweax" />
+          <date year="2026" />
+        </front>
+      </reference>
+    </references>
+  </back>
+</rfc>
