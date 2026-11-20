@@ -94,8 +94,7 @@ if clause_path.exists():
     print(f'PASS {len(seen)} proposed-clause source mappings (not approval or conformance)')
 
 # Release deltas are separate ledgers: historical execution is never rebased.
-delta_path = root / 'audit/release-0.3.3.json'
-if delta_path.exists():
+for delta_path in sorted((root / 'audit').glob('release-*.json')):
     import xml.etree.ElementTree as ET
     delta = json.loads(delta_path.read_text())
     def git(*arguments):
@@ -124,4 +123,4 @@ if delta_path.exists():
             assert hashlib.sha256(data).hexdigest() == source['sha256'], claim['id']
             text = data.decode()
             assert text[:text.index(source['needle'])].count('\n') + 1 == source['line'], claim['id']
-    print(f"PASS 0.3.3 tag/commit identities, {len(actual)} changed paths and {len(seen)} source-reviewed delta claims (no runtime execution implied)")
+    print(f"PASS {delta_path.stem} tag/commit identities, {len(actual)} changed paths and {len(seen)} source-reviewed delta claims (no runtime execution implied)")

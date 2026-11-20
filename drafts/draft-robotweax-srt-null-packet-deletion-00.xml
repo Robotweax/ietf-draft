@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rfc version="3" ipr="trust200902" category="exp" submissionType="independent" docName="draft-robotweax-srt-null-packet-deletion-00" tocInclude="true" symRefs="true">
+  <front>
+    <title abbrev="SRT Null Packet Deletion">MPEG Transport Stream Null Packet Deletion for SRT</title>
+    <author fullname="Marc Cymontkowski" initials="M." surname="Cymontkowski">
+      <organization>Robotweax GmbH</organization>
+      <address>
+        <email>marc@robotweax.ai</email>
+      </address>
+    </author>
+    <date year="2026" month="November" day="20" />
+    <abstract>
+      <t>This document describes the experimental null packet deletion profile in Robotweax SRT 0.3.4. Peers negotiate a per-DATA-packet bitmap that allows the receiver to reconstruct canonical MPEG transport stream null packets while preserving message boundaries and timestamps.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="status">
+      <name>Introduction</name>
+      <t>The implemented profile applies to individual HSv5 Live Message Caller/Listener connections. Its default policy is OFF. It preserves DATA sequence positions even when every transport stream unit in a payload can be deleted. Groups, Rendezvous, File/Stream and 204-byte transport stream units are outside the v1 scope.</t>
+    </section>
+    <section anchor="negotiation">
+      <name>Negotiation</name>
+      <t>The provisional CONFIG command is 0x7f19. Its content comprises eight octets, in hexadecimal 53 4e 50 44 01 00 00 00. The first four encode SNPD, followed by version 1, zero flags and two reserved zero octets. The Caller offers the record in HSREQ CONCLUSION and requires an exact echo in HSRSP CONCLUSION. Activation applies in both directions. INDUCTION is unchanged. With session authentication, AGREEMENT repeats the negotiated record and retries preserve it.</t>
+      <t>An OFF Caller sends no offer. An IF_OFFERED Listener accepts ordinary connections without an offer and echoes a valid offer. A Listener configured to require NPD requires a valid offer. An OFF Listener rejects a valid offer. IF_OFFERED is Listener-only. A Caller configured to require NPD fails setup on a missing echo. When a Listener has admitted it as an ordinary connection, the Caller sends one best-effort SHUTDOWN. For a participating endpoint, incorrect length, magic, version, flags, reserved bytes, duplicate records or missing CONFIG flag invalidate negotiation. OFF can ignore invalid NPD content within an otherwise well-formed chain.</t>
+    </section>
+    <section anchor="wire">
+      <name>DATA Encoding and Restoration</name>
+      <t>Every negotiated source DATA payload begins with a one-octet bitmap before encryption. Bit 7 is zero. Bit i, counting from the least significant bit, marks deletion of original unit i. A candidate payload consists of one through seven 188-octet units and every unit begins with 0x47. Only the exact sequence 47 1f ff 10 followed by 184 octets of ff can be omitted. Retained units follow the bitmap in original order. Other nonempty application payloads use bitmap zero and carry their original bytes.</t>
+      <t>On receipt, reject an empty wire payload, a set high bit or an empty remainder with bitmap zero. For a nonzero bitmap the remainder must contain whole units. Add its unit count to the population count of the bitmap to obtain the restored count N. Require N at most seven and all set bits below N. Walk the N positions, emitting the canonical null unit for a set bit and consuming one retained unit for each clear bit. Check restored output capacity before delivery. The single octet 7f restores seven null units, totaling 1316 bytes.</t>
+      <t>Malformed input is discarded without acknowledgement or liveness refresh. The connection continues. Recovery retains the original sequence and protected payload. A source datagram is transmitted even for an all-null message, preserving sequence numbers, message boundaries and original timestamps.</t>
+    </section>
+    <section anchor="transport">
+      <name>Encryption, Repair and Pacing</name>
+      <t>The bitmap and retained units form the input to encryption. GCM authenticates the prefix with the payload. Restoration follows decryption and authentication where selected. FEC protects the wire representation. For effective application ceiling P and DATA tag size T, the protected source and parity XOR capacities must accommodate P + 1 + T. Parity also reserves its existing FEC header and any authenticated-parity envelope. Deletion saves source bytes while fixed-capacity parity can grow. A non-OFF policy reserves one byte of payload ceiling even when an IF_OFFERED Listener subsequently negotiates OFF.</t>
+      <t>Input-rate estimation observes application bytes before deletion. Packet-size accounting observes the wire payload. Traffic with no eligible null units gains one byte per source packet. Timing and bandwidth savings depend on the stream and transport conditions.</t>
+    </section>
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>Ordinary session authentication v2 and ACP1 leave the NPD offer and echo outside their handshake proof. The endpoints can consequently disagree on DATA decoding if negotiation is altered. The separate pinned-key profile covers these records in its CONCLUSION transcript. DATA confidentiality and integrity depend on cipher selection. Receivers bound reconstructed size before handing bytes to the application.</t>
+    </section>
+    <section anchor="iana">
+      <name>IANA Considerations</name>
+      <t>No allocation is requested. CONFIG 0x7f19 is a provisional implementation identifier. The released fixed-source multicast CONFIG record retains 0x7f15. Earlier development builds of NPD used a conflicting number. Their wire evidence requires explicit version attribution.</t>
+    </section>
+    <section anchor="issues">
+      <name>Open Issues</name>
+      <t>Independent implementation vectors, deployed transport-stream corpora, physical-network pacing, and the full range of loss, key rotation and FEC combinations remain review items. The feature uses an SRT-specific wire format. Interoperability with stock SRT is limited to ordinary connections when NPD is inactive.</t>
+    </section>
+    <section anchor="sources">
+      <name>Implementation Reference</name>
+      <t>The wire codec and socket integration are recorded in <xref target="RWSRT" />.</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>Informative References</name>
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
+        <front>
+          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
+          <author fullname="Robotweax" />
+          <date year="2026" />
+        </front>
+      </reference>
+    </references>
+  </back>
+</rfc>
