@@ -45,3 +45,12 @@ The original [source audit](source-audit-2026-11-06.md) is historical; the curre
 The [baseline comparison](baseline-comparison.md) covers all numbered sections
 of the submitted text and maps the supplemental source by heading and line.
 Its editorial dispositions complement, rather than replace, this feature map.
+
+## 0.3.4 release delta
+
+The [release review](release-review-0.3.4.md) and [source ledger](../audit/release-0.3.4.json)
+extend the identifier, profile-combination and conformance work. Review CONFIG
+0x7f19 (NPD) and CONFIG 0x7f16 (peer authentication) in the handshake namespace.
+Independent vectors should cover exact NPD echo and restored payloads, plus the
+pinned-key transcript and the transition from identity proof to completed KM.
+Independent cryptographic review remains open.

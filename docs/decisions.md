@@ -137,3 +137,12 @@ they do not approve a future standards profile or close earlier review gates.
 
 All three draft names remain unsubmitted `-00` working versions. A product release
 number does not automatically increment an Internet-Draft submission revision.
+
+## 0.3.4 release delta
+
+The [release review](release-review-0.3.4.md) and [source ledger](../audit/release-0.3.4.json)
+extend the identifier, profile-combination and conformance work. Review CONFIG
+0x7f19 (NPD) and CONFIG 0x7f16 (peer authentication) in the handshake namespace.
+Independent vectors should cover exact NPD echo and restored payloads, plus the
+pinned-key transcript and the transition from identity proof to completed KM.
+Independent cryptographic review remains open.

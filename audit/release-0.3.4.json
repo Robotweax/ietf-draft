@@ -1,0 +1,709 @@
+{
+  "base_tag_object": "29c741d35f89a412926c374d6ccb15fa1270833c",
+  "base_commit": "69bd5328bf654ebbed894c77fd30ae5b2dfba9d7",
+  "release_tag_object": "559c0c4a0ba0ddbb0d65a62eebbe127f5187f2a5",
+  "implementation_commit": "87742777290e6a77e38672ca35701f7184b75526",
+  "claims": [
+    {
+      "id": "R034-01",
+      "destination": "drafts/draft-robotweax-srt-null-packet-deletion-00.xml#negotiation",
+      "sources": [
+        {
+          "path": "src/null_packet_deletion.hpp",
+          "needle": "extension_command = 0x7f19",
+          "line": 13,
+          "sha256": "307d2a5a05ef0bfd13695d3610204585f041a228aef0600cc9f2bd76e1375469"
+        },
+        {
+          "path": "docs/null-packet-deletion.md",
+          "needle": "## Handshake record",
+          "line": 115,
+          "sha256": "3d7bb8581376eaff6da1fc23fbaec89873fae8bfd99ab47405c9052a2d190464"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R034-02",
+      "destination": "drafts/draft-robotweax-srt-null-packet-deletion-00.xml#wire",
+      "sources": [
+        {
+          "path": "src/null_packet_deletion.cpp",
+          "needle": "Result decode_payload(",
+          "line": 95,
+          "sha256": "9ce7d09e5f3781c9893cbbba8e5465d17c3ca0c7a5ec335f134f9e581e2a1e22"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R034-03",
+      "destination": "drafts/draft-robotweax-srt-null-packet-deletion-00.xml#transport",
+      "sources": [
+        {
+          "path": "docs/null-packet-deletion.md",
+          "needle": "## Interaction with other features",
+          "line": 208,
+          "sha256": "3d7bb8581376eaff6da1fc23fbaec89873fae8bfd99ab47405c9052a2d190464"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R034-04",
+      "destination": "drafts/draft-robotweax-srt-authentication-00.xml#pinned-key",
+      "sources": [
+        {
+          "path": "src/peer_authentication.hpp",
+          "needle": "record_type = 0x7f16",
+          "line": 12,
+          "sha256": "31bd02630e2bb10289ceb32302fcf1360a07bff32cf1919f1ddf7ae235f5917d"
+        },
+        {
+          "path": "src/peer_authentication.cpp",
+          "needle": "return 232;",
+          "line": 220,
+          "sha256": "5b61e46f8f878a6003fffb6d9a15a2ddc7faa288422335f20a0e87abac85108c"
+        },
+        {
+          "path": "docs/peer-authentication.md",
+          "needle": "## Implemented version 1 decisions",
+          "line": 902,
+          "sha256": "feb76a34324044ccdbbddbeeb8068c9c1f5971deae67a164f86153049302ab8e"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R034-05",
+      "destination": "drafts/draft-robotweax-srt-hybrid-control-00.xml#messages",
+      "sources": [
+        {
+          "path": "src/compat/hybrid/hybrid_receiver.cpp",
+          "needle": "add(phase == Phase::known ? state_.confirmation_origin_us",
+          "line": 478,
+          "sha256": "dc069ede23f884405206dc5892ef959a6ea7f170025de2413959c64510f8f1b6"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R034-06",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#admission-034",
+      "sources": [
+        {
+          "path": "src/compat/group_registry.cpp",
+          "needle": "record->members.size() >= ROBOTWEAX_SRT_MAX_GROUP_MEMBERS",
+          "line": 1799,
+          "sha256": "342fa08a515546c765b44cba07ae712fa250e902db6d69377abe61ec313dea8b"
+        },
+        {
+          "path": "src/compat/caller_handshake_steps.cpp",
+          "needle": "machine_.ignores_setup_message(message)",
+          "line": 31,
+          "sha256": "f6aec93334428f1faa399c2cf0adc2617d881c11981e9ec1a675f4797010e1ad"
+        },
+        {
+          "path": "src/rendezvous.cpp",
+          "needle": "packet.flow_window != peer_flow_window_",
+          "line": 557,
+          "sha256": "03fe2c057f1834154a49642c143e4f999058fea77bcecbb6311f74e3dcc8dcbc"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R034-07",
+      "destination": "docs/release-review-0.3.4.md",
+      "sources": [
+        {
+          "path": "docs/release-notes-0.3.4.md",
+          "needle": "## Timing and performance",
+          "line": 49,
+          "sha256": "d2ba5f5e0a29cbbd0f8708e1e2137c2fc97b661fb90aae6fbe243c9355983e34"
+        },
+        {
+          "path": "docs/udp-io-backends.md",
+          "needle": "# ",
+          "line": 1,
+          "sha256": "0072e772187f96a3d8b885440eb554cb6332a9487da84687ea29c462f5052b29"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    }
+  ],
+  "changed_files": [
+    {
+      "status": "M",
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/experimental-hybrid-control.yml"
+    },
+    {
+      "status": "A",
+      "path": ".github/workflows/experimental-peerauth.yml"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/linux-packages.yml"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/windows-bcrypt.yml"
+    },
+    {
+      "status": "M",
+      "path": "CHANGELOG.md"
+    },
+    {
+      "status": "M",
+      "path": "CMakeLists.txt"
+    },
+    {
+      "status": "M",
+      "path": "README.md"
+    },
+    {
+      "status": "M",
+      "path": "SECURITY.md"
+    },
+    {
+      "status": "A",
+      "path": "cmake/abi/robotweax-srt-0.3.4.txt"
+    },
+    {
+      "status": "M",
+      "path": "cmake/abi/robotweax-srt-development.txt"
+    },
+    {
+      "status": "M",
+      "path": "cmake/public-symbols.txt"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/aes-gcm-contract.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/api-compatibility.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/building.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/connect-variants.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/connection-groups.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/encryption.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ffmpeg-integration.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/file-mode.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/getting-started.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/integration.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/limitations.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/migration-0.2.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/null-packet-deletion.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/peer-authentication.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/release-notes-0.3.4.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/release-process-0.3.4.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/rendezvous.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/security-delta-0.3.4.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/udp-io-backends.md"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/test_delivery_contracts.py"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/test_hybrid_multicast.py"
+    },
+    {
+      "status": "A",
+      "path": "fuzz/fuzz_null_packet_deletion.cpp"
+    },
+    {
+      "status": "A",
+      "path": "fuzz/fuzz_peer_authentication.cpp"
+    },
+    {
+      "status": "A",
+      "path": "fuzz/peer_authentication_corpus.py"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/crypto.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/crypto_provider.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/handshake.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/handshake_datagram.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/handshake_extensions.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/rendezvous.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/session.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/session_authentication.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/socket_options.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/udp.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/srt/srt.h"
+    },
+    {
+      "status": "M",
+      "path": "include/srt/version.h"
+    },
+    {
+      "status": "M",
+      "path": "interop/api_peer.cpp"
+    },
+    {
+      "status": "A",
+      "path": "interop/run_npd_interop.py"
+    },
+    {
+      "status": "A",
+      "path": "interop/run_peer_authentication_compat.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_aead_contract.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_ci_build_scope.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_ci_changes.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_macos_ci_batches.py"
+    },
+    {
+      "status": "A",
+      "path": "interop/tests/test_npd_interop.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_obs_harness.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_release_documentation.py"
+    },
+    {
+      "status": "M",
+      "path": "packaging/README.md"
+    },
+    {
+      "status": "A",
+      "path": "packaging/acceptance-0.3.4.json"
+    },
+    {
+      "status": "M",
+      "path": "packaging/debian/changelog"
+    },
+    {
+      "status": "M",
+      "path": "packaging/fedora/robotweax-srt.spec"
+    },
+    {
+      "status": "M",
+      "path": "packaging/homebrew/robotweax-srt.rb"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/README.md"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/qualify-fedora.sh"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/qualify-ubuntu.sh"
+    },
+    {
+      "status": "A",
+      "path": "packaging/qualification-0.3.4.md"
+    },
+    {
+      "status": "A",
+      "path": "packaging/soak-0.3.4-macos.json"
+    },
+    {
+      "status": "A",
+      "path": "packaging/source-0.3.4.json"
+    },
+    {
+      "status": "M",
+      "path": "packaging/tests/CMakeLists.txt"
+    },
+    {
+      "status": "M",
+      "path": "packaging/vcpkg/ports/robotweax-srt/portfile.cmake"
+    },
+    {
+      "status": "M",
+      "path": "packaging/vcpkg/ports/robotweax-srt/vcpkg.json"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/README.md"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/test-installers.ps1"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/test-upgrade-check.ps1"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/caller_handshake_steps.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/connection.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/epoll.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/epoll.hpp"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/file_destination.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/file_destination.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/file_io.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/group_registry.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/hybrid/hybrid_receiver.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/listener_connection_setup.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/listener_connection_setup_sources.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/listener_connection_setup_sources.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/listener_handshake_router.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/peer_authentication_handshake.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/compat/peer_authentication_handshake.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/public_socket_options.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_options.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_registry.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_registry.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/srt_api.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/transport_runtime.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/transport_runtime.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/crypto.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/crypto_bcrypt.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/crypto_mbedtls.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/crypto_openssl.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/crypto_openssl_p256.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/handshake.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/handshake_datagram.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/handshake_extensions.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/null_packet_deletion.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/null_packet_deletion.hpp"
+    },
+    {
+      "status": "A",
+      "path": "src/peer_authentication.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/peer_authentication.hpp"
+    },
+    {
+      "status": "A",
+      "path": "src/peer_authentication_admission.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/peer_authentication_admission.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/rendezvous.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/send_buffer.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/session.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/session_authentication.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/socket_options.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/udp.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/obs/build_windows.ps1"
+    },
+    {
+      "status": "A",
+      "path": "tests/peer_authentication_peer/CMakeLists.txt"
+    },
+    {
+      "status": "A",
+      "path": "tests/peer_authentication_peer/legacy-wire.sha256"
+    },
+    {
+      "status": "A",
+      "path": "tests/peer_authentication_peer/peer.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/peer_authentication_peer/wire.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/peer_authentication_vectors.py"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_caller_handshake_events.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_caller_handshake_steps.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_epoll.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_groups.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_runtime.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_file_io.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_hybrid_native.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_multicast_dispatch.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_npd_transport.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_null_packet_deletion.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_peer_authentication.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_peer_authentication_exchange.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_peer_authentication_p256.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_rendezvous.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_socket_options.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_statistics.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_udp.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tools/qualify_mbedtls_reference.py"
+    }
+  ]
+}

@@ -83,3 +83,11 @@ These rows are source/contract-reviewed, not newly executed conformance tests.
 
 The earlier multicast-plus-authentication unknown row must not override the
 coordinated profile's explicit session-authentication exclusion.
+
+## 0.3.4 combinations
+
+| Profile | Negotiated scope | Exclusions and interactions |
+|---|---|---|
+| Null packet deletion v1 | Individual Live Message Caller/Listener. A REQUIRED Caller needs an exact echo. IF_OFFERED is Listener-only. | Groups, Rendezvous and File/Stream excluded. Clear, CTR or GCM and compatible FEC use the NPD prefix. Pinned-key authentication binds the NPD record in the handshake transcript. |
+| Pinned-key peer authentication v1 | Individual Caller/Listener, experimental OpenSSL build, explicit AES-GCM, passphrase, enforced encryption, SESSIONAUTH and pinned P-256 keys. | REQUIRED or OFF. Active profile replaces the 0x7f10 exchange and keys authenticated KM/parity. ACP1, CTR, Rendezvous and groups excluded. |
+| Experimental Linux UDP batching/segmentation | Compile-time local UDP backend. | No wire capability or peer prerequisite. |

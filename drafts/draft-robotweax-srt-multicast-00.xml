@@ -8,7 +8,7 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="14" />
+    <date year="2026" month="November" day="20" />
     <abstract>
       <t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.3. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t>
     </abstract>
@@ -17,7 +17,7 @@
     <section anchor="status">
       <name>Introduction</name>
       <t>This is an unsubmitted editorial draft. The document name remains provisional. It is not a complete independently implementable specification. Statements describing version 0.3.3 are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
-      <t>The baseline is Robotweax SRT commit 69bd5328bf654ebbed894c77fd30ae5b2dfba9d7. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
+      <t>The baseline is Robotweax SRT commit 87742777290e6a77e38672ca35701f7184b75526. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
       <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
     </section>
     <section anchor="model">
@@ -80,6 +80,11 @@
       <t>Version 0.3.3 also contains default-off hybrid control components requiring explicit ACP1 and HYBRID_CONTROL build options and separate pairwise credentials. They support bounded startup membership recovery, unicast fallback and multicast return. They are scoped in a separate working document rather than added implicitly to the ordinary dispatch protocol. Native handshakes still reject session-authentication version 7; a separate provisional runtime exchange establishes its context.</t>
       <t>Explicitly provisioned hybrid startup has a different publication boundary: it stages a unicast dispatch route and waits for authenticated sender-approved unicast policy before publishing CONNECTED. Membership attempts then occur after publication. Unprovisioned public connect still fails on a local multicast join failure. The media sample uses live catch-up and can discard unread media while reporting skipped positions. Fallback is neither lossless nor a decoder-continuity guarantee. The hybrid exchange binds source metadata after the ordinary join; it does not authenticate the announcement at initial admission.</t>
     </section>
+    <section anchor="admission-034">
+      <name>Admission Limits and Setup in 0.3.4</name>
+      <t>Each connection group counts pending and connected members together against a build-time limit. The default is 64 and the configurable range is 1 through 65536. Excess admission is refused locally. Coordinated senders also retain their profile-specific ceiling of 64 members. Raising the general group limit does not increase that ceiling.</t>
+      <t>Setup validates incoming handshake fields before updating cryptographic or metadata state. Once the peer binding applies, an inconsistent peer cookie, socket identity or flow window causes that input to be ignored while the original attempt continues to its existing deadline. The binding rules preserve the permitted change of socket ID from INDUCTION to CONCLUSION and early rejection before cookie binding.</t>
+    </section>
     <section anchor="security">
       <name>Security Considerations</name>
       <t>Shared keys permit admitted receivers to forge traffic authentic under the group key. AES-GCM therefore does not establish sender identity against group insiders; AES-CTR does not provide DATA integrity. Source-address filtering does not fix either limitation.</t>
@@ -122,9 +127,9 @@
         </front>
         <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
       </reference>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/69bd5328bf654ebbed894c77fd30ae5b2dfba9d7">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
         <front>
-          <title>Robotweax SRT 0.3.3 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>

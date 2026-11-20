@@ -1,15 +1,15 @@
 # SRT protocol draft work
 
-Editorial work for extensions implemented by Robotweax SRT 0.3.3, retaining the historical 0.3.2 audit.
+Editorial work for extensions implemented by Robotweax SRT 0.3.4, with earlier release evidence preserved.
 These documents are **unsubmitted working drafts**, not IETF standards,
 IANA allocations, or a claim of independent cryptographic review.
 
 ## Current release review
 
-See the [0.3.3 release review](docs/release-review-0.3.3.md),
-[source delta ledger](audit/release-0.3.3.json), and
-[0.3.3 validation](docs/validation-0.3.3.md). Historical 0.3.2 execution and
-idnits results do not qualify the changed drafts or the new hybrid profile.
+The [0.3.4 release review](docs/release-review-0.3.4.md) maps the release
+to the working drafts. See the [delta ledger](audit/release-0.3.4.json)
+and [editorial validation](docs/validation-0.3.4.md). The
+[0.3.3 review](docs/release-review-0.3.3.md) records the previous baseline.
 
 ## Audit and publication status
 
@@ -64,9 +64,10 @@ Recommended next decisions: [version 00 disposition](docs/initial-draft-disposit
 - [Open decisions and submission gates](docs/decisions.md)
 - [Multicast dispatch draft](drafts/draft-robotweax-srt-multicast-00.xml)
 - [Session authentication draft](drafts/draft-robotweax-srt-authentication-00.xml)
+- [MPEG-TS null packet deletion draft](drafts/draft-robotweax-srt-null-packet-deletion-00.xml)
 - [Experimental hybrid control draft](drafts/draft-robotweax-srt-hybrid-control-00.xml)
 
-The drafts cover multicast, authentication and separately gated hybrid control. Base-SRT
+The drafts cover multicast, authentication, hybrid control and null packet deletion. Base-SRT
 corrections and delivery/group extensions are tracked separately so experimental
 features do not silently redefine ordinary SRT. Draft names remain provisional. The author/contact is Marc Cymontkowski,
 Robotweax GmbH, marc@robotweax.ai, as confirmed by the user.
@@ -93,7 +94,7 @@ The runner discovers all working drafts and can retain release-specific evidence
 
 ```sh
 python3 tools/check_nits.py --idnits /path/to/idnits --online \
-  --evidence-dir evidence/release-0.3.3
+  --evidence-dir evidence/release-0.3.4
 ```
 
 The `--online` flag permits reference metadata lookups; it does not submit documents. The

@@ -8,15 +8,15 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="14" />
+    <date year="2026" month="November" day="20" />
     <abstract>
-      <t>This initial editorial draft records Robotweax SRT session authentication version 2 and scopes the separate experimental ACP1 authenticated-control work. It describes current implementation behavior and outstanding security and specification decisions. It is not a complete security protocol specification or a claim of independent cryptographic review.</t>
+      <t>This working draft describes session authentication version 2, the scope of ACP1 and the experimental pinned-key Caller/Listener exchange introduced in Robotweax SRT 0.3.4.</t>
     </abstract>
   </front>
   <middle>
     <section anchor="status">
       <name>Introduction</name>
-      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 69bd5328bf654ebbed894c77fd30ae5b2dfba9d7. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
+      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 87742777290e6a77e38672ca35701f7184b75526. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
       <t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
       <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
     </section>
@@ -57,6 +57,15 @@
       <t>The hybrid context binds the existing 60-byte dispatch announcement, new 32-byte fixed-source announcement and two 48-byte capabilities in a 192-byte context. A separate four-record exchange under provisional runtime subtype 0x7f17 supplies nonces and conclusion proofs. Version 7 permits only recovery controls with inner subtype 0x7f16 inside the existing ACP1 envelope 0x7f05. It refuses ordinary controls, authenticated KM and FEC; versions 2 through 6 retain their distinct formats. A separate working draft records this experimental scope.</t>
       <t>Ordinary session-authentication proofs do not bind either multicast announcement. Hybrid binds their context later, after the receiver has joined and installed its source filter; it does not provide authenticated admission for those records. Shared DATA keys still permit insider forgery and departure does not revoke them. Pairwise hybrid control credentials must not be confused with the shared DATA passphrase.</t>
     </section>
+    <section anchor="pinned-key">
+      <name>Pinned-Key Peer Authentication, Version 1</name>
+      <t>The experimental OpenSSL profile requires explicit selection at both endpoints, a passphrase, enforced encryption, session authentication and explicit AES-GCM. Each endpoint provisions a P-256 signing key and a set of one to sixteen trusted peer public keys. A claimed identifier is a lookup hint until the peer proves possession. The profile applies to individual Caller/Listener sockets. ACP1, groups and Rendezvous are excluded.</t>
+      <t>HSv5 CONFIG type 0x7f16 replaces the session-authentication record 0x7f10 for this exchange. The first two flights use CONCLUSION and the third uses AGREEMENT. All start with eight octets: version 1, message kind (1, 2 or 3), suite 1, zero flags, cipher mode 2, AES key length in bytes, and two reserved zero octets. The offer permits zero as an unspecified length. The response selects the explicit Caller length, otherwise the Listener preference, otherwise 16. Confirmation repeats the selection.</t>
+      <t>M1 has 136 content bytes: prefix, 32-byte Caller nonce, 64-byte ephemeral P-256 public key and 32-byte identity key identifier. M2 has 232 bytes: prefix, Listener nonce, ephemeral key and identifier of the same widths, then a 64-byte signature and 32-byte confirmation. M3 has 104 bytes: prefix, Caller signature and confirmation. Coordinates and signature integers are fixed-width big-endian values. The verifier enforces canonical low-S signatures. The peers cache the exact handshake payloads across retries.</t>
+      <t>The transcript covers the 48-byte handshake information and all extensions, including Stream ID and any NPD record. It excludes INDUCTION and the outer 16-byte packet headers. The Listener digest covers length-prefixed M1 and M2 with proof fields zeroed. The Caller digest uses M1, the actual signed M2 and M3 with zeroed proof fields. Both hashes use the PEERAUTH v1 domain label and 32-bit network-order lengths.</t>
+      <t>Ephemeral ECDH supplies the first HKDF stage. The second incorporates passphrase material derived with both nonces. Separate outputs key the two confirmations, the authenticated KM and parity envelopes, and the two directional wrapping keys. M2 proves Listener identity and ephemeral-key possession. M3 proves Caller identity and passphrase possession. The Caller obtains the Listener passphrase proof during authenticated runtime KM. Both directional key exchanges must complete within the original connect deadline before connection publication.</t>
+      <t>The envelope layouts for authenticated KM and parity carry over from v2 with profile-specific keying and label. Ordinary ACK, NAK, DROPREQ and SHUTDOWN remain outside proof coverage. A Listener serializes setup, so one pending child can delay new admissions until its deadline. The release records independent cryptographic review as outstanding. Pin distribution, revocation, transcript and key-schedule review, and independent interoperable vectors remain necessary to assess this profile.</t>
+    </section>
     <section anchor="security">
       <name>Security Considerations</name>
       <t>Version 2 protects selected key material and parity, not every handshake or runtime control. Stream ID, transport settings, ordinary ACK/NAK and shutdown are outside its protection. Stream ID is routing input, not authorization. GCM is required separately for DATA authentication.</t>
@@ -66,6 +75,7 @@
     <section anchor="iana">
       <name>IANA Considerations</name>
       <t>No allocation request is made in this initial editorial version. Handshake 0x7f10 and runtime 0x7f03, 0x7f04 and 0x7f05 are provisional implementation values, not registered assignments. Determine namespace policy and migration before publication.</t>
+      <t>The experimental peer-authentication CONFIG value 0x7f16 is provisional. Hybrid recovery also uses the number 0x7f16 in the distinct runtime user-defined control subtype namespace.</t>
     </section>
     <section anchor="issues">
       <name>Open Issues</name>
@@ -98,9 +108,9 @@
         </front>
         <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
       </reference>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/69bd5328bf654ebbed894c77fd30ae5b2dfba9d7">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
         <front>
-          <title>Robotweax SRT 0.3.3 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>
