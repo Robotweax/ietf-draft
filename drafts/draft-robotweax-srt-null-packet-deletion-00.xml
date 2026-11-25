@@ -8,9 +8,9 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="20" />
+    <date year="2026" month="November" day="25" />
     <abstract>
-      <t>This document describes the experimental null packet deletion profile in Robotweax SRT 0.3.4. Peers negotiate a per-DATA-packet bitmap that allows the receiver to reconstruct canonical MPEG transport stream null packets while preserving message boundaries and timestamps.</t>
+      <t>This document describes the experimental null packet deletion profile introduced in Robotweax SRT 0.3.4. Peers negotiate a per-DATA-packet bitmap that allows the receiver to reconstruct canonical MPEG transport stream null packets while preserving message boundaries and timestamps.</t>
     </abstract>
   </front>
   <middle>
@@ -31,6 +31,7 @@
     </section>
     <section anchor="transport">
       <name>Encryption, Repair and Pacing</name>
+      <t>Version 0.3.5 carries fractional pacing intervals across continuous sends. On mobile timer-paced builds, optional coalescing can service several queued Live DATA deadlines at one wake. Each source packet still carries its own sequence number and deletion bitmap. Reordering can fill an isolated gap during the receiver's next read in the same slice before it emits a NAK.</t>
       <t>The bitmap and retained units form the input to encryption. GCM authenticates the prefix with the payload. Restoration follows decryption and authentication where selected. FEC protects the wire representation. For effective application ceiling P and DATA tag size T, the protected source and parity XOR capacities must accommodate P + 1 + T. Parity also reserves its existing FEC header and any authenticated-parity envelope. Deletion saves source bytes while fixed-capacity parity can grow. A non-OFF policy reserves one byte of payload ceiling even when an IF_OFFERED Listener subsequently negotiates OFF.</t>
       <t>Input-rate estimation observes application bytes before deletion. Packet-size accounting observes the wire payload. Traffic with no eligible null units gains one byte per source packet. Timing and bandwidth savings depend on the stream and transport conditions.</t>
     </section>
@@ -54,9 +55,9 @@
   <back>
     <references>
       <name>Informative References</name>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/fd9dac31675b12022579d28a748abb0839004cde">
         <front>
-          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.5 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>

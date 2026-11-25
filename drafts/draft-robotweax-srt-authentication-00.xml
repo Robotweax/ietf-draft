@@ -8,7 +8,7 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="20" />
+    <date year="2026" month="November" day="25" />
     <abstract>
       <t>This working draft describes session authentication version 2, the scope of ACP1 and the experimental pinned-key Caller/Listener exchange introduced in Robotweax SRT 0.3.4.</t>
     </abstract>
@@ -16,7 +16,7 @@
   <middle>
     <section anchor="status">
       <name>Introduction</name>
-      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit 87742777290e6a77e38672ca35701f7184b75526. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
+      <t>This is an unsubmitted working draft. The implementation baseline is Robotweax SRT commit fd9dac31675b12022579d28a748abb0839004cde. Session authentication is explicitly enabled, requires a passphrase and enforced encryption, and does not implicitly enable GCM.</t>
       <t>Version 2 supports Caller/Listener. It has no fallback to ordinary SRT or version 1. Stock peers cannot establish this protected profile. ACP1 topology variants are experimental and are summarized separately, not implicitly incorporated into version 2.</t>
       <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
     </section>
@@ -108,9 +108,9 @@
         </front>
         <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
       </reference>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/fd9dac31675b12022579d28a748abb0839004cde">
         <front>
-          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.5 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>

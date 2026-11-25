@@ -8,16 +8,16 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="20" />
+    <date year="2026" month="November" day="25" />
     <abstract>
-      <t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.3. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t>
+      <t>This document describes the experimental multicast dispatch profile implemented in Robotweax SRT 0.3.5. One sender transmits shared DATA over IP multicast while maintaining per-receiver unicast control and repair sessions. This initial editorial draft records the wire representation and identifies unresolved protocol and deployment requirements.</t>
     </abstract>
   </front>
   <middle>
     <section anchor="status">
       <name>Introduction</name>
-      <t>This is an unsubmitted editorial draft. The document name remains provisional. It is not a complete independently implementable specification. Statements describing version 0.3.3 are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
-      <t>The baseline is Robotweax SRT commit 87742777290e6a77e38672ca35701f7184b75526. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
+      <t>This is an unsubmitted editorial draft. The document name remains provisional. It is not a complete independently implementable specification. Statements describing the implementation are implementation observations, not IETF consensus. Open issues are intentional and must be resolved or explicitly scoped before claiming conformance.</t>
+      <t>The baseline is Robotweax SRT commit fd9dac31675b12022579d28a748abb0839004cde. This profile uses Live Message Caller/Listener connections. Packet-filter FEC, File/Stream and Rendezvous are excluded. IPv4 multicast has documented sample qualification; an IPv6 encoding is not evidence of IPv6 deployment qualification.</t>
       <t>The descriptive sections record the pinned implementation. Recommendations in Open Issues are proposals for review, not approved changes to the existing wire format. Local API states describe this implementation and are not peer-visible protocol fields.</t>
     </section>
     <section anchor="model">
@@ -49,6 +49,7 @@
     </section>
     <section anchor="repair">
       <name>Delivery and Repairs</name>
+      <t>In 0.3.5 the datagram channel can recheck an isolated single-packet gap on the next nonblocking UDP read within the same receive slice before issuing an immediate NAK. The ingress-only multicast route bypasses that recheck and wakes the owning control channel to service feedback deadlines. This receiver behavior preserves the existing NAK format and sender repair rules.</t>
       <t>Unicast repair is the default. With a configured threshold of 1 through 16 distinct requesting receivers, a bounded per-sequence tally can cause one multicast repair for shared loss. Suppression begins only after local UDP acceptance. A repeated request by the same receiver uses unicast, permitting recovery if the multicast repair was lost. Transient multicast send failure falls back to unicast.</t>
       <t>At each repair decision, the implementation computes a window in microseconds from the requesting member: clamp(2 * smoothed_RTT, 10000, 1000000) when that member has an RTT sample, otherwise 100000. The window is measured from the tally entry first-request time, but recalculated for each requesting member; it is not a fixed shared group RTT. Expiry occurs when elapsed time is strictly greater than this window, or the local clock moves before the recorded first time.</t>
       <t>The tally uses 1024 slots indexed by sequence modulo 1024, with at most 16 remembered receiver identities per slot. A repeated receiver request or an unrecordable additional receiver uses unicast. Once an entry has attempted multicast, expiry restores unicast until eviction rather than starting another multicast attempt. Completion is bound to the sequence and attempt identity, preventing stale completion from modifying a replacement entry. These are observed implementation bounds, not yet mandatory limits for independent implementations.</t>
@@ -127,9 +128,9 @@
         </front>
         <seriesInfo name="Internet-Draft" value="draft-sharabayko-srt-01" />
       </reference>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/fd9dac31675b12022579d28a748abb0839004cde">
         <front>
-          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.5 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>

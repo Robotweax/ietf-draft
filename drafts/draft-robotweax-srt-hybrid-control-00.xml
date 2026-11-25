@@ -8,7 +8,7 @@
         <email>marc@robotweax.ai</email>
       </address>
     </author>
-    <date year="2026" month="November" day="20" />
+    <date year="2026" month="November" day="25" />
     <abstract>
       <t>This unsubmitted working draft inventories the separately enabled hybrid multicast control components in Robotweax SRT 0.3.3. It records their provisional wire identities, authentication boundary and delivery-policy constraints. It is not a complete independently implementable protocol or a supported security profile.</t>
     </abstract>
@@ -16,7 +16,7 @@
   <middle>
     <section anchor="status">
       <name>Introduction</name>
-      <t>Implementation observations refer to commit 87742777290e6a77e38672ca35701f7184b75526. The document name and publication route are provisional. Hybrid control requires explicit experimental ACP1 and HYBRID_CONTROL build options, both default-off, plus explicitly provisioned internal owners. No public hybrid C API is introduced. IPv4 native integration and protocol-engine address encodings have different qualification boundaries.</t>
+      <t>Implementation observations refer to commit fd9dac31675b12022579d28a748abb0839004cde. The document name and publication route are provisional. Hybrid control requires explicit experimental ACP1 and HYBRID_CONTROL build options, both default-off, plus explicitly provisioned internal owners. No public hybrid C API is introduced. IPv4 native integration and protocol-engine address encodings have different qualification boundaries.</t>
       <t>The profile augments independent-source multicast and its coordinated sender with a separate pairwise control context. Native SRT handshake decoders still reject session-authentication version 7. There is no hybrid capability CONFIG extension. Ordinary multicast, authentication v2 and ACP1 v3 through v6 are not silently upgraded. Existing DATA cipher, KM and protected repair identity remain separate.</t>
     </section>
     <section anchor="capability">
@@ -75,9 +75,9 @@
   <back>
     <references>
       <name>Informative References</name>
-      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/87742777290e6a77e38672ca35701f7184b75526">
+      <reference anchor="RWSRT" target="https://github.com/Robotweax/srt/tree/fd9dac31675b12022579d28a748abb0839004cde">
         <front>
-          <title>Robotweax SRT 0.3.4 source and protocol contracts</title>
+          <title>Robotweax SRT 0.3.5 source and protocol contracts</title>
           <author fullname="Robotweax" />
           <date year="2026" />
         </front>
