@@ -1,12 +1,12 @@
 # Scope and baseline
 
-Review date: 2026-11-20. Current delta: [0.3.4 release review](release-review-0.3.4.md).
+Review date: 2026-11-25. Current delta: [0.3.5 release review](release-review-0.3.5.md).
 
 ## Immutable implementation baseline
 
-Current release: Robotweax SRT `v0.3.4`, annotated tag object
-`559c0c4a0ba0ddbb0d65a62eebbe127f5187f2a5`, peeled commit
-`87742777290e6a77e38672ca35701f7184b75526`.
+Current release: Robotweax SRT `v0.3.5`, annotated tag object
+`d7b6ba7959593db1d37bac8178c6bff26ecfc5b0`, peeled commit
+`fd9dac31675b12022579d28a748abb0839004cde`.
 
 Historical 0.3.2 audit: `235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1` is the
 **annotated tag object**, not a commit; it peels to
@@ -14,7 +14,7 @@ Historical 0.3.2 audit: `235cbdb6c0b0d1950b3e74d623ffc21108bf3ef1` is the
 `implementation_commit`. Git resolves its file references to that commit, so
 those hashes and test provenance are preserved rather than relabeled as 0.3.3.
 
-Project version 0.3.4, ABI 0.3, compatible API 1.5.7 and HSv5 are separate axes.
+Project version 0.3.5, ABI 0.3, compatible API 1.5.7 and HSv5 are separate axes.
 Unreleased branches and adjacent projects remain outside this baseline.
 
 ## Specification baselines
@@ -61,4 +61,4 @@ The 0.3.3 pass reviews release/source deltas and updates editorial text. It does
 not rerun the 0.3.2 runtime suite. Release-reported qualification remains attributed
 to the release, not claimed as independent testing by this draft project.
 
-The 0.3.4 scope adds a standalone Live Message null packet deletion draft and a distinct pinned-key exchange within the authentication draft. See the current release review for setup, group and hybrid changes.
+The 0.3.4 scope adds a standalone Live Message null packet deletion draft and a distinct pinned-key exchange within the authentication draft. The 0.3.5 review covers receive feedback, packet pacing and local platform policies.

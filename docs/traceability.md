@@ -54,3 +54,10 @@ extend the identifier, profile-combination and conformance work. Review CONFIG
 Independent vectors should cover exact NPD echo and restored payloads, plus the
 pinned-key transcript and the transition from identity proof to completed KM.
 Independent cryptographic review remains open.
+
+## 0.3.5 release delta
+
+The [release review](release-review-0.3.5.md) maps the receive-loop recheck to
+base sections 3.2.5 and 4.8.2 and the pacing changes to sections 5.1 and 5.2.1.
+The multicast and NPD drafts describe the observable effects within their own
+profiles. All four drafts cite the tagged 0.3.5 source.

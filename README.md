@@ -1,15 +1,15 @@
 # SRT protocol draft work
 
-Editorial work for extensions implemented by Robotweax SRT 0.3.4, with earlier release evidence preserved.
+Editorial work for extensions implemented by Robotweax SRT 0.3.5, with earlier release evidence preserved.
 These documents are **unsubmitted working drafts**, not IETF standards,
 IANA allocations, or a claim of independent cryptographic review.
 
 ## Current release review
 
-The [0.3.4 release review](docs/release-review-0.3.4.md) maps the release
-to the working drafts. See the [delta ledger](audit/release-0.3.4.json)
-and [editorial validation](docs/validation-0.3.4.md). The
-[0.3.3 review](docs/release-review-0.3.3.md) records the previous baseline.
+The [0.3.5 release review](docs/release-review-0.3.5.md) maps the release
+to the working drafts. See the [delta ledger](audit/release-0.3.5.json)
+and [editorial validation](docs/validation-0.3.5.md). The
+[0.3.4 review](docs/release-review-0.3.4.md) records the previous baseline.
 
 ## Audit and publication status
 
@@ -94,7 +94,7 @@ The runner discovers all working drafts and can retain release-specific evidence
 
 ```sh
 python3 tools/check_nits.py --idnits /path/to/idnits --online \
-  --evidence-dir evidence/release-0.3.4
+  --evidence-dir evidence/release-0.3.5
 ```
 
 The `--online` flag permits reference metadata lookups; it does not submit documents. The

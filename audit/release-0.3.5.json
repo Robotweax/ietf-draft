@@ -1,0 +1,474 @@
+{
+  "base_tag_object": "559c0c4a0ba0ddbb0d65a62eebbe127f5187f2a5",
+  "base_commit": "87742777290e6a77e38672ca35701f7184b75526",
+  "release_tag_object": "d7b6ba7959593db1d37bac8178c6bff26ecfc5b0",
+  "implementation_commit": "fd9dac31675b12022579d28a748abb0839004cde",
+  "claims": [
+    {
+      "id": "R035-01",
+      "destination": "drafts/draft-robotweax-srt-multicast-00.xml#repair",
+      "sources": [
+        {
+          "path": "include/robotweax/srt/session.hpp",
+          "needle": "bool opens_single_immediate_gap(",
+          "line": 746,
+          "sha256": "7edd3e734f85d29d4de5893455db3063ab96a2dec46ca7d0bd9f874e19ad2a1d"
+        },
+        {
+          "path": "src/compat/transport_runtime.cpp",
+          "needle": "ingress_only || gap_runtime_ ? nullptr : &recheck",
+          "line": 1555,
+          "sha256": "f2e324df8aa98963be7d13bf94015bc464d83c98af5954b0cbb99265c4c1bff1"
+        },
+        {
+          "path": "tests/test_compat_runtime.cpp",
+          "needle": "TEST(compat_channel_same_pass_nak_rechecks_one_packet_gap)",
+          "line": 11398,
+          "sha256": "0c2176ee3e916dbdd6b212dc55ca0b583a899ae3d06346b7d6d13348c4ba543d"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R035-02",
+      "destination": "docs/release-review-0.3.5.md",
+      "sources": [
+        {
+          "path": "src/compat/transport_runtime.cpp",
+          "needle": "const bool possible_repair = gap_runtime_",
+          "line": 1619,
+          "sha256": "f2e324df8aa98963be7d13bf94015bc464d83c98af5954b0cbb99265c4c1bff1"
+        },
+        {
+          "path": "src/compat/transport_runtime.cpp",
+          "needle": "DatagramChannel::finish_receive_slice(",
+          "line": 1651,
+          "sha256": "f2e324df8aa98963be7d13bf94015bc464d83c98af5954b0cbb99265c4c1bff1"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R035-03",
+      "destination": "drafts/draft-robotweax-srt-null-packet-deletion-00.xml#transport",
+      "sources": [
+        {
+          "path": "src/timing.cpp",
+          "needle": "interval_remainder_ = remainder;",
+          "line": 355,
+          "sha256": "d3c9b02c1c041c1bc895ecd7522a33675f97cb4263e3dda101c790b612aa1404"
+        },
+        {
+          "path": "src/compat/transport_runtime.cpp",
+          "needle": "live_paced ? pacing_coalesce_microseconds_ : 0U",
+          "line": 6026,
+          "sha256": "f2e324df8aa98963be7d13bf94015bc464d83c98af5954b0cbb99265c4c1bff1"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R035-04",
+      "destination": "docs/release-review-0.3.5.md",
+      "sources": [
+        {
+          "path": "src/file.cpp",
+          "needle": "packet_sending_period_microseconds_ = effective_period * 1.03;",
+          "line": 255,
+          "sha256": "056d1a8285badda508757c676de9234855f8c7adbb9d82ebd9357d78c776a546"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R035-05",
+      "destination": "docs/release-review-0.3.5.md",
+      "sources": [
+        {
+          "path": "CMakeLists.txt",
+          "needle": "ROBOTWEAX_SRT_MOBILE_PACING_COALESCE_MICROSECONDS",
+          "line": 51,
+          "sha256": "5613bd944fc0ac2afa344783d91afd7cfb3d2824791fbc8945b8c96dd06d69ea"
+        },
+        {
+          "path": "src/compat/transport_runtime.cpp",
+          "needle": "coarse_timer_probe_spacing_.on_enter(",
+          "line": 1297,
+          "sha256": "f2e324df8aa98963be7d13bf94015bc464d83c98af5954b0cbb99265c4c1bff1"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    },
+    {
+      "id": "R035-06",
+      "destination": "docs/release-review-0.3.5.md",
+      "sources": [
+        {
+          "path": "src/compat/socket_options.cpp",
+          "needle": "case SRTO_PACKETFILTER:",
+          "line": 498,
+          "sha256": "d733f4cca4514302caa054adddbd35fd58e971f35faf807311192a023fbf0768"
+        },
+        {
+          "path": "tests/live_transmit/prepare_source.py",
+          "needle": "groupconnect must be 0 for single-stream SRT URIs",
+          "line": 90,
+          "sha256": "646deb40435da77362c8cc34f324d4a096fdd951c4e95adf93abd106c6e8dbd9"
+        },
+        {
+          "path": "docs/security-delta-0.3.5.md",
+          "needle": "**Experimental receive and peer authentication coverage.**",
+          "line": 30,
+          "sha256": "63fc3dbeb3b1fe4c55f1ef3616e39d0acb20f769c0bf57d52e0704106f074136"
+        }
+      ],
+      "evidence": "source-reviewed; runtime tests not run in this pass"
+    }
+  ],
+  "changed_files": [
+    {
+      "status": "M",
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/linux-packages.yml"
+    },
+    {
+      "status": "M",
+      "path": "CHANGELOG.md"
+    },
+    {
+      "status": "M",
+      "path": "CMakeLists.txt"
+    },
+    {
+      "status": "M",
+      "path": "README.md"
+    },
+    {
+      "status": "A",
+      "path": "cmake/abi/robotweax-srt-0.3.5.txt"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/aes-gcm-contract.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/api-compatibility.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/building.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/connect-variants.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/connection-groups.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/encryption.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ffmpeg-integration.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/getting-started.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/integration.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/limitations.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/migration-0.2.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/mobile-building.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/release-notes-0.3.5.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/release-process-0.3.5.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/security-delta-0.3.5.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/socket-options.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/srt-live-transmit.md"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/console.py"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/test_console.py"
+    },
+    {
+      "status": "M",
+      "path": "examples/applications/test_process_support.py"
+    },
+    {
+      "status": "M",
+      "path": "examples/ios/pacing/CMakeLists.txt"
+    },
+    {
+      "status": "M",
+      "path": "examples/ios/pacing/Info.plist.in"
+    },
+    {
+      "status": "M",
+      "path": "examples/ios/pacing/README.md"
+    },
+    {
+      "status": "M",
+      "path": "examples/ios/pacing/main.mm"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/session.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/robotweax/srt/timing.hpp"
+    },
+    {
+      "status": "M",
+      "path": "include/srt/version.h"
+    },
+    {
+      "status": "M",
+      "path": "interop/run_group_interop.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_aead_contract.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_ci_changes.py"
+    },
+    {
+      "status": "A",
+      "path": "interop/tests/test_group_reference_connect_race.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_mobile_configure.py"
+    },
+    {
+      "status": "M",
+      "path": "interop/tests/test_release_documentation.py"
+    },
+    {
+      "status": "M",
+      "path": "packaging/README.md"
+    },
+    {
+      "status": "A",
+      "path": "packaging/acceptance-0.3.5.json"
+    },
+    {
+      "status": "M",
+      "path": "packaging/debian/changelog"
+    },
+    {
+      "status": "M",
+      "path": "packaging/fedora/robotweax-srt.spec"
+    },
+    {
+      "status": "M",
+      "path": "packaging/homebrew/robotweax-srt.rb"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/README.md"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/qualify-fedora.sh"
+    },
+    {
+      "status": "M",
+      "path": "packaging/linux/qualify-ubuntu.sh"
+    },
+    {
+      "status": "M",
+      "path": "packaging/qualification-0.3.4.md"
+    },
+    {
+      "status": "A",
+      "path": "packaging/qualification-0.3.5.md"
+    },
+    {
+      "status": "A",
+      "path": "packaging/soak-0.3.5-macos.json"
+    },
+    {
+      "status": "A",
+      "path": "packaging/source-0.3.5.json"
+    },
+    {
+      "status": "M",
+      "path": "packaging/tests/CMakeLists.txt"
+    },
+    {
+      "status": "M",
+      "path": "packaging/vcpkg/ports/robotweax-srt/portfile.cmake"
+    },
+    {
+      "status": "M",
+      "path": "packaging/vcpkg/ports/robotweax-srt/vcpkg.json"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/README.md"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/test-installers.ps1"
+    },
+    {
+      "status": "M",
+      "path": "packaging/windows/test-upgrade-check.ps1"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/connection.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/message_io.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/process_owned.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/process_state.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/process_state.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/socket_options.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/submillisecond_pacing_platform.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/transport_runtime.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/compat/transport_runtime.hpp"
+    },
+    {
+      "status": "M",
+      "path": "src/file.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/timing.cpp"
+    },
+    {
+      "status": "M",
+      "path": "src/udp.cpp"
+    },
+    {
+      "status": "A",
+      "path": "src/udp_receive_batch.hpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/live_transmit/overlays/robotweax_app.hpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/live_transmit/prepare_source.py"
+    },
+    {
+      "status": "M",
+      "path": "tests/live_transmit/run_smoke.py"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_groups.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_compat_runtime.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_file.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_lifecycle.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_peer_authentication_exchange.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_srt_compat.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/test_string_option_reset.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_timing.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tests/test_udp.cpp"
+    },
+    {
+      "status": "A",
+      "path": "tests/windows_dll_exit_probe.cpp"
+    },
+    {
+      "status": "M",
+      "path": "tools/mobile_configure.py"
+    }
+  ]
+}
